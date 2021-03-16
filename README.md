@@ -1,6 +1,6 @@
 ![brandlogo](https://github.com/simplyedwin/tcg_codeinstitute_project_2/blob/master/images/AlightLiaoLahBrandLogo.svg?raw=true)
 
-# Milestone Project 3 Data Centric - hiitathome
+# Milestone Project 3 Data Centric - All Movies DB
 <img src="images/ALL_landingpage.PNG">
 Fig 1 - The landing page of AlightLiaoLah (ALL) Singapore Bus Stop and Bus Finder
 
