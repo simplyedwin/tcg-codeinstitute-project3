@@ -1,0 +1,37 @@
+{% extends "base.template.html" %}
+
+{% block content %}
+
+<div>
+    {% for result in all_genre %}
+    {% if loop.index is divisibleby 2 %}
+    <div style="background-color: lightgrey;">
+        <div class="container my-10">
+        <h3>{{result.genre}}</h3>
+        </div>
+    </div>
+    {% else %}
+    <div class="bg-light">
+        <div class="container my-10">
+        <h3>{{result.genre}}</h3>
+        </div>
+    </div>
+    {% endif %}
+    {% endfor %}
+    <!-- <div class="bg-secondary">
+        <h3>Horrors</h3>
+
+    </div>
+
+    <div class="bg-light">
+        <h3>Fantasy</h3>
+
+    </div>
+
+    <div class="bg-secondary">
+        <h3>Love</h3>
+
+    </div> -->
+</div>
+
+{% endblock %}

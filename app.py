@@ -16,6 +16,20 @@ DB_NAME = 'all_movies'
 client = pymongo.MongoClient(MONGO_URI)
 db = client[DB_NAME]
 
+
+@app.route('/movies')
+def landing_page():
+    all_genre = db.movie_genres.find()
+    # for result in all_genre:
+    #     print(result['genre'])
+    return render_template('landingpage.template.html', all_genre=all_genre)
+
+
+@app.route('/movies/create')
+def show_create_movie():
+    return render_template('create_movieinfo.template.html')
+
+
 if __name__ == '__main__':
     app.run(host=os.environ.get('IP'),
-            port=os.environ.get('PORT'), debug=False)
+            port=os.environ.get('PORT'), debug=True)
