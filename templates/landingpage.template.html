@@ -3,23 +3,28 @@
 {% block content %}
 
 <div>
-    {% for result in all_genre %}
-    {% if loop.index is divisibleby 2 %}
+    {% for genre in all_genre %}
+    {% for movie in all_movies %}
+    {% if genre.genre == movie.genre %}
     <div style="background-color: lightgrey;">
         <div class="container w-50">
-        <h3>{{result.genre}}</h3>
-        <div class="row">
-            <div></div>
-        </div>
+            <h3>{{genre.genre.capitalize()}}</h3>
+            <div class="row">
+                <div class="col-3">
+                    <img src="{{movie.imageurl}}" alt="" class="img-thumbnail">
+                    <label for="">{{movie.name}}</label>
+                </div>
+            </div>
         </div>
     </div>
     {% else %}
     <div class="bg-light">
         <div class="container w-50">
-        <h3>{{result.genre}}</h3>
+            <h3>{{genre.genre.capitalize()}}</h3>
         </div>
     </div>
     {% endif %}
+    {% endfor %}
     {% endfor %}
     <!-- <div class="bg-secondary">
         <h3>Horrors</h3>
