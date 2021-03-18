@@ -2,44 +2,46 @@
 
 {% block content %}
 
-<div>
-    {% for genre in all_genre %}
-    {% for movie in all_movies %}
-    {% if genre.genre == movie.genre %}
-    <div style="background-color: lightgrey;">
-        <div class="container w-50">
-            <h3>{{genre.genre.capitalize()}}</h3>
-            <div class="row">
-                <div class="col-3">
-                    <img src="{{movie.imageurl}}" alt="" class="img-thumbnail">
-                    <label for="">{{movie.name}}</label>
+{% for genre in all_genre %}
+    {% if loop.index is divisibleby 2 %}
+        <div style="background-color: lightgrey;">
+            <div class="container w-50 py-5">
+                <p class="h3 py-2"><a href="">{{genre.genre.capitalize()}}</a>
+                    <span class="h6">
+                        ᐊ View More </span>
+                </p>
+                <div class="row">
+                    {% for movie in all_movies %}
+                    {% if genre.genre == movie.genre %}
+                    <div class="col-4">
+                        <img src="{{movie.imageurl}}" alt="" class="rounded" style="height: 150px; width: 200px;">
+                        <label for="">{{movie.name}}</label>
+                    </div>
+                    {% endif %}
+                    {% endfor %}
                 </div>
             </div>
         </div>
-    </div>
     {% else %}
-    <div class="bg-light">
-        <div class="container w-50">
-            <h3>{{genre.genre.capitalize()}}</h3>
+        <div class="bg-light">
+            <div class="container w-50 py-5">
+                <p class="h3 py-2"><a href="">{{genre.genre.capitalize()}}</a>
+                    <span class="h6">
+                        ᐊ View More </span>
+                </p>
+                <div class="row">
+                    {% for movie in all_movies %}
+                        {% if genre.genre == movie.genre %}
+                        <div class="col-4">
+                            <img src="{{movie.imageurl}}" alt="" class="rounded" style="height: 150px; width: 200px;">
+                            <label for="">{{movie.name}}</label>
+                        </div>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
         </div>
-    </div>
     {% endif %}
-    {% endfor %}
-    {% endfor %}
-    <!-- <div class="bg-secondary">
-        <h3>Horrors</h3>
-
-    </div>
-
-    <div class="bg-light">
-        <h3>Fantasy</h3>
-
-    </div>
-
-    <div class="bg-secondary">
-        <h3>Love</h3>
-
-    </div> -->
-</div>
+{% endfor %}
 
 {% endblock %}

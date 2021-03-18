@@ -25,10 +25,11 @@ def landing_page():
 
     # files = os.listdir('./images')
 
-    # for result in all_genre:
+    # for result in all_movies:
     #     print(result['genre'])
     return render_template('landingpage.template.html',
-                           all_genre=all_genre,all_movies=all_movies)
+                           all_genre=list(all_genre),
+                           all_movies=list(all_movies))
 
 
 @app.route('/movies/create')
@@ -44,6 +45,5 @@ def show_create_movie():
 
 
 if __name__ == '__main__':
-    print(os.listdir('./images'))
     app.run(host=os.environ.get('IP'),
             port=os.environ.get('PORT'), debug=True)
