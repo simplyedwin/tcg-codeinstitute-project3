@@ -3,6 +3,9 @@ import os
 from dotenv import load_dotenv
 import pymongo
 from bson.binary import Binary
+import cloudinary
+import cloudinary.uploader
+import cloudinary.api
 
 # we can use ObjectId
 from bson.objectid import ObjectId
@@ -10,6 +13,12 @@ from bson.objectid import ObjectId
 load_dotenv()
 
 app = Flask(__name__)
+
+cloudinary.config( 
+  cloud_name = os.environ.get('CLOUD_NAME'), 
+  api_key = os.environ.get('CLOUD_API_KEY'), 
+  api_secret = os.environ.get('CLOUD_API_SECRET') 
+)
 
 MONGO_URI = os.environ.get('MONGO_URI')
 DB_NAME = 'all_movies'
@@ -19,28 +28,31 @@ db = client[DB_NAME]
 
 
 @app.route('/movies')
-def landing_page():
+def show_landing_page():
     all_genre = db.movie_genres.find()
     all_movies = db.movies.find()
-
-    # files = os.listdir('./images')
-
-    # for result in all_movies:
-    #     print(result['genre'])
     return render_template('landingpage.template.html',
                            all_genre=list(all_genre),
                            all_movies=list(all_movies))
 
 
-@app.route('/movies/create')
+@app.route('/movies', methods=['POST'])
+def process_landing_page():
+
+    name = request.form.get('name')
+    genre = request.form.get('genre')
+    imageurl = request.form.get('imageurl')
+    year = request.form.get('year')
+    maincasts = request.form.get('maincasts')
+    synopsis = request.form.get('synopsis')
+    directors = request.form.get('directors')
+    youtubeurl = request.form.get('youtubeurl')
+
+    return redirect(url_for('show_landing_page'))
+
+
+@app.route('/movies/bygenre')
 def show_create_movie():
-    # with open(path, 'rb') as f:
-    #     contents = f.read()
-    #     binary_file = Binary(contents)
-    #     db.movie_thumbnails.insert_one({
-    #         'name': 'RE',
-    #         'file': binary_file
-    #     })
     return render_template('create_movieinfo.template.html')
 
 
