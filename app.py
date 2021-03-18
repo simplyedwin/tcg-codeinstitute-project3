@@ -48,16 +48,16 @@ def process_landing_page():
     directors = request.form.get('directors')
     youtubeurl = request.form.get('youtubeurl')
 
-    cloudinary.uploader.upload(imageurl.stream,
-                               folder="tcgproj3/"+genre,
-                               use_filename=True,
-                               resource_type="image"
-                               )
+    result = cloudinary.uploader.upload(imageurl.stream,
+                                        public_id=name,
+                                        folder="tcgproj3/"+genre,
+                                        resource_type="image"
+                                        )
 
     db.movies.insert_one({
         "name": name,
         "genre": genre.lower(),
-        "imageurl": [],
+        "imageurl": result['url'],
         "year": year,
         "maincasts": maincasts.split(","),
         "synopsis": synopsis,
