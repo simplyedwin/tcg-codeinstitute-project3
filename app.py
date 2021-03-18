@@ -14,10 +14,10 @@ load_dotenv()
 
 app = Flask(__name__)
 
-cloudinary.config( 
-  cloud_name = os.environ.get('CLOUD_NAME'), 
-  api_key = os.environ.get('CLOUD_API_KEY'), 
-  api_secret = os.environ.get('CLOUD_API_SECRET') 
+cloudinary.config(
+    cloud_name=os.environ.get('CLOUD_NAME'),
+    api_key=os.environ.get('CLOUD_API_KEY'),
+    api_secret=os.environ.get('CLOUD_API_SECRET')
 )
 
 MONGO_URI = os.environ.get('MONGO_URI')
@@ -41,12 +41,29 @@ def process_landing_page():
 
     name = request.form.get('name')
     genre = request.form.get('genre')
-    imageurl = request.form.get('imageurl')
+    imageurl = request.files['imageurl']
     year = request.form.get('year')
     maincasts = request.form.get('maincasts')
     synopsis = request.form.get('synopsis')
     directors = request.form.get('directors')
     youtubeurl = request.form.get('youtubeurl')
+
+    cloudinary.uploader.upload(imageurl.stream,
+                               folder="tcgproj3/"+genre,
+                               use_filename=True,
+                               resource_type="image"
+                               )
+
+    db.movies.insert_one({
+        "name": name,
+        "genre": genre.lower(),
+        "imageurl": [],
+        "year": year,
+        "maincasts": maincasts.split(","),
+        "synopsis": synopsis,
+        "directors": directors.split(","),
+        "youtubeurl": youtubeurl
+    })
 
     return redirect(url_for('show_landing_page'))
 
