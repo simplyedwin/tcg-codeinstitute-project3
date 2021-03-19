@@ -79,6 +79,16 @@ def show_movieinfolist_bygenre(genre):
                            all_movies=list(all_movies))
 
 
+@app.route('/movies/<movie_id>/movieinfo')
+def show_movieinfo_page(movie_id):
+    movie = db.movies.find_one({
+        '_id': ObjectId(movie_id)
+    })
+
+    return render_template('movieinfo.template.html',
+                           movie=movie)
+
+
 if __name__ == '__main__':
     app.run(host=os.environ.get('IP'),
             port=os.environ.get('PORT'), debug=True)

@@ -7,6 +7,7 @@
     {% if movie.genre == genre %}
 
         <div class="container w-50 py-5">
+            <a href="{{url_for('show_movieinfo_page',movie_id=movie._id)}}">
             <div class="card mb-3">
                 <div class="row no-gutters">
                     <div class="col-md-6">
@@ -22,6 +23,7 @@
                     </div>
                 </div>
             </div>
+            </a>
         </div>
 
     {% endif %}

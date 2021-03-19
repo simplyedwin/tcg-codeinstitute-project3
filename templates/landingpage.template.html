@@ -3,45 +3,52 @@
 {% block content %}
 
 {% for genre in all_genre %}
-    {% if loop.index is divisibleby 2 %}
-        <div style="background-color: lightgrey;">
-            <div class="container w-50 py-5">
-                <p class="h3 py-2"><a href="{{url_for('show_movieinfolist_bygenre',genre=genre.genre)}}">{{genre.genre.capitalize()}}</a>
-                    <span class="h6">
-                        ᐊ View More </span>
-                </p>
-                <div class="row">
-                    {% for movie in all_movies %}
-                    {% if genre.genre == movie.genre %}
-                    <div class="col-4">
-                        <img src="{{movie.imageurl}}" alt="" class="rounded" style="height: 150px; width: 200px;">
-                        <label for="">{{movie.name}}</label>
-                    </div>
-                    {% endif %}
-                    {% endfor %}
-                </div>
+{% if loop.index is divisibleby 2 %}
+<div style="background-color: lightgrey;">
+    <div class="container w-50 py-5">
+        <p class="h3 py-2"><a
+                href="{{url_for('show_movieinfolist_bygenre',genre=genre.genre)}}">{{genre.genre.capitalize()}}</a>
+            <span class="h6">
+                ᐊ View More </span>
+        </p>
+        <div class="row">
+            {% for movie in all_movies %}
+            {% if genre.genre == movie.genre %}
+
+            <div class="col-4">
+                <a href="{{url_for('show_movieinfo_page',movie_id=movie._id)}}">
+                <img src="{{movie.imageurl}}" alt="" class="rounded" style="height: 150px; width: 200px;">
+                <label for="">{{movie.name}}</label>
+                </a>
             </div>
+            {% endif %}
+            {% endfor %}
         </div>
-    {% else %}
-        <div class="bg-light">
-            <div class="container w-50 py-5">
-                <p class="h3 py-2"><a href="{{url_for('show_movieinfolist_bygenre',genre=genre.genre)}}">{{genre.genre.capitalize()}}</a>
-                    <span class="h6">
-                        ᐊ View More </span>
-                </p>
-                <div class="row">
-                    {% for movie in all_movies %}
-                        {% if genre.genre == movie.genre %}
-                        <div class="col-4">
-                            <img src="{{movie.imageurl}}" alt="" class="rounded" style="height: 150px; width: 200px;">
-                            <label for="">{{movie.name}}</label>
-                        </div>
-                        {% endif %}
-                    {% endfor %}
-                </div>
+    </div>
+</div>
+{% else %}
+<div class="bg-light">
+    <div class="container w-50 py-5">
+        <p class="h3 py-2"><a
+                href="{{url_for('show_movieinfolist_bygenre',genre=genre.genre)}}">{{genre.genre.capitalize()}}</a>
+            <span class="h6">
+                ᐊ View More </span>
+        </p>
+        <div class="row">
+            {% for movie in all_movies %}
+            {% if genre.genre == movie.genre %}
+            <div class="col-4">
+                <a href="{{url_for('show_movieinfo_page',movie_id=movie._id)}}">
+                    <img src="{{movie.imageurl}}" alt="" class="rounded" style="height: 150px; width: 200px;">
+                    <label for="">{{movie.name}}</label>
+                </a>
             </div>
+            {% endif %}
+            {% endfor %}
         </div>
-    {% endif %}
+    </div>
+</div>
+{% endif %}
 {% endfor %}
 
 {% endblock %}
