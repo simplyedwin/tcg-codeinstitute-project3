@@ -5,7 +5,7 @@
 {% for genre in all_genre %}
 {% if loop.index is divisibleby 2 %}
 <div style="background-color: lightgrey;">
-    <div class="container w-50 py-5">
+    <div class="container w-75 py-5">
         <p class="h3 py-2"><a
                 href="{{url_for('show_movieinfolist_bygenre',genre=genre.genre)}}">{{genre.genre.capitalize()}}</a>
             <span class="h6">
@@ -16,10 +16,12 @@
             {% if genre.genre == movie.genre %}
 
             <div class="col-4">
+                <div class="container">
                 <a href="{{url_for('show_movieinfo_page',movie_id=movie._id)}}">
-                <img src="{{movie.imageurl}}" alt="" class="rounded" style="height: 150px; width: 200px;">
+                <img src="{{movie.imageurl}}" alt="" class="rounded" style="height: 200px; width: 300px;">
                 <label for="">{{movie.name}}</label>
                 </a>
+                </div>
             </div>
             {% endif %}
             {% endfor %}
@@ -28,7 +30,7 @@
 </div>
 {% else %}
 <div class="bg-light">
-    <div class="container w-50 py-5">
+    <div class="container w-75 py-5">
         <p class="h3 py-2"><a
                 href="{{url_for('show_movieinfolist_bygenre',genre=genre.genre)}}">{{genre.genre.capitalize()}}</a>
             <span class="h6">
@@ -39,8 +41,10 @@
             {% if genre.genre == movie.genre %}
             <div class="col-4">
                 <a href="{{url_for('show_movieinfo_page',movie_id=movie._id)}}">
-                    <img src="{{movie.imageurl}}" alt="" class="rounded" style="height: 150px; width: 200px;">
+                    <div class="container">
+                    <img src="{{movie.imageurl}}" alt="" class="rounded" style="height: 200px; width: 300px;">
                     <label for="">{{movie.name}}</label>
+                    </div>
                 </a>
             </div>
             {% endif %}

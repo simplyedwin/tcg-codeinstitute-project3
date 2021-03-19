@@ -52,7 +52,7 @@ def process_landing_page():
 
     result = cloudinary.uploader.upload(imageurl.stream,
                                         public_id=name,
-                                        folder="tcgproj3/"+genre,
+                                        folder="tcgproj3/"+genre+"/"+name,
                                         resource_type="image"
                                         )
 
