@@ -38,7 +38,7 @@ def show_landing_page():
                            all_movies=list(all_movies))
 
 
-@app.route('/movies', methods=['POST'])
+@ app.route('/movies', methods=['POST'])
 def process_landing_page():
 
     name = request.form.get('name')
@@ -71,7 +71,7 @@ def process_landing_page():
     return redirect(url_for('show_landing_page'))
 
 
-@app.route('/movies/<genre>/bygenre')
+@ app.route('/movies/<genre>/bygenre')
 def show_movieinfolist_bygenre(genre):
 
     all_movies = db.movies.find()
