@@ -39,6 +39,8 @@ def show_landing_page():
 @app.route('/movies', methods=['POST'])
 def process_landing_page():
 
+    visible = True
+
     name = request.form.get('name')
     genre = request.form.get('genre')
     imageurl = request.files['imageurl']
@@ -65,12 +67,16 @@ def process_landing_page():
         "youtubeurl": youtubeurl
     })
 
-    return redirect(url_for('show_landing_page'))
+    return render_template('landingpage.template.html')
 
 
-@app.route('/movies/bygenre')
-def show_create_movie():
-    return render_template('create_movieinfo.template.html')
+@app.route('/movies/<genre>/bygenre')
+def show_movieinfolist_bygenre(genre):
+
+    all_movies = db.movies.find()
+    return render_template('movieinfolist.template.html',
+                           genre=genre,
+                           all_movies=list(all_movies))
 
 
 if __name__ == '__main__':
