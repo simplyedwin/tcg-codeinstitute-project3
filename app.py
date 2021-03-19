@@ -64,7 +64,7 @@ def process_landing_page():
         "maincasts": maincasts.split(","),
         "synopsis": synopsis,
         "directors": directors.split(","),
-        "youtubeurl": youtubeurl
+        "youtubeurl": youtubeurl.replace('watch?v=','embed/')
     })
 
     return render_template('landingpage.template.html')
