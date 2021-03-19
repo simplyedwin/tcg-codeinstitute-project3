@@ -14,6 +14,8 @@ load_dotenv()
 
 app = Flask(__name__)
 
+app.secret_key = os.environ.get('FLASK_SECRET_KEY')
+
 cloudinary.config(
     cloud_name=os.environ.get('CLOUD_NAME'),
     api_key=os.environ.get('CLOUD_API_KEY'),
@@ -39,8 +41,6 @@ def show_landing_page():
 @app.route('/movies', methods=['POST'])
 def process_landing_page():
 
-    visible = True
-
     name = request.form.get('name')
     genre = request.form.get('genre')
     imageurl = request.files['imageurl']
@@ -64,10 +64,11 @@ def process_landing_page():
         "maincasts": maincasts.split(","),
         "synopsis": synopsis,
         "directors": directors.split(","),
-        "youtubeurl": youtubeurl.replace('watch?v=','embed/')
+        "youtubeurl": youtubeurl.replace('watch?v=', 'embed/')
     })
 
-    return render_template('landingpage.template.html')
+    flash(name + " has been added!")
+    return redirect(url_for('show_landing_page'))
 
 
 @app.route('/movies/<genre>/bygenre')
@@ -87,6 +88,22 @@ def show_movieinfo_page(movie_id):
 
     return render_template('movieinfo.template.html',
                            movie=movie)
+
+
+@app.route('/movies/<movie_id>/movieinfo', methods=['POST'])
+def process_delete_movieinfo(movie_id):
+    movie = db.movies.find_one({
+        '_id': ObjectId(movie_id)
+    })
+
+    name = movie['name']
+
+    db.movies.remove({
+        "_id": ObjectId(movie_id)
+    })
+
+    flash(name + " has been deleted!")
+    return redirect(url_for('show_landing_page'))
 
 
 if __name__ == '__main__':
