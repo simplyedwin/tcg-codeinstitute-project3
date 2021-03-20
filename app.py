@@ -107,5 +107,7 @@ def process_delete_movieinfo(movie_id):
 
 
 if __name__ == '__main__':
+    # app.run(host=os.environ.get('IP'),
+    #         port=os.environ.get('PORT'), debug=True)
     app.run(host=os.environ.get('IP'),
-            port=os.environ.get('PORT'), debug=True)
+                port=8080, debug=True)

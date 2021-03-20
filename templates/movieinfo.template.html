@@ -56,7 +56,9 @@
     <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deletemovieinfo">
         Delete
     </button>
-    <button type="submit" class="btn btn-primary">Edit</button>
+    <button type="button" class="btn btn-success" data-toggle="modal" data-target="#updatemovieinfo">
+        Edit
+    </button>
 
     <!-- Modal -->
     <form method="POST">
@@ -83,11 +85,60 @@
             </div>
         </div>
     </form>
+    <!-- Modal -->
+    <div class="modal fade " id="updatemovieinfo" data-backdrop="static" data-keyboard="false" tabindex="-1"
+        aria-labelledby="updatemovieinfoLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="updatemovieinfoLabel">Please update the below field about the
+                        movie</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form method="POST" enctype="multipart/form-data">
+                        <div class="form-group">
+                            <label for="recipient-name" class="col-form-label">Title:</label>
+                            <input type="text" class="form-control" id="movie-name" name="name">
+                        </div>
+                        <div class="form-group">
+                            <label for="message-text" class="col-form-label">Genre:</label>
+                            <input class="form-control" id="movie-genre" name="genre">
+                        </div>
+                        <div class="form-group">
+                            <label for="message-text" class="col-form-label">Poster:</label>
+                            <input type="file" class="form-control" id="movie-poster" name="imageurl">
+                        </div>
+                        <div class="form-group">
+                            <label for="message-text" class="col-form-label">Year:</label>
+                            <input class="form-control" id="movie-year" name="year">
+                        </div>
+                        <div class="form-group">
+                            <label for="message-text" class="col-form-label">Main Casts:</label>
+                            <input class="form-control" id="movie-casts" name="maincasts">
+                        </div>
+                        <div class="form-group">
+                            <label for="message-text" class="col-form-label">Synopsis:</label>
+                            <textarea class="form-control" id="movie-synop" name="synopsis"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="message-text" class="col-form-label">Directed by:</label>
+                            <input class="form-control" id="movie-director" name="directors">
+                        </div>
+                        <div class="form-group">
+                            <label for="message-text" class="col-form-label">Trailer(url):</label>
+                            <input class="form-control" id="movie-trialer" name="youtubeurl">
+                        </div>
+                        <button type="submit" class="btn btn-primary">Add</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 
 </div>
-
-
-
-
 
 {% endblock %}
