@@ -3,11 +3,7 @@
 {% block content %}
 
     {% for movie in all_movies%}
-
-    {{movie.directors|pprint}}
-    {{movie.directors|length|pprint}}
-
-
+    
             {% if movie.genre == genre %}
                 <div class="container w-50 py-5 bg-light">
                     <a href="{{url_for('show_movieinfo_page',movie_id=movie._id)}}">
@@ -94,7 +90,6 @@
                     {% elif movie.maincasts|length>0 %}
 
                         {% for cast in movie.maincasts %}
-                        {{cast|pprint}}
 
                             {% if result in cast %}
                                 <div class="container w-50 py-5 bg-light">
@@ -126,8 +121,9 @@
                             {% endif%}
 
                         {% endfor%}
+                    {% endif%}    
 
-                    {% elif movie.directors|length>0 %}
+                    {% if movie.directors|length>0 %}
 
                         {% for director in movie.directors %}
 
@@ -160,7 +156,7 @@
                                     </div>
                                 {% endif%}
 
-                            {% endfor%}
+                        {% endfor%}
 
                     {% endif %}
                 {% endif %}
