@@ -35,7 +35,7 @@ def show_landing_page():
     all_genre = db.movie_genres.find()
     all_movies = db.movies.find()
 
-    if request.args.get('result'):
+    if request.args.get('result') != None:
         result = request.args.get('result')
         print(result)
         return render_template('movieinfolist.template.html',
@@ -85,48 +85,63 @@ def process_landing_page():
 def show_movieinfolist_bygenre(genre):
     all_genre = db.movie_genres.find()
     all_movies = db.movies.find()
-    return render_template('movieinfolist.template.html',
-                           all_genre=list(all_genre),
-                           genre=genre,
-                           all_movies=list(all_movies))
+
+    if request.args.get('result') != None:
+        result = request.args.get('result')
+        print(result)
+        return render_template('movieinfolist.template.html',
+                               all_genre=list(all_genre),
+                               result=result,
+                               all_movies=list(all_movies))
+    else:
+
+        return render_template('movieinfolist.template.html',
+                               all_genre=list(all_genre),
+                               genre=genre,
+                               all_movies=list(all_movies))
 
 
 @ app.route('/movies/<year>/byyear')
 def show_movieinfolist_byyear(year):
     all_genre = db.movie_genres.find()
     all_movies = db.movies.find()
-    return render_template('movieinfolist.template.html',
-                           all_genre=list(all_genre),
-                           year=year,
-                           all_movies=list(all_movies))
 
+    if request.args.get('result') != None:
+        result = request.args.get('result')
+        print(result)
+        return render_template('movieinfolist.template.html',
+                               all_genre=list(all_genre),
+                               result=result,
+                               all_movies=list(all_movies))
+    else:
 
-# @ app.route('/movies')
-# def show_movieinfolist_byresult():
-
-#     print("Hello")
-#     result = request.args.get('result')
-#     print(type(result))
-#     all_genre = db.movie_genres.find()
-#     all_movies = db.movies.find()
-#     return render_template('movieinfolist.template.html',
-#                            all_genre=list(all_genre),
-#                            result=result,
-#                            all_movies=list(all_movies))
+        return render_template('movieinfolist.template.html',
+                               all_genre=list(all_genre),
+                               year=year,
+                               all_movies=list(all_movies))
 
 
 @app.route('/movies/<movie_id>/movieinfo')
 def show_movieinfo_page(movie_id):
     all_genre = db.movie_genres.find()
     all_movies = db.movies.find()
-    movie = db.movies.find_one({
-        '_id': ObjectId(movie_id)
-    })
 
-    return render_template('movieinfo.template.html',
-                           all_genre=list(all_genre),
-                           all_movies=list(all_movies),
-                           movie=movie)
+    if request.args.get('result') != None:
+        result = request.args.get('result')
+        print(result)
+        return render_template('movieinfolist.template.html',
+                               all_genre=list(all_genre),
+                               result=result,
+                               all_movies=list(all_movies))
+    else:
+        movie = db.movies.find_one({
+            '_id': ObjectId(movie_id)
+        })
+
+        return render_template('movieinfo.template.html',
+                               all_genre=list(all_genre),
+                               all_movies=list(all_movies),
+                               movie=movie)
 
 
 @app.route('/movies/<movie_id>/movieinfo', methods=['POST'])

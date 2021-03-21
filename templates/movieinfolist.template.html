@@ -4,6 +4,10 @@
 
     {% for movie in all_movies%}
 
+    {{movie.directors|pprint}}
+    {{movie.directors|length|pprint}}
+
+
             {% if movie.genre == genre %}
                 <div class="container w-50 py-5 bg-light">
                     <a href="{{url_for('show_movieinfo_page',movie_id=movie._id)}}">
@@ -58,76 +62,41 @@
                         </div>
                     </a>
                 </div>
-            {% elif result == "" %}
-            {{result|pprint}}
-
-                {% if result in movie.name %}
-                    <div class="container w-50 py-5 bg-light">
-                        <a href="{{url_for('show_movieinfo_page',movie_id=movie._id)}}">
-                            <div class="card mb-3">
-                                <div class="row no-gutters">
-                                    <div class="col-md-6">
-                                        <img src="{{movie.imageurl}}" class="card-img my-auto" alt="...">
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div class="card-body">
-                                            <h5 class="card-title">{{movie.name}}</h5>
-                                            <p class="card-text">Genre: {{movie.genre.capitalize()}}</p>
-                                            <p class="card-text">Directed by:
-                                                {% if movie.directors|length> 0 %}
-                                                {{', '.join(movie.directors)}}
-                                                {% else %}
-                                                {{movie.directors[0]}}
-                                                {% endif %}
-                                            </p>
-                                            <p class="card-text">Release on: {{movie.year}}</p>
-                                            <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+            {% elif result is not none() %}
+                {% if result is defined %}
+                    {% if result in movie.name%}
+                        <div class="container w-50 py-5 bg-light">
+                            <a href="{{url_for('show_movieinfo_page',movie_id=movie._id)}}">
+                                <div class="card mb-3">
+                                    <div class="row no-gutters">
+                                        <div class="col-md-6">
+                                            <img src="{{movie.imageurl}}" class="card-img my-auto" alt="...">
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="card-body">
+                                                <h5 class="card-title">{{movie.name}}</h5>
+                                                <p class="card-text">Genre: {{movie.genre.capitalize()}}</p>
+                                                <p class="card-text">Directed by:
+                                                    {% if movie.directors|length> 0 %}
+                                                    {{', '.join(movie.directors)}}
+                                                    {% else %}
+                                                    {{movie.directors[0]}}
+                                                    {% endif %}
+                                                </p>
+                                                <p class="card-text">Release on: {{movie.year}}</p>
+                                                <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                        </a>
-                    </div>
-                {% elif movie.maincasts|length>0 %}
+                            </a>
+                        </div>
+                    {% elif movie.maincasts|length>0 %}
 
-                    {% for cast in movie.maincasts %}
+                        {% for cast in movie.maincasts %}
+                        {{cast|pprint}}
 
-                        {% if result in cast %}
-                            <div class="container w-50 py-5 bg-light">
-                                <a href="{{url_for('show_movieinfo_page',movie_id=movie._id)}}">
-                                    <div class="card mb-3">
-                                        <div class="row no-gutters">
-                                            <div class="col-md-6">
-                                                <img src="{{movie.imageurl}}" class="card-img my-auto" alt="...">
-                                            </div>
-                                            <div class="col-md-6">
-                                                <div class="card-body">
-                                                    <h5 class="card-title">{{movie.name}}</h5>
-                                                    <p class="card-text">Genre: {{movie.genre.capitalize()}}</p>
-                                                    <p class="card-text">Directed by:
-                                                        {% if movie.directors|length> 0 %}
-                                                        {{', '.join(movie.directors)}}
-                                                        {% else %}
-                                                        {{movie.directors[0]}}
-                                                        {% endif %}
-                                                    </p>
-                                                    <p class="card-text">Release on: {{movie.year}}</p>
-                                                    <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </a>
-                            </div>
-                        {% endif%}
-
-                    {% endfor%}
-
-                {% elif movie.directors|length>0 %}
-
-                    {% for director in movie.directors %}
-
-                            {% if result in director %}
+                            {% if result in cast %}
                                 <div class="container w-50 py-5 bg-light">
                                     <a href="{{url_for('show_movieinfo_page',movie_id=movie._id)}}">
                                         <div class="card mb-3">
@@ -158,6 +127,42 @@
 
                         {% endfor%}
 
+                    {% elif movie.directors|length>0 %}
+
+                        {% for director in movie.directors %}
+
+                                {% if result in director %}
+                                    <div class="container w-50 py-5 bg-light">
+                                        <a href="{{url_for('show_movieinfo_page',movie_id=movie._id)}}">
+                                            <div class="card mb-3">
+                                                <div class="row no-gutters">
+                                                    <div class="col-md-6">
+                                                        <img src="{{movie.imageurl}}" class="card-img my-auto" alt="...">
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <div class="card-body">
+                                                            <h5 class="card-title">{{movie.name}}</h5>
+                                                            <p class="card-text">Genre: {{movie.genre.capitalize()}}</p>
+                                                            <p class="card-text">Directed by:
+                                                                {% if movie.directors|length> 0 %}
+                                                                {{', '.join(movie.directors)}}
+                                                                {% else %}
+                                                                {{movie.directors[0]}}
+                                                                {% endif %}
+                                                            </p>
+                                                            <p class="card-text">Release on: {{movie.year}}</p>
+                                                            <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </a>
+                                    </div>
+                                {% endif%}
+
+                            {% endfor%}
+
+                    {% endif %}
                 {% endif %}
 
             {% endif %}
