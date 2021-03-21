@@ -106,8 +106,55 @@ def process_delete_movieinfo(movie_id):
     return redirect(url_for('show_landing_page'))
 
 
+@app.route('/movies/movieinfo/<movie_id>/update')
+def show_update_movieinfo_page(movie_id):
+    movie = db.movies.find_one({
+        '_id': ObjectId(movie_id)
+    })
+
+    return render_template('movieinfo_update.template.html',
+                           movie=movie)
+
+
+@app.route('/movies/movieinfo/<movie_id>/update', methods=['POST'])
+def process_update_movieinfo_page(movie_id):
+
+    name = request.form.get('name')
+    genre = request.form.get('genre')
+    imageurl = request.files['imageurl']
+    year = request.form.get('year')
+    maincasts = request.form.get('maincasts')
+    synopsis = request.form.get('synopsis')
+    directors = request.form.get('directors')
+    youtubeurl = request.form.get('youtubeurl')
+
+    result = cloudinary.uploader.upload(imageurl.stream,
+                                        public_id=name,
+                                        folder="tcgproj3/"+genre+"/"+name,
+                                        resource_type="image"
+                                        )
+
+    db.movies.update_one({
+        "_id": ObjectId(movie_id)
+    }, {
+        '$set': {
+            "name": name,
+            "genre": genre.lower(),
+            "imageurl": result['url'],
+            "year": year,
+            "maincasts": maincasts.split(","),
+            "synopsis": synopsis,
+            "directors": directors.split(","),
+            "youtubeurl": youtubeurl.replace('watch?v=', 'embed/')
+        }
+    })
+
+    flash(name + " has been updated!")
+    return redirect(url_for('show_update_movieinfo_page',movie_id=movie_id))
+
+
 if __name__ == '__main__':
     # app.run(host=os.environ.get('IP'),
     #         port=os.environ.get('PORT'), debug=True)
     app.run(host=os.environ.get('IP'),
-                port=8080, debug=True)
+            port=8080, debug=True)
