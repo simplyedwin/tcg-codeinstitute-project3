@@ -6,6 +6,8 @@ from bson.binary import Binary
 import cloudinary
 import cloudinary.uploader
 import cloudinary.api
+from flask_dropzone import Dropzone
+
 
 # we can use ObjectId
 from bson.objectid import ObjectId
@@ -14,8 +16,21 @@ load_dotenv()
 
 app = Flask(__name__)
 app.secret_key = os.environ.get('FLASK_SECRET_KEY')
-app.config['MAX_CONTENT_LENGTH'] = 600 * 600
+app.config['MAX_CONTENT_LENGTH'] = 1024 * 1024
 app.config['UPLOAD_EXTENSIONS'] = ['.jpg', '.png', '.gif']
+
+app.config.update(
+    # Flask-Dropzone config:
+    DROPZONE_ALLOWED_FILE_TYPE='image',
+    DROPZONE_MAX_FILE_SIZE=3,
+    DROPZONE_MAX_FILES=30,
+    DROPZONE_IN_FORM=True,
+    DROPZONE_UPLOAD_ON_CLICK=True,
+    DROPZONE_UPLOAD_ACTION='process_landing_page',  # URL or endpoint
+    DROPZONE_UPLOAD_BTN_ID='upload-btn',
+)
+
+dropzone = Dropzone(app)
 
 cloudinary.config(
     cloud_name=os.environ.get('CLOUD_NAME'),
@@ -52,9 +67,13 @@ def show_landing_page():
 @ app.route('/movies', methods=['POST'])
 def process_landing_page():
 
+    for key, f in request.files.items():
+            if key.startswith('file'):
+                    imageurl = f
+
     name = request.form.get('name')
     genre = request.form.get('genre')
-    imageurl = request.files['imageurl']
+    # imageurl = request.files['file']
     year = request.form.get('year')
     maincasts = request.form.get('maincasts')
     synopsis = request.form.get('synopsis')
