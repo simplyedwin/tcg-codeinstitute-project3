@@ -31,11 +31,21 @@ db = client[DB_NAME]
 
 @app.route('/movies')
 def show_landing_page():
+
     all_genre = db.movie_genres.find()
     all_movies = db.movies.find()
-    return render_template('landingpage.template.html',
-                           all_genre=list(all_genre),
-                           all_movies=list(all_movies))
+
+    if request.args.get('result'):
+        result = request.args.get('result')
+        print(result)
+        return render_template('movieinfolist.template.html',
+                               all_genre=list(all_genre),
+                               result=result,
+                               all_movies=list(all_movies))
+    else:
+        return render_template('landingpage.template.html',
+                               all_genre=list(all_genre),
+                               all_movies=list(all_movies))
 
 
 @ app.route('/movies', methods=['POST'])
@@ -89,6 +99,20 @@ def show_movieinfolist_byyear(year):
                            all_genre=list(all_genre),
                            year=year,
                            all_movies=list(all_movies))
+
+
+# @ app.route('/movies')
+# def show_movieinfolist_byresult():
+
+#     print("Hello")
+#     result = request.args.get('result')
+#     print(type(result))
+#     all_genre = db.movie_genres.find()
+#     all_movies = db.movies.find()
+#     return render_template('movieinfolist.template.html',
+#                            all_genre=list(all_genre),
+#                            result=result,
+#                            all_movies=list(all_movies))
 
 
 @app.route('/movies/<movie_id>/movieinfo')

@@ -26,16 +26,21 @@
             <div class="col d-flex p-2 justify-content-end">
                 <a href="{{url_for('show_landing_page')}}" class="btn btn-primary">Home</a>
             </div>
-            <div class="col d-flex justify-content-center">
-                <div class="input-group p-2">
-                    <input type="text" class="form-control" placeholder="Please type in a movie name">
-                    <div class="input-group-append">
-                        <button type="button" class="btn btn-primary mr-2">
-                            Search
-                        </button>
+            <form method="GET" enctype="multipart/form-data">
+
+                <div class="col d-flex justify-content-center">
+                    <div class="input-group p-2">
+                        <input name="result" type="text" class="form-control" placeholder="Please type in a movie name">
+                        <div class="input-group-append">
+                            <button type="submit" class="btn btn-primary mr-2">
+                                Search
+                            </button>
+                        </div>
                     </div>
                 </div>
-            </div>
+
+            </form>
+
             <div class="col d-flex p-2 justify-content-start">
                 <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#staticBackdrop">
                     Add
