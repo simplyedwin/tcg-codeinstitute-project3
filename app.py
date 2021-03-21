@@ -13,8 +13,9 @@ from bson.objectid import ObjectId
 load_dotenv()
 
 app = Flask(__name__)
-
 app.secret_key = os.environ.get('FLASK_SECRET_KEY')
+app.config['MAX_CONTENT_LENGTH'] = 600 * 600
+app.config['UPLOAD_EXTENSIONS'] = ['.jpg', '.png', '.gif']
 
 cloudinary.config(
     cloud_name=os.environ.get('CLOUD_NAME'),
