@@ -23,15 +23,16 @@
 
     <div class="container-fluid sticky-top bg-light">
         <div class="row">
-            <div class="col d-flex p-2 justify-content-end">
+            <div class="col-3 d-flex p-2 justify-content-end">
                 <a href="{{url_for('show_landing_page')}}" class="btn btn-primary">Home</a>
             </div>
 
-            <div class="col d-flex justify-content-center">
+            <div class="col-6 d-flex justify-content-center">
                 <form method="GET" enctype="multipart/form-data" class="w-100">
 
                     <div class="input-group p-2">
-                        <input name="result" type="text" class="form-control" placeholder="Please type in a movie name">
+                        <input name="result" type="text" class="form-control"
+                            placeholder="Please type in a movie title / main cast / director name...">
                         <div class="input-group-append">
                             <button type="submit" class="btn btn-primary mr-2">
                                 Search
@@ -43,8 +44,8 @@
             </div>
 
 
-            <div class="col d-flex p-2 justify-content-start">
-                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#staticBackdrop">
+            <div class="col-3 d-flex p-2 justify-content-start">
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#AddMovieBackdrop">
                     Add
                 </button>
             </div>
@@ -84,62 +85,66 @@
     </div>
 
     <!-- Modal -->
-    <div class="modal fade " id="staticBackdrop" data-backdrop="static" data-keyboard="false" tabindex="-1"
-        aria-labelledby="staticBackdropLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="staticBackdropLabel">Add New Movie Info</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <form method="POST" enctype="multipart/form-data">
+    <div class="container">
+        <div class="modal fade " id="AddMovieBackdrop" data-backdrop="static" data-keyboard="false" tabindex="-1"
+            aria-labelledby="AddMovieBackdropLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="AddMovieBackdropLabel">Add New Movie Info</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="row">
+                        <form method="POST" enctype="multipart/form-data">
 
-                    <div class="modal-body">
-                        <div class="form-group">
-                            <label for="recipient-name" class="col-form-label">Title:</label>
-                            <input type="text" class="form-control" id="movie-name" name="name">
-                        </div>
-                        <div class="form-group">
-                            <label for="message-text" class="col-form-label">Genre:</label>
-                            <input class="form-control" id="movie-genre" name="genre">
-                        </div>
-                        <div class="form-group">
-                            <label for="message-text" class="col-form-label">Poster:</label>
-                            <input type="file" class="form-control" id="movie-poster" name="imageurl">
-                        </div>
-                        <div class="form-group">
-                            <label for="message-text" class="col-form-label">Year:</label>
-                            <input class="form-control" id="movie-year" name="year">
-                        </div>
-                        <div class="form-group">
-                            <label for="message-text" class="col-form-label">Main Casts:</label>
-                            <input class="form-control" id="movie-casts" name="maincasts">
-                        </div>
-                        <div class="form-group">
-                            <label for="message-text" class="col-form-label">Synopsis:</label>
-                            <textarea class="form-control" id="movie-synop" name="synopsis"></textarea>
-                        </div>
-                        <div class="form-group">
-                            <label for="message-text" class="col-form-label">Directed by:</label>
-                            <input class="form-control" id="movie-director" name="directors">
-                        </div>
-                        <div class="form-group">
-                            <label for="message-text" class="col-form-label">Trailer(url):</label>
-                            <input class="form-control" id="movie-trialer" name="youtubeurl">
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary">Add</button>
-                    </div>
-                    <!-- <div class="progress mt-1" {% if visible %} visible {% else %} hidden {% endif %}>
+                            <div class="modal-body">
+                                <div class="form-group">
+                                    <label for="recipient-name" class="col-form-label">Title:</label>
+                                    <input type="text" class="form-control" id="movie-name" name="name">
+                                </div>
+                                <div class="form-group">
+                                    <label for="message-text" class="col-form-label">Genre:</label>
+                                    <input class="form-control" id="movie-genre" name="genre">
+                                </div>
+                                <div class="form-group">
+                                    <label for="message-text" class="col-form-label">Poster:</label>
+                                    <input type="file" class="form-control" id="movie-poster" name="imageurl">
+                                </div>
+                                <div class="form-group">
+                                    <label for="message-text" class="col-form-label">Year:</label>
+                                    <input class="form-control" id="movie-year" name="year">
+                                </div>
+                                <div class="form-group">
+                                    <label for="message-text" class="col-form-label">Main Casts:</label>
+                                    <input class="form-control" id="movie-casts" name="maincasts">
+                                </div>
+                                <div class="form-group">
+                                    <label for="message-text" class="col-form-label">Synopsis:</label>
+                                    <textarea class="form-control" id="movie-synop" name="synopsis"></textarea>
+                                </div>
+                                <div class="form-group">
+                                    <label for="message-text" class="col-form-label">Directed by:</label>
+                                    <input class="form-control" id="movie-director" name="directors">
+                                </div>
+                                <div class="form-group">
+                                    <label for="message-text" class="col-form-label">Trailer(url):</label>
+                                    <input class="form-control" id="movie-trialer" name="youtubeurl">
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                <button type="submit" class="btn btn-primary">Add</button>
+                            </div>
+                            <!-- <div class="progress mt-1" {% if visible %} visible {% else %} hidden {% endif %}>
                         <div class="progress-bar" role="progressbar" style="width: 25%" aria-valuenow="25"
                             aria-valuemin="0" aria-valuemax="100"></div>
                     </div> -->
-                </form>
+                        </form>
+                    </div>
 
+                </div>
             </div>
         </div>
     </div>
