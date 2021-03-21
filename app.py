@@ -73,20 +73,35 @@ def process_landing_page():
 
 @ app.route('/movies/<genre>/bygenre')
 def show_movieinfolist_bygenre(genre):
-
+    all_genre = db.movie_genres.find()
     all_movies = db.movies.find()
     return render_template('movieinfolist.template.html',
+                           all_genre=list(all_genre),
                            genre=genre,
+                           all_movies=list(all_movies))
+
+
+@ app.route('/movies/<year>/byyear')
+def show_movieinfolist_byyear(year):
+    all_genre = db.movie_genres.find()
+    all_movies = db.movies.find()
+    return render_template('movieinfolist.template.html',
+                           all_genre=list(all_genre),
+                           year=year,
                            all_movies=list(all_movies))
 
 
 @app.route('/movies/<movie_id>/movieinfo')
 def show_movieinfo_page(movie_id):
+    all_genre = db.movie_genres.find()
+    all_movies = db.movies.find()
     movie = db.movies.find_one({
         '_id': ObjectId(movie_id)
     })
 
     return render_template('movieinfo.template.html',
+                           all_genre=list(all_genre),
+                           all_movies=list(all_movies),
                            movie=movie)
 
 
@@ -108,11 +123,15 @@ def process_delete_movieinfo(movie_id):
 
 @app.route('/movies/movieinfo/<movie_id>/update')
 def show_update_movieinfo_page(movie_id):
+    all_genre = db.movie_genres.find()
+    all_movies = db.movies.find()
     movie = db.movies.find_one({
         '_id': ObjectId(movie_id)
     })
 
     return render_template('movieinfo_update.template.html',
+                           all_genre=list(all_genre),
+                           all_movies=list(all_movies),
                            movie=movie)
 
 
@@ -150,7 +169,7 @@ def process_update_movieinfo_page(movie_id):
     })
 
     flash(name + " has been updated!")
-    return redirect(url_for('show_update_movieinfo_page',movie_id=movie_id))
+    return redirect(url_for('show_update_movieinfo_page', movie_id=movie_id))
 
 
 if __name__ == '__main__':

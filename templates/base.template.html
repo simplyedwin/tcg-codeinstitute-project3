@@ -17,23 +17,63 @@
 
 <body>
 
-    <div class="mb-50">
+    <div class="mb-50 ">
 
     </div>
 
-    <div class="container w-50">
-        <div class="input-group mb-3">
-            <input type="text" class="form-control" placeholder="Please type in a movie name">
-            <div class="input-group-append">
-                <button type="button" class="btn btn-primary mr-2">
-                    Search
-                </button>
+    <div class="container-fluid sticky-top bg-light">
+        <div class="row">
+            <div class="col d-flex p-2 justify-content-end">
+                <a href="{{url_for('show_landing_page')}}" class="btn btn-primary">Home</a>
+            </div>
+            <div class="col d-flex justify-content-center">
+                <div class="input-group p-2">
+                    <input type="text" class="form-control" placeholder="Please type in a movie name">
+                    <div class="input-group-append">
+                        <button type="button" class="btn btn-primary mr-2">
+                            Search
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="col d-flex p-2 justify-content-start">
                 <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#staticBackdrop">
                     Add
                 </button>
             </div>
         </div>
-        <a href="{{url_for('show_landing_page')}}" class="btn btn-primary">Home</a>
+        <div class="row d-flex justify-content-center">
+            <div class="dropdown px-2 pb-2">
+                <button class="bg-transparent border-0 dropdown-toggle" type="button" id="dropdownMenuButton"
+                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Genre
+                </button>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    {% for genre in all_genre %}
+                    <a class="dropdown-item"
+                        href="{{url_for('show_movieinfolist_bygenre',genre=genre.genre)}}">{{genre.genre.capitalize()}}</a>
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="dropdown px-2 pb-2">
+                <button class="bg-transparent border-0 dropdown-toggle" type="button" id="dropdownMenuButton"
+                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Year
+                </button>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    {% set years =[] %}
+                    {% for movie in all_movies %}
+                    {% if years.append(movie.year|int) is none %}
+                    {{''}}
+                    {% endif %}
+                    {% endfor %}
+                    {% set years_sorted = years|unique|sort %}
+                    {% for year in years_sorted %}
+                    <a class="dropdown-item" href="{{url_for('show_movieinfolist_byyear',year=year)}}">{{year}} </a>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
     </div>
 
     <!-- Modal -->
