@@ -91,7 +91,7 @@
 
                         {% for cast in movie.maincasts %}
 
-                            {% if result in cast %}
+                            {% if result.capitalize() in cast %}
                                 <div class="container w-50 py-5 bg-light">
                                     <a href="{{url_for('show_movieinfo_page',movie_id=movie._id)}}">
                                         <div class="card mb-3">
@@ -127,7 +127,7 @@
 
                         {% for director in movie.directors %}
 
-                                {% if result in director %}
+                                {% if result.capitalize() in director %}
                                     <div class="container w-50 py-5 bg-light">
                                         <a href="{{url_for('show_movieinfo_page',movie_id=movie._id)}}">
                                             <div class="card mb-3">
