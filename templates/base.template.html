@@ -15,6 +15,7 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='js/dropzone-5.7.0/dist/dropzone.css') }}" />
 
     {{ dropzone.load_css() }}
+    {{ dropzone.style('border: 2px dashed #0087F7; margin: 10px 0 10px; min-height: 400px; width: auto') }}
 
     <title>Movie Finder</title>
 </head>
@@ -101,7 +102,7 @@
                 </div>
                 <!-- <form method="POST" enctype="multipart/form-data" action="{{ url_for('process_landing_page') }}"
                     class="dropzone"> -->
-                <form action="{{ url_for('process_landing_page') }}" method="POST" enctype="multipart/form-data">
+                <form method="POST" enctype="multipart/form-data">
                     <div class="container modal-body">
                         <div class="row">
                             <div class="col-6">
@@ -125,6 +126,11 @@
                                     <label for="message-text" class="col-form-label">Directed by:</label>
                                     <input class="form-control" id="movie-director" name="directors">
                                 </div>
+
+
+                            </div>
+
+                            <div class="col-6">
                                 <div class="form-group">
                                     <label for="message-text" class="col-form-label">Trailer(url):</label>
                                     <input class="form-control" id="movie-trialer" name="youtubeurl">
@@ -133,14 +139,18 @@
                                     <label for="message-text" class="col-form-label">Synopsis:</label>
                                     <textarea class="form-control" id="movie-synop" name="synopsis"></textarea>
                                 </div>
-                            </div>
-
-                            <div class="col-6">
-                                <label for="message-text" class="col-form-label">Poster:</label>
-                                {{ dropzone.create()}}                               
-                                <!-- <div class="form-group">
-                                    <label for="message-text" class="col-form-label">Poster:</label>
-                                </div> -->
+                                <div> <label for="message-text" class="col-form-label">Poster:</label>
+                                </div>
+                                <div> <input type="file" name="file">
+                                </div>
+                                <div> <label for="message-text" class="col-form-label">Backdrop:</label>
+                                </div>
+                                <div> <input type="file" name="file">
+                                </div>
+                                <div> <label for="message-text" class="col-form-label">Thumbnails:</label>
+                                </div>
+                                <div> <input type="file" name="file" multiple>
+                                </div>
                             </div>
                         </div>
 
@@ -150,16 +160,16 @@
                         <button type="submit" class="btn btn-primary" id="upload-btn">Add</button>
                     </div>
                 </form>
-                {{ dropzone.load_js() }}
-                {{ dropzone.config() }}
+
             </div>
         </div>
     </div>
 
     {% block content %} {% endblock %}
 
+    {{ dropzone.load_js() }}
+    {{ dropzone.config() }}
 
-  
 
 
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"
@@ -187,7 +197,7 @@
 
     </script>
 
-    <script src="{{ url_for('static', filename='js/dropzone-5.7.0/dist/dropzone.js')}}"></script>
+    <!-- <script src="{{ url_for('static', filename='js/dropzone-5.7.0/dist/dropzone.js')}}"></script> -->
 
     <!-- Option 2: jQuery, Popper.js, and Bootstrap JS
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
