@@ -33,7 +33,7 @@ client = pymongo.MongoClient(MONGO_URI)
 db = client[DB_NAME]
 
 
-@app.route('/movies')
+@app.route('/')
 def show_landing_page():
 
     all_genre = db.movie_genres.find()
@@ -52,7 +52,7 @@ def show_landing_page():
                                all_movies=list(all_movies))
 
 
-@ app.route('/movies', methods=['POST'])
+@ app.route('/', methods=['POST'])
 def process_landing_page():
 
     name = request.form.get('name')
@@ -84,7 +84,7 @@ def process_landing_page():
     return redirect(url_for('show_landing_page'))
 
 
-@ app.route('/movies/<genre>/bygenre')
+@ app.route('/<genre>/bygenre')
 def show_movieinfolist_bygenre(genre):
     all_genre = db.movie_genres.find()
     all_movies = db.movies.find()
@@ -104,7 +104,7 @@ def show_movieinfolist_bygenre(genre):
                                all_movies=list(all_movies))
 
 
-@ app.route('/movies/<year>/byyear')
+@ app.route('/<year>/byyear')
 def show_movieinfolist_byyear(year):
     all_genre = db.movie_genres.find()
     all_movies = db.movies.find()
@@ -124,7 +124,7 @@ def show_movieinfolist_byyear(year):
                                all_movies=list(all_movies))
 
 
-@app.route('/movies/<movie_id>/movieinfo')
+@app.route('/<movie_id>/movieinfo')
 def show_movieinfo_page(movie_id):
     all_genre = db.movie_genres.find()
     all_movies = db.movies.find()
@@ -147,7 +147,7 @@ def show_movieinfo_page(movie_id):
                                movie=movie)
 
 
-@app.route('/movies/<movie_id>/movieinfo', methods=['POST'])
+@app.route('/<movie_id>/movieinfo', methods=['POST'])
 def process_delete_movieinfo(movie_id):
     movie = db.movies.find_one({
         '_id': ObjectId(movie_id)
@@ -163,7 +163,7 @@ def process_delete_movieinfo(movie_id):
     return redirect(url_for('show_landing_page'))
 
 
-@app.route('/movies/movieinfo/<movie_id>/update')
+@app.route('/movieinfo/<movie_id>/update')
 def show_update_movieinfo_page(movie_id):
     all_genre = db.movie_genres.find()
     all_movies = db.movies.find()
@@ -177,7 +177,7 @@ def show_update_movieinfo_page(movie_id):
                            movie=movie)
 
 
-@app.route('/movies/movieinfo/<movie_id>/update', methods=['POST'])
+@app.route('/movieinfo/<movie_id>/update', methods=['POST'])
 def process_update_movieinfo_page(movie_id):
 
     name = request.form.get('name')
