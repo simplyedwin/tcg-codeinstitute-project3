@@ -199,22 +199,8 @@ The project uses Heroku to host the cors anywhere instance to address the [CORS 
 There are a numbers of bugs or problems encountered during the development of the project are as explained below:
 
 - ***Retriving data after looping through a pymongo.cursor.Cursor object ***  
-<img src="images/CorsIssue_CorsPolicyBlocked.JPG" height=70><br>
+
 During the request of api response from the bus stop information api, an CORs error was encountered. This caused the application unable to receive any information. This was temporary resolved by running the application on a browser with lower security setting. 
-However, this solution was not feasible as the application will be hosted using github.<br>
-Hence, an open source nodejs proxy, called [Cors Anywhere](https://github.com/Rob--W/cors-anywhere) , was used to add CORS headers to the proxied request. This was done by prefix the URL to the bus stop information api url as follow: <br>
-
-      "https://cors-anywhere.herokuapp.com/http://datamall2.mytransport.sg/ltaodataservice/BusStops?$skip=" +
-      apicalls,
-      
-    While the solution worked with no cors error, due to the high number of api call requests during the initial loading of the page and other users of the same proxy, another error occured:<br>
-  <img src="images/CorsIssue_TooManyRequest.JPG" height=300><br>
-An eventual solution was soughted by hosting an instance of the cors anywhere proxy with whitelist limitation to only requesting from the bus stop information api. This proxy instance was hosted using heroku with the following new url:
-
-      "https://cors-anywhere-tcgversion.herokuapp.com/http://datamall2.mytransport.sg/ltaodataservice/BusStops?$skip=" +
-                apicalls,           
-  By hosting a cors anywhere proxy instance which only accepts the bus stop information api, this will prevent others from using it as an open proxy. Hence, the proxy instance will only needs to serve this application and only requesting from the bus stop information api.  
-  <br>
 
 - ***Missing Latitude and Longitude Information From API Server*** <br>
   During the testing on markers, these markers, at some time, were found to be positioned into the sea on the map. It was then found out that the cause was due to the missing information from the api server. An eventual solution was implemented in the backend codes to check for missing api information and remove the markers if not available.  
