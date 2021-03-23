@@ -196,9 +196,9 @@ The project uses Heroku to host the cors anywhere instance to address the [CORS 
 <img src="images/768by1024Screen_3.JPG" height=200><br>
 
 ### Bugs/Problems Encountered
-There are a numbers of bugs or problems encountered during the development of the project. Much of these issues are due to the restful api as explained below:
+There are a numbers of bugs or problems encountered during the development of the project are as explained below:
 
-- ***Cross-Origin Resource Sharing (CORS) Error***  
+- ***Retriving data after looping through a pymongo.cursor.Cursor object ***  
 <img src="images/CorsIssue_CorsPolicyBlocked.JPG" height=70><br>
 During the request of api response from the bus stop information api, an CORs error was encountered. This caused the application unable to receive any information. This was temporary resolved by running the application on a browser with lower security setting. 
 However, this solution was not feasible as the application will be hosted using github.<br>
