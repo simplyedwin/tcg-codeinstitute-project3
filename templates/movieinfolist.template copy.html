@@ -1,0 +1,196 @@
+{% extends "base.template.html" %}
+
+{% block content %}
+
+    {% for movie in all_movies%}
+
+        {% if movie.genre == genre %}
+                    <div class="container w-50 py-5 bg-light">
+                        <a href="{{url_for('show_movieinfo_page',movie_id=movie._id)}}">
+                            <div class="card mb-3">
+                                <div class="row no-gutters">
+                                    <div class="col-md-6">
+                                        <img src="{{movie.imageurl}}" class="card-img my-auto" alt="...">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="card-body">
+                                            <h5 class="card-title">{{movie.name}}</h5>
+                                            <p class="card-text">Genre: {{movie.genre.capitalize()}}</p>
+                                            <p class="card-text">Directed by:
+                                                {% if movie.directors|length> 0 %}
+                                                {{', '.join(movie.directors)}}
+                                                {% else %}
+                                                {{movie.directors[0]}}
+                                                {% endif %}
+                                            </p>
+                                            <p class="card-text">Release on: {{movie.year}}</p>
+                                            <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+        {% elif movie.year == year %}
+                    <div class="container w-50 py-5 bg-light">
+                        <a href="{{url_for('show_movieinfo_page',movie_id=movie._id)}}">
+                            <div class="card mb-3">
+                                <div class="row no-gutters">
+                                    <div class="col-md-6">
+                                        <img src="{{movie.imageurl}}" class="card-img my-auto" alt="...">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="card-body">
+                                            <h5 class="card-title">{{movie.name}}</h5>
+                                            <p class="card-text">Genre: {{movie.genre.capitalize()}}</p>
+                                            <p class="card-text">Directed by:
+                                                {% if movie.directors|length> 0 %}
+                                                {{', '.join(movie.directors)}}
+                                                {% else %}
+                                                {{movie.directors[0]}}
+                                                {% endif %}
+                                            </p>
+                                            <p class="card-text">Release on: {{movie.year}}</p>
+                                            <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+        
+        {% elif result is not none() %}
+        results is {{ result|pprint}}
+                        {% if result.capitalize() in movie.name%}
+                            <div class="container w-50 py-5 bg-light">
+                                <a href="{{url_for('show_movieinfo_page',movie_id=movie._id)}}">
+                                    <div class="card mb-3">
+                                        <div class="row no-gutters">
+                                            <div class="col-md-6">
+                                                <img src="{{movie.imageurl}}" class="card-img my-auto" alt="...">
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="card-body">
+                                                    <h5 class="card-title">{{movie.name}}</h5>
+                                                    <p class="card-text">Genre: {{movie.genre.capitalize()}}</p>
+                                                    <p class="card-text">Directed by:
+                                                        {% if movie.directors|length> 0 %}
+                                                        {{', '.join(movie.directors)}}
+                                                        {% else %}
+                                                        {{movie.directors[0]}}
+                                                        {% endif %}
+                                                    </p>
+                                                    <p class="card-text">Release on: {{movie.year}}</p>
+                                                    <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </a>
+                            </div>
+                        
+
+                        {% elif movie.directors|length>0 %}
+                        movie directors is {{ movie.directors|pprint}}
+                            {% for director in movie.directors|list %}
+
+                                    {% if result.capitalize() in director %}
+                                        <div class="container w-50 py-5">
+                                            <a href="{{url_for('show_movieinfo_page',movie_id=movie._id)}}">
+                                                <div class="card mb-3">
+                                                    <div class="row no-gutters">
+                                                        <div class="col-md-6">
+                                                            <img src="{{movie.imageurl}}" class="card-img my-auto" alt="...">
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                            <div class="card-body">
+                                                                <h5 class="card-title">{{movie.name}}</h5>
+                                                                <p class="card-text">Genre: {{movie.genre.capitalize()}}</p>
+                                                                <p class="card-text">Directed by:
+                                                                    {% if movie.directors|length> 0 %}
+                                                                    {{', '.join(movie.directors)}}
+                                                                    {% else %}
+                                                                    {{movie.directors[0]}}
+                                                                    {% endif %}
+                                                                </p>
+                                                                <p class="card-text">Release on: {{movie.year}}</p>
+                                                                <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </a>
+                                        </div>
+                                    {% endif%}
+
+                            {% endfor%}
+
+                        {% elif movie.maincasts|length>0 %}
+                         main cast is {{movie.maincasts|pprint}}
+
+                            {% for cast in movie.maincasts|list %}
+                                {% if result.capitalize() in cast %}
+                                    <div class="container w-50 py-5 bg-light">
+                                        <a href="{{url_for('show_movieinfo_page',movie_id=movie._id)}}">
+                                            <div class="card mb-3">
+                                                <div class="row no-gutters">
+                                                    <div class="col-md-6">
+                                                        <img src="{{movie.imageurl}}" class="card-img my-auto" alt="...">
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <div class="card-body">
+                                                            <h5 class="card-title">{{movie.name}}</h5>
+                                                            <p class="card-text">Genre: {{movie.genre.capitalize()}}</p>
+                                                            <p class="card-text">Directed by:
+                                                                {% if movie.directors|length> 0 %}
+                                                                {{', '.join(movie.directors)}}
+                                                                {% else %}
+                                                                {{movie.directors[0]}}
+                                                                {% endif %}
+                                                            </p>
+                                                            <p class="card-text">Release on: {{movie.year}}</p>
+                                                            <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </a>
+                                    </div>
+                                {% endif%}
+
+                            {% endfor%}
+
+                        {% endif %}
+
+        {% else %}
+                    <div class="container w-50 py-5 bg-light">
+                        <a href="{{url_for('show_movieinfo_page',movie_id=movie._id)}}">
+                            <div class="card mb-3">
+                                <div class="row no-gutters">
+                                    <div class="col-md-6">
+                                        <img src="{{movie.imageurl}}" class="card-img my-auto" alt="...">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="card-body">
+                                            <h5 class="card-title">{{movie.name}}</h5>
+                                            <p class="card-text">Genre: {{movie.genre.capitalize()}}</p>
+                                            <p class="card-text">Directed by:
+                                                {% if movie.directors|length> 0 %}
+                                                {{', '.join(movie.directors)}}
+                                                {% else %}
+                                                {{movie.directors[0]}}
+                                                {% endif %}
+                                            </p>
+                                            <p class="card-text">Release on: {{movie.year}}</p>
+                                            <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+        {% endif %}
+
+    {% endfor%}
+
+{% endblock %}

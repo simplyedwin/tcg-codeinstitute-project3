@@ -26,7 +26,7 @@
 
     </div>
 
-    <div class="container-fluid sticky-top bg-light">
+    <div class="container-fluid sticky-top" style="background-color:white; opacity:0.9">
         <div class="row">
             <div class="col-3 d-flex p-2 justify-content-end">
                 <a href="{{url_for('show_landing_page')}}" class="btn btn-primary">Home</a>
@@ -37,7 +37,7 @@
 
                     <div class="input-group p-2">
                         <input name="result" type="text" class="form-control"
-                            placeholder="Please type in a movie title / main cast / director name...">
+                            placeholder="Search for a movie title, main cast or director name...">
                         <div class="input-group-append">
                             <button type="submit" class="btn btn-primary mr-2">
                                 Search
@@ -136,8 +136,8 @@
                                     <input class="form-control" id="movie-trialer" name="youtubeurl">
                                 </div>
                                 <div class="form-group">
-                                    <label for="message-text" class="col-form-label">Synopsis:</label>
-                                    <textarea class="form-control" id="movie-synop" name="synopsis"></textarea>
+                                    <label for="message-text" class="col-form-label" >Synopsis:</label>
+                                    <textarea class="form-control" style="height: 10rem;" id="movie-synop" name="synopsis"></textarea>
                                 </div>
                                 <div> <label for="message-text" class="col-form-label">Poster:</label>
                                 </div>
@@ -145,11 +145,11 @@
                                 </div>
                                 <div> <label for="message-text" class="col-form-label">Backdrop:</label>
                                 </div>
-                                <div> <input type="file" name="file">
+                                <div> <input type="file" name="backdrop">
                                 </div>
                                 <div> <label for="message-text" class="col-form-label">Thumbnails:</label>
                                 </div>
-                                <div> <input type="file" name="file" multiple>
+                                <div> <input type="file" name="thumbnails" multiple>
                                 </div>
                             </div>
                         </div>

@@ -1,175 +1,178 @@
 {% extends 'base.template.html' %}
 
 {% block content %}
-<div class="container bg-light"
-    style="background-image: url({{movie.backdrop}}); background-repeat:repeat-y; background-size: contain; background-blend-mode: normal">
-    <div class="row">
-        <div class="col">
-            <div id="carouselExampleControls" class="carousel slide" data-ride="carousel"
-                style="width: auto; height: 700px;">
-                <div class="carousel-inner">
-                    {% for tn in movie.thumbnails %}
-                    <div class="carousel-item{% if loop.index == 1 %} active{% endif %}">
-                        <img src="{{tn}}" class="d-block mx-auto rounded-lg" alt="Thumbnails"
-                            style="width: auto;height: 300px;">
+
+<div class="m-3"
+    style="border-radius: 10px; background-image: url({{movie.backdrop}}); background-repeat:no-repeat; background-size:cover ; background-blend-mode: normal">
+    <div class="container">
+        <div class="row">
+            <div class="col d-flex p-2 justify-content-center">
+                <div id="carouselExampleControls" class="carousel slide" data-ride="carousel"
+                    style="width: 600px; height: 300px;">
+                    <div class="carousel-inner">
+                        {% for tn in movie.thumbnails %}
+                        <div class="carousel-item{% if loop.index == 1 %} active{% endif %}">
+                            <img src="{{tn}}" class="d-block mx-auto rounded-lg" alt="Thumbnails"
+                                style="width: auto;height: 300px;">
+                        </div>
+                        {% endfor %}
                     </div>
-                    {% endfor %}
+                    <a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="sr-only">Previous</span>
+                    </a>
+                    <a class="carousel-control-next" href="#carouselExampleControls" role="button" data-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="sr-only">Next</span>
+                    </a>
                 </div>
-                <a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-slide="prev">
-                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                    <span class="sr-only">Previous</span>
-                </a>
-                <a class="carousel-control-next" href="#carouselExampleControls" role="button" data-slide="next">
-                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                    <span class="sr-only">Next</span>
-                </a>
             </div>
         </div>
-    </div>
-    <div class="row">
-        <ul class="list-group">
-            <label for="">Title:</label>
-            <li class="list-group-item">{{movie.name}}</li>
-            <label for="">Genre:</label>
-            <li class="list-group-item">{{movie.genre}}</li>
-            <label for="">Directed by:</label>
-            {% if movie.directors|length > 0 %}
-            <li class="list-group-item">{{', '.join(movie.directors)}}</li>
-            {% else %}
-            <li class="list-group-item">{{movie.directors[0]}}</li>
-            {% endif %}
-            <label for="">Release on:</label>
-            <li class="list-group-item">{{movie.year}}</li>
-            <label for="">Main casts:</label>
-            <li class="list-group-item">{{', '.join(movie.maincasts)}}</li>
-            <label for="">Synopsis:</label>
-            <li class="list-group-item">
-                <p>
-                    {{movie.synopsis}}
-                </p>
-            </li>
-        </ul>
-        <label for="">Trailer:</label>
-        <div class=" container">
-            <iframe style="border: 0; width:80%; height: 500px; overflow: auto;"
-                class="embed-responsive d-block mb-4 mx-auto" src="{{movie.youtubeurl}}"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowfullscreen></iframe>
+        <div class="row">
+            <ul class="list-group">
+                <label for="">Title:</label>
+                <li class="list-group-item">{{movie.name}}</li>
+                <label for="">Genre:</label>
+                <li class="list-group-item">{{movie.genre}}</li>
+                <label for="">Directed by:</label>
+                {% if movie.directors|length > 0 %}
+                <li class="list-group-item">{{', '.join(movie.directors)}}</li>
+                {% else %}
+                <li class="list-group-item">{{movie.directors[0]}}</li>
+                {% endif %}
+                <label for="">Release on:</label>
+                <li class="list-group-item">{{movie.year}}</li>
+                <label for="">Main casts:</label>
+                <li class="list-group-item">{{', '.join(movie.maincasts)}}</li>
+                <label for="">Synopsis:</label>
+                <li class="list-group-item">
+                    <p>
+                        {{movie.synopsis}}
+                    </p>
+                </li>
+            </ul>
+            <label for="">Trailer:</label>
+            <div class=" container">
+                <iframe style="border: 0; width:80%; height: 500px; overflow: auto;"
+                    class="embed-responsive d-block mb-4 mx-auto" src="{{movie.youtubeurl}}"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowfullscreen></iframe>
+            </div>
         </div>
-    </div>
-    <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deletemovieinfo">
-        Delete
-    </button>
-    <button type="button" class="btn btn-success" data-toggle="modal" data-target="#updatemovieinfo">
-        Edit
-    </button>
+        <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deletemovieinfo">
+            Delete
+        </button>
+        <button type="button" class="btn btn-success" data-toggle="modal" data-target="#updatemovieinfo">
+            Edit
+        </button>
 
-    <!-- Modal -->
-    <form method="POST">
-        <div class="modal fade " id="deletemovieinfo" data-backdrop="static" data-keyboard="false" tabindex="-1"
-            aria-labelledby="deletemovieinfoLabel" aria-hidden="true">
+        <!-- Modal -->
+        <form method="POST">
+            <div class="modal fade " id="deletemovieinfo" data-backdrop="static" data-keyboard="false" tabindex="-1"
+                aria-labelledby="deletemovieinfoLabel" aria-hidden="true">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="deletemovieinfoLabel">Delete this
+                                movie ?
+                            </h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <button href="{{url_for('process_delete_movieinfo',movie_id=movie._id)}}" type="submit"
+                                class="btn btn-danger">Yes</button>
+                            <button type="button" class="btn btn-success" data-dismiss="modal">No</button>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+        <!-- Modal -->
+        <div class="modal fade " id="updatemovieinfo" data-backdrop="static" data-keyboard="false" tabindex="-1"
+            aria-labelledby="updatemovieinfoLabel" aria-hidden="true">
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="deletemovieinfoLabel">Delete this
-                            movie ?
-                        </h5>
+                        <h5 class="modal-title" id="updatemovieinfoLabel">Update Movie Info</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
-                    <div class="modal-body">
-                        <button href="{{url_for('process_delete_movieinfo',movie_id=movie._id)}}" type="submit"
-                            class="btn btn-danger">Yes</button>
-                        <button type="button" class="btn btn-success" data-dismiss="modal">No</button>
-
-                    </div>
-                </div>
-            </div>
-        </div>
-    </form>
-    <!-- Modal -->
-    <div class="modal fade " id="updatemovieinfo" data-backdrop="static" data-keyboard="false" tabindex="-1"
-        aria-labelledby="updatemovieinfoLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="updatemovieinfoLabel">Update Movie Info</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <form method="POST" enctype="multipart/form-data">
-                    <div class="container modal-body">
-                        <div class="row">
-                            <div class="col-6">
-                                <div class="form-group">
-                                    <label for="recipient-name" class="col-form-label">Title:</label>
-                                    <input type="text" class="form-control" name="name" value="{{movie.name}}">
-                                </div>
-                                <div class="form-group">
-                                    <label for="message-text" class="col-form-label">Genre:</label>
-                                    <input class="form-control" id="movie-genre" name="genre" value='{{movie.genre}}'>
-                                </div>
-                                <div class="form-group">
-                                    <label for="message-text" class="col-form-label">Year:</label>
-                                    <input class="form-control" id="movie-year" name="year" value="{{movie.year}}">
-                                </div>
-                                <div class="form-group">
-                                    <label for="message-text" class="col-form-label">Main Casts:</label>
-                                    <input class="form-control" id="movie-casts" name="maincasts"
-                                        value="{{', '.join(movie.maincasts)}}">
-                                </div>
-                                <div class="form-group">
-                                    <label for="message-text" class="col-form-label">Directed by:</label>
-                                    <input class="form-control" id="movie-director" name="directors" value={% if
-                                        movie.directors|length> 0 %}
-                                    " {{', '.join(movie.directors)}}">
-                                    {% else %}
-                                    " {{movie.directors[0]}}" >
-                                    {% endif %}
-                                </div>
+                    <form method="POST" enctype="multipart/form-data">
+                        <div class="container modal-body">
+                            <div class="row">
+                                <div class="col-6">
+                                    <div class="form-group">
+                                        <label for="recipient-name" class="col-form-label">Title:</label>
+                                        <input type="text" class="form-control" name="name" value="{{movie.name}}">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="message-text" class="col-form-label">Genre:</label>
+                                        <input class="form-control" id="movie-genre" name="genre"
+                                            value='{{movie.genre}}'>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="message-text" class="col-form-label">Year:</label>
+                                        <input class="form-control" id="movie-year" name="year" value="{{movie.year}}">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="message-text" class="col-form-label">Main Casts:</label>
+                                        <input class="form-control" id="movie-casts" name="maincasts"
+                                            value="{{', '.join(movie.maincasts)}}">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="message-text" class="col-form-label">Directed by:</label>
+                                        <input class="form-control" id="movie-director" name="directors" value={% if
+                                            movie.directors|length> 0 %}
+                                        " {{', '.join(movie.directors)}}">
+                                        {% else %}
+                                        " {{movie.directors[0]}}" >
+                                        {% endif %}
+                                    </div>
 
 
+                                </div>
+
+                                <div class="col-6">
+                                    <div class="form-group">
+                                        <label for="message-text" class="col-form-label">Trailer(url):</label>
+                                        <input class="form-control" id="movie-trialer" name="youtubeurl"
+                                            value="{{movie.youtubeurl}}">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="message-text" class="col-form-label">Synopsis:</label>
+                                        <textarea class="form-control" style="height: 10rem;" id="movie-synop"
+                                            name="synopsis">{{movie.synopsis}}</textarea>
+                                    </div>
+                                    <div> <label for="message-text" class="col-form-label">Poster:</label>
+                                    </div>
+                                    <div> <input type="file" name="file">
+                                    </div>
+                                    <div> <label for="message-text" class="col-form-label">Backdrop:</label>
+                                    </div>
+                                    <div> <input type="file" name="backdrop">
+                                    </div>
+                                    <div> <label for="message-text" class="col-form-label">Thumbnails:</label>
+                                    </div>
+                                    <div> <input type="file" name="thumbnails" multiple>
+                                    </div>
+                                </div>
                             </div>
 
-                            <div class="col-6">
-                                <div class="form-group">
-                                    <label for="message-text" class="col-form-label">Trailer(url):</label>
-                                    <input class="form-control" id="movie-trialer" name="youtubeurl"
-                                        value="{{movie.youtubeurl}}">
-                                </div>
-                                <div class="form-group">
-                                    <label for="message-text" class="col-form-label">Synopsis:</label>
-                                    <textarea class="form-control" id="movie-synop"
-                                        name="synopsis">{{movie.synopsis}}</textarea>
-                                </div>
-                                <div> <label for="message-text" class="col-form-label">Poster:</label>
-                                </div>
-                                <div> <input type="file" name="file">
-                                </div>
-                                <div> <label for="message-text" class="col-form-label">Backdrop:</label>
-                                </div>
-                                <div> <input type="file" name="file">
-                                </div>
-                                <div> <label for="message-text" class="col-form-label">Thumbnails:</label>
-                                </div>
-                                <div> <input type="file" name="file" multiple>
-                                </div>
-                            </div>
                         </div>
-
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <a href="{{url_for('process_update_movieinfo_page',movie_id=movie._id)}}"
-                            class="btn btn-primary">Post</a>
-                    </div>
-                </form>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <a href="{{url_for('process_update_movieinfo_page',movie_id=movie._id)}}"
+                                class="btn btn-primary">Post</a>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
-
 </div>
 
 {% endblock %}
