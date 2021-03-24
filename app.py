@@ -33,8 +33,62 @@ client = pymongo.MongoClient(MONGO_URI)
 db = client[DB_NAME]
 
 
-def forms_validation():
-    return ""
+def validate_form(form):
+
+    errors = {}
+
+    name = request.form.get('name')
+    genre = request.form.get('genre')
+    imageurl = request.files['file']
+    year_string= request.form.get('year')
+    maincasts = request.form.get('maincasts')
+    synopsis = request.form.get('synopsis')
+    directors = request.form.get('directors')
+    youtubeurl = request.form.get('youtubeurl')
+    backdrop = request.files['backdrop']
+    thumbnails = request.files['thumbnails']
+
+    if len(name) == 0:
+        # the key of the key/value pair is the type of the error
+        # and the value is what we want to display to the user
+        errors['title_is_blank'] = "Movie title field cannot be blank"
+
+    if len(genre) == 0:
+        errors['genre_is_blank'] = "Genre field cannot be blank"
+
+    if len(year_string) == 0:
+        errors['year_is_blank'] = "Year field cannot be blank"
+        try:
+            year = int(year_string)
+        except:
+            errors['year_is_string'] = "Year field cannot be words or characters"
+
+    # we do the next check only if age is not blank
+    if len(year) > 0 and int(year) < 0:
+        errors['year_is_less_than_0'] = "Year field cannot be less than zero"
+
+    if len(synopsis) == 0:
+        errors['synopsis_is_blank'] = "Synopsis field cannot be blank"
+
+    if len(maincasts) == 0:
+        errors['maincasts_is_blank'] = "Maincasts field cannot be blank"
+
+    if len(directors) == 0:
+        errors['directors_is_blank'] = "Directors field cannot be blank"
+
+    if len(youtubeurl) == 0:
+        errors['youtubeurl_is_blank'] = "Youtubeurl field cannot be blank"
+
+    if len(imageurl.filename) == 0:
+        errors['file_is_blank'] = "File field cannot be blank"
+
+    if len(backdrop.filename) == 0:
+        errors['backdrop_is_blank'] = "Backdrop field cannot be blank"
+
+    if len(thumbnails.filename) == 0:
+        errors['thumbnails_is_blank'] = "Thumbnails field cannot be blank"
+
+    return errors
 
 
 @app.route('/')
@@ -73,7 +127,7 @@ def show_landing_page():
                                all_genre=list(all_genre),
                                result=result,
                                movieslist=movieslist,
-                               all_movies=list(all_movies))
+                               all_movies=list(all_movies), old_values={}, errors={})
 
     else:
         print("/ route return 2")
@@ -81,41 +135,77 @@ def show_landing_page():
 
         return render_template('landingpage.template.html',
                                all_genre=list(all_genre),
-                               all_movies=list(all_movies))
+                               all_movies=list(all_movies), old_values={}, errors={})
 
 
 @ app.route('/', methods=['POST'])
 def process_landing_page():
 
-    name = request.form.get('name')
-    genre = request.form.get('genre')
-    imageurl = request.files['file']
-    year = request.form.get('year')
-    maincasts = request.form.get('maincasts')
-    synopsis = request.form.get('synopsis')
-    directors = request.form.get('directors')
-    youtubeurl = request.form.get('youtubeurl')
+    result_thumbnails = []
+    errors = validate_form(request.form)
 
-    result = cloudinary.uploader.upload(imageurl.stream,
-                                        public_id=name,
-                                        folder="tcgproj3/"+genre+"/"+name,
-                                        resource_type="image"
-                                        )
-    db.movies.insert_one({
-        "name": name,
-        "genre": genre.lower(),
-        "imageurl": result['url'],
-        "year": year,
-        "maincasts": maincasts.split(","),
-        "synopsis": synopsis,
-        "directors": directors.split(","),
-        "youtubeurl": youtubeurl.replace('watch?v=', 'embed/')
-    })
+    if len(errors) == 0:
 
-    flash(name + " has been added!")
+        name = request.form.get('name')
+        genre = request.form.get('genre')
+        imageurl = request.files['file']
+        year = request.form.get('year')
+        maincasts = request.form.get('maincasts')
+        synopsis = request.form.get('synopsis')
+        directors = request.form.get('directors')
+        youtubeurl = request.form.get('youtubeurl')
+        backdrop = request.files['backdrop']
+        thumbnails = request.files['thumbnails']
 
-    print("/ route return post")
-    return redirect(url_for('show_landing_page'))
+        result_poster = cloudinary.uploader.upload(imageurl.stream,
+                                                   public_id=name,
+                                                   folder="tcgproj3/"+genre+"/"+name,
+                                                   resource_type="image"
+                                                   )
+
+        result_backdrop = cloudinary.uploader.upload(backdrop.stream,
+                                                     public_id=name,
+                                                     folder="tcgproj3/"+genre+"/"+name,
+                                                     resource_type="image"
+                                                     )
+        for thumbnail in thumbnails:
+            result_thumbnail = cloudinary.uploader.upload(thumbnail.stream,
+                                                          public_id=name,
+                                                          folder="tcgproj3/"+genre+"/"+name,
+                                                          resource_type="image"
+                                                          )
+            result_thumbnails.append(result_thumbnail['url'])
+
+        db.movies.insert_one({
+            "name": name,
+            "genre": genre.lower(),
+            "imageurl": result_poster['url'],
+            "year": year,
+            "maincasts": maincasts.split(","),
+            "synopsis": synopsis,
+            "directors": directors.split(","),
+            "youtubeurl": youtubeurl.replace('watch?v=', 'embed/'),
+            'backdrop': result_backdrop['url'],
+            'thumbnails': result_thumbnails
+        })
+
+        flash(name + " has been added!")
+
+        print("/ route return post")
+        return redirect(url_for('show_landing_page'))
+
+    else:
+
+        flash(errors)
+        all_genre = db.movie_genres.find()
+        all_movies = db.movies.find()
+
+        print("/create route errors")
+        return render_template('landingpage.template.html',
+                               all_movies=list(all_movies),
+                               all_genre=list(all_genre),
+                               errors=errors,
+                               old_values=request.form)
 
 
 @ app.route('/<genre>/bygenre')
@@ -157,7 +247,7 @@ def show_movieinfolist_bygenre(genre):
                                all_genre=list(all_genre),
                                result=result,
                                movieslist=movieslist,
-                               all_movies=dbmovieslist)
+                               all_movies=dbmovieslist, old_values={}, errors={})
     else:
 
         for movie in all_movies:
@@ -172,7 +262,7 @@ def show_movieinfolist_bygenre(genre):
         return render_template('movieinfolist.template.html',
                                all_genre=list(all_genre),
                                movieslist=movieslist,
-                               all_movies=dbmovieslist)
+                               all_movies=dbmovieslist, old_values={}, errors={})
 
 
 @ app.route('/<year>/byyear')
@@ -189,14 +279,19 @@ def show_movieinfolist_byyear(year):
     if result != None:
 
         for movie in all_movies:
-            name = movie['name']
-            if result in name:
+
+            name = movie['name'].lower()
+            if result.lower() in name:
                 movieslist.append(movie)
             for cast in movie['maincasts']:
-                if (result in cast) and (result not in name):
+                if (result.lower() in cast.lower()) and (result.lower()
+                                                         not in name) and (cast.lower() not in directorname):
+                    castname = cast.lower()
                     movieslist.append(movie)
             for director in movie['directors']:
-                if result in director:
+                if (result.lower() in director.lower()) and (result.lower()
+                                                             not in name) and (director.lower() not in castname):
+                    directorname = director.lower()
                     movieslist.append(movie)
 
             dbmovieslist.append(movie)
@@ -207,7 +302,7 @@ def show_movieinfolist_byyear(year):
                                all_genre=list(all_genre),
                                result=result,
                                movieslist=movieslist,
-                               all_movies=dbmovieslist)
+                               all_movies=dbmovieslist, old_values={}, errors={})
 
     else:
 
@@ -224,7 +319,7 @@ def show_movieinfolist_byyear(year):
         return render_template('movieinfolist.template.html',
                                all_genre=list(all_genre),
                                movieslist=movieslist,
-                               all_movies=dbmovieslist)
+                               all_movies=dbmovieslist, old_values={}, errors={})
 
 
 @app.route('/<movie_id>/movieinfo')
@@ -240,7 +335,7 @@ def show_movieinfo_page(movie_id):
         return render_template('movieinfolist.template.html',
                                all_genre=list(all_genre),
                                result=result,
-                               all_movies=list(all_movies))
+                               all_movies=list(all_movies), old_values={}, errors={})
     else:
         movie = db.movies.find_one({
             '_id': ObjectId(movie_id)
@@ -250,7 +345,7 @@ def show_movieinfo_page(movie_id):
         return render_template('movieinfo.template.html',
                                all_genre=list(all_genre),
                                all_movies=list(all_movies),
-                               movie=movie)
+                               movie=movie, old_values={}, errors={})
 
 
 @app.route('/<movie_id>/movieinfo', methods=['POST'])
@@ -285,46 +380,78 @@ def show_update_movieinfo_page(movie_id):
     return render_template('movieinfo_update.template.html',
                            all_genre=list(all_genre),
                            all_movies=list(all_movies),
-                           movie=movie)
+                           movie=movie, old_values={}, errors={})
 
 
 @app.route('/movieinfo/<movie_id>/update', methods=['POST'])
 def process_update_movieinfo_page(movie_id):
 
-    name = request.form.get('name')
-    genre = request.form.get('genre')
-    imageurl = request.files['imageurl']
-    year = request.form.get('year')
-    maincasts = request.form.get('maincasts')
-    synopsis = request.form.get('synopsis')
-    directors = request.form.get('directors')
-    youtubeurl = request.form.get('youtubeurl')
+    result_thumbnails = []
+    errors = validate_form(request.form)
 
-    result = cloudinary.uploader.upload(imageurl.stream,
-                                        public_id=name,
-                                        folder="tcgproj3/"+genre+"/"+name,
-                                        resource_type="image"
-                                        )
+    if len(errors) == 0:
 
-    db.movies.update_one({
-        "_id": ObjectId(movie_id)
-    }, {
-        '$set': {
-            "name": name,
-            "genre": genre.lower(),
-            "imageurl": result['url'],
-            "year": year,
-            "maincasts": maincasts.split(","),
-            "synopsis": synopsis,
-            "directors": directors.split(","),
-            "youtubeurl": youtubeurl.replace('watch?v=', 'embed/')
-        }
-    })
+        name = request.form.get('name')
+        genre = request.form.get('genre')
+        imageurl = request.files['file']
+        year = request.form.get('year')
+        maincasts = request.form.get('maincasts')
+        synopsis = request.form.get('synopsis')
+        directors = request.form.get('directors')
+        youtubeurl = request.form.get('youtubeurl')
+        backdrop = request.files['backdrop']
+        thumbnails = request.files['thumbnails']
 
-    flash(name + " has been updated!")
+        result_poster = cloudinary.uploader.upload(imageurl.stream,
+                                                   public_id=name,
+                                                   folder="tcgproj3/"+genre+"/"+name,
+                                                   resource_type="image"
+                                                   )
 
-    print("/<movie_id>/movieinfo/update route return post")
-    return redirect(url_for('show_update_movieinfo_page', movie_id=movie_id))
+        result_backdrop = cloudinary.uploader.upload(backdrop.stream,
+                                                     public_id=name,
+                                                     folder="tcgproj3/"+genre+"/"+name,
+                                                     resource_type="image"
+                                                     )
+        for thumbnail in thumbnails:
+            result_thumbnail = cloudinary.uploader.upload(thumbnail.stream,
+                                                          public_id=name,
+                                                          folder="tcgproj3/"+genre+"/"+name,
+                                                          resource_type="image"
+                                                          )
+            result_thumbnails.append(result_thumbnail['url'])
+
+        db.movies.update_one({
+            "_id": ObjectId(movie_id)
+        }, {
+            '$set': {
+                "name": name,
+                "genre": genre.lower(),
+                "imageurl": result_poster['url'],
+                "year": year,
+                "maincasts": maincasts.split(","),
+                "synopsis": synopsis,
+                "directors": directors.split(","),
+                "youtubeurl": youtubeurl.replace('watch?v=', 'embed/'),
+                'backdrop': result_backdrop['url'],
+                'thumbnails': result_thumbnails
+            }
+        })
+
+        flash(name + " has been updated!")
+
+        print("/<movie_id>/movieinfo/update route return post")
+        return redirect(url_for('show_update_movieinfo_page', movie_id=movie_id))
+
+    else:
+
+        print("/update route errors")
+        return errors
+
+
+@app.errorhandler(404)
+def page_not_found(e):
+    return render_template('custom404.template.html')
 
 
 if __name__ == '__main__':

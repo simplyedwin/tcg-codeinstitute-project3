@@ -107,57 +107,96 @@
                         <div class="row">
                             <div class="col-6">
                                 <div class="form-group">
-                                    <label for="recipient-name" class="col-form-label">Title:</label>
-                                    <input type="text" class="form-control" id="movie-name" name="name">
+                                    <label for="recipient-name" class="col-form-label">Title: {{ errors.title_is_blank
+                                        }}
+                                    </label>
+                                    <input type="text" value="{{old_values.name}}" class=" form-control {%if
+                                        errors.title_is_blank %} is-invalid{%endif%}" id="movie-name" name="name">
                                 </div>
                                 <div class="form-group">
-                                    <label for="message-text" class="col-form-label">Genre:</label>
-                                    <input class="form-control" id="movie-genre" name="genre">
+                                    <label for="message-text" class="col-form-label">Genre: {{ errors.genre_is_blank }}
+                                    </label>
+                                    <input type="text" value="{{old_values.genre}}" class="form-control  {%if
+                                        errors.genre_is_blank %} is-invalid{%endif%}" id="movie-genre" name="genre">
                                 </div>
                                 <div class="form-group">
-                                    <label for="message-text" class="col-form-label">Year:</label>
-                                    <input class="form-control" id="movie-year" name="year">
+                                    <label for="message-text" class="col-form-label">Year: {{ errors.year_is_blank or
+                                        errors.year_is_less_than_0 or errors.year_is_string}}
+                                    </label>
+                                    <input value="{{old_values.year}}" class=" form-control {%if errors.year_is_blank
+                                        or errors.year_is_less_than_0 or errors.year_is_string %} is-invalid{%endif%}" id="movie-year"
+                                        name="year">
                                 </div>
                                 <div class="form-group">
-                                    <label for="message-text" class="col-form-label">Main Casts:</label>
-                                    <input class="form-control" id="movie-casts" name="maincasts">
+                                    <label for="message-text" class="col-form-label">Main Casts: {{
+                                        errors.maincasts_is_blank }}
+                                    </label>
+                                    <input type="text" value="{{old_values.maincasts}}" class="form-control  {%if
+                                        errors.maincasts_is_blank %} is-invalid{%endif%}" id="movie-casts"
+                                        name="maincasts">
                                 </div>
                                 <div class="form-group">
-                                    <label for="message-text" class="col-form-label">Directed by:</label>
-                                    <input class="form-control" id="movie-director" name="directors">
+                                    <label for="message-text" class="col-form-label">Directed by: {{
+                                        errors.directors_is_blank}}
+                                    </label>
+                                    <input type="text" value="{{old_values.directors}}" class="form-control  {%if
+                                        errors.directors_is_blank %} is-invalid{%endif%}" id="movie-director"
+                                        name="directors">
                                 </div>
-
-
                             </div>
 
                             <div class="col-6">
                                 <div class="form-group">
-                                    <label for="message-text" class="col-form-label">Trailer(url):</label>
-                                    <input class="form-control" id="movie-trialer" name="youtubeurl">
+                                    <label for="message-text" class="col-form-label">Trailer(url): {{
+                                        errors.youtubeurl_is_blank}}
+                                    </label>
+                                    <input type="text" value="{{old_values.directors}}" class="form-control  {%if
+                                        errors.youtubeurl_is_blank %} is-invalid{%endif%}" id="movie-trialer"
+                                        name="youtubeurl">
                                 </div>
                                 <div class="form-group">
-                                    <label for="message-text" class="col-form-label" >Synopsis:</label>
-                                    <textarea class="form-control" style="height: 10rem;" id="movie-synop" name="synopsis"></textarea>
+                                    <label for="message-text" class="col-form-label">Synopsis: {{
+                                        errors.synopsis_is_blank}}
+                                    </label>
+                                    <textarea type="text" value="{{old_values.directors}}" class="form-control {%if
+                                        errors.synopsis_is_blank %} is-invalid{%endif%} " style="height: 10rem;"
+                                        id="movie-synop" name="synopsis"></textarea>
                                 </div>
-                                <div> <label for="message-text" class="col-form-label">Poster:</label>
+                                <div> <label for="poster" class="col-form-label">Poster: {{ errors.file_is_blank
+                                        }}
+                                    </label>
                                 </div>
-                                <div> <input type="file" name="file">
+                                <div> <input type="file" name="file" class=" {%if
+                                    errors.file_is_blank %} is-invalid{%endif%}">
                                 </div>
-                                <div> <label for="message-text" class="col-form-label">Backdrop:</label>
+                                <div> <label for="backdrop" class="col-form-label">Backdrop:{{
+                                        errors.backdrop_is_blank}}</label>
                                 </div>
-                                <div> <input type="file" name="backdrop">
+                                <div> <input type="file" name="backdrop" class=" {%if
+                                    errors.backdrop_is_blank %} is-invalid{%endif%}">
                                 </div>
-                                <div> <label for="message-text" class="col-form-label">Thumbnails:</label>
+
+                                <div> <label for="thumbnails" class="col-form-label">Thumbnails: {{
+                                        errors.thumbnails_is_blank}}
+                                    </label>
                                 </div>
-                                <div> <input type="file" name="thumbnails" multiple>
+                                <div> <input type="file" name="thumbnails" class=" {%if
+                                    errors.thumbnails_is_blank %} is-invalid{%endif%}" multiple>
                                 </div>
                             </div>
                         </div>
 
                     </div>
                     <div class="modal-footer">
+                        {%if errors|length > 0 %}
+                        <div class="alert alert-danger">
+                            Please correct all the errors and resubmit the form.
+                        </div>
+                        {% endif %}
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary" id="upload-btn">Add</button>
+                        <button type="submit" class="btn btn-primary" id="upload-btn">
+                            Add
+                        </button>
                     </div>
                 </form>
 
@@ -195,7 +234,6 @@
 
     </script>
 
-    </script>
 
     <!-- <script src="{{ url_for('static', filename='js/dropzone-5.7.0/dist/dropzone.js')}}"></script> -->
 
