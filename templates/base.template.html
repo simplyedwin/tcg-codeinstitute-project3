@@ -61,7 +61,7 @@
                     data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     Genre
                 </button>
-                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                <div class="dropdown-menu " style="min-width:0em" aria-labelledby="dropdownMenuButton">
                     {% for genre in all_genre %}
                     <a class="dropdown-item"
                         href="{{url_for('show_movieinfolist_bygenre',genre=genre.genre)}}">{{genre.genre.capitalize()}}</a>
@@ -73,7 +73,7 @@
                     data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     Year
                 </button>
-                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                <div class="dropdown-menu" style="min-width:0em" aria-labelledby="dropdownMenuButton">
                     {% set years =[] %}
                     {% for movie in all_movies %}
                     {% if years.append(movie.year|int) is none %}
@@ -82,7 +82,7 @@
                     {% endfor %}
                     {% set years_sorted = years|unique|sort %}
                     {% for year in years_sorted %}
-                    <a class="dropdown-item" href="{{url_for('show_movieinfolist_byyear',year=year)}}">{{year}} </a>
+                    <a class="dropdown-item text-wrap" href="{{url_for('show_movieinfolist_byyear',year=year)}}">{{year}} </a>
                     {% endfor %}
                 </div>
             </div>
@@ -150,7 +150,7 @@
                                     <label for="message-text" class="col-form-label">Trailer(url): {{
                                         errors.youtubeurl_is_blank}}
                                     </label>
-                                    <input type="text" value="{{old_values.directors}}" class="form-control  {%if
+                                    <input type="text" value="{{old_values.youtubeurl}}" class="form-control  {%if
                                         errors.youtubeurl_is_blank %} is-invalid{%endif%}" id="movie-trialer"
                                         name="youtubeurl">
                                 </div>
@@ -158,7 +158,7 @@
                                     <label for="message-text" class="col-form-label">Synopsis: {{
                                         errors.synopsis_is_blank}}
                                     </label>
-                                    <textarea type="text" value="{{old_values.directors}}" class="form-control {%if
+                                    <textarea type="text" value="{{old_values.synopsis}}" class="form-control {%if
                                         errors.synopsis_is_blank %} is-invalid{%endif%} " style="height: 10rem;"
                                         id="movie-synop" name="synopsis"></textarea>
                                 </div>
