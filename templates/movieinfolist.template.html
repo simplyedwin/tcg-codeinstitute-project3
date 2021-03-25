@@ -3,26 +3,25 @@
 {% block content %}
 
     {% for movie in movieslist%}
-            <div class="container w-50 py-5 bg-light">
+            <div class="container w-50 py-5">
                 <a href="{{url_for('show_movieinfo_page',movie_id=movie._id)}}">
                     <div class="card mb-3">
-                        <div class="row no-gutters">
+                        <div class="row no-gutters align-items-center">
                             <div class="col-md-6">
-                                <img src="{{movie.imageurl}}" class="card-img my-auto" alt="...">
+                                <img src="{{movie.imageurl}}" class="card-img my-auto " alt="...">
                             </div>
                             <div class="col-md-6">
                                 <div class="card-body">
-                                    <h5 class="card-title">{{movie.name}}</h5>
-                                    <p class="card-text">Genre: {{movie.genre.capitalize()}}</p>
-                                    <p class="card-text">Directed by:
+                                    <h5 class="card-title headerfont">{{movie.name}}</h5>
+                                    <p class="card-text headerfont">Genre: {{movie.genre.capitalize()}}</p>
+                                    <p class="card-text headerfont">Directed by:
                                         {% if movie.directors|length> 0 %}
                                         {{', '.join(movie.directors)}}
                                         {% else %}
                                         {{movie.directors[0]}}
                                         {% endif %}
                                     </p>
-                                    <p class="card-text">Release on: {{movie.year}}</p>
-                                    <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+                                    <p class="card-text headerfont">Release on: {{movie.year}}</p>
                                 </div>
                             </div>
                         </div>

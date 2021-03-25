@@ -50,13 +50,13 @@ def validate_form(form):
     backdrop = request.files['backdrop']
     thumbnails = request.files['thumbnails']
 
-    if len(name) == 0:
+    if len(name) == 0 or name.isspace():
         errors['title_is_blank'] = "Movie title field cannot be blank"
 
-    if len(genre) == 0:
+    if len(genre) == 0 or genre.isspace():
         errors['genre_is_blank'] = "Genre field cannot be blank"
 
-    if len(year_string) == 0:
+    if len(year_string) == 0 or year_string.isspace():
         errors['year_is_blank'] = "Year field cannot be blank"
 
     try:
@@ -70,16 +70,16 @@ def validate_form(form):
         print("year is string")
         errors['year_is_string'] = "Year field cannot be words or characters"
 
-    if len(synopsis) == 0:
+    if len(synopsis) == 0 or synopsis.isspace():
         errors['synopsis_is_blank'] = "Synopsis field cannot be blank"
 
-    if len(maincasts) == 0:
+    if len(maincasts) == 0 or maincasts.isspace():
         errors['maincasts_is_blank'] = "Maincasts field cannot be blank"
 
-    if len(directors) == 0:
+    if len(directors) == 0 or directors.isspace():
         errors['directors_is_blank'] = "Directors field cannot be blank"
 
-    if len(youtubeurl) == 0:
+    if len(youtubeurl) == 0 or youtubeurl.isspace():
         errors['youtubeurl_is_blank'] = "Youtubeurl field cannot be blank"
 
     if len(imageurl.filename) == 0:
