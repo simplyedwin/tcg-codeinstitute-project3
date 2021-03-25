@@ -15,7 +15,7 @@ load_dotenv()
 
 app = Flask(__name__)
 app.secret_key = os.environ.get('FLASK_SECRET_KEY')
-app.config['MAX_CONTENT_LENGTH'] = 1024 * 1024 * 2
+app.config['MAX_CONTENT_LENGTH'] = 1024 * 1024 
 app.config['UPLOAD_EXTENSIONS'] = ['.jpg', '.png', '.gif']
 
 dropzone = Dropzone(app)
@@ -82,7 +82,7 @@ def validate_form(form):
     if len(youtubeurl) == 0 or youtubeurl.isspace():
         errors['youtubeurl_is_blank'] = "Youtubeurl field cannot be blank"
 
-    if len(imageurl.filename) == 0:
+    if len(imageurl.filename)  == 0:
         errors['file_is_blank'] = "Poster field cannot be blank"
 
     if len(backdrop.filename) == 0:
@@ -90,7 +90,7 @@ def validate_form(form):
 
     if len(thumbnails.filename) == 0:
         errors['thumbnails_is_blank'] = "Thumbnails field cannot be blank"
-
+    
     return errors
 
 
@@ -483,6 +483,14 @@ def process_update_movieinfo_page(movie_id):
 @app.errorhandler(404)
 def page_not_found(e):
     return render_template('custom404.template.html')
+
+
+@app.errorhandler(413)
+def request_entity_too_large(error):
+    
+    flash('File Too Large')
+
+    return redirect(url_for('show_landing_page'))
 
 
 if __name__ == '__main__':

@@ -112,16 +112,16 @@
                 </div>
                 <!-- <form method="POST" enctype="multipart/form-data" action="{{ url_for('process_landing_page') }}"
                     class="dropzone"> -->
-                <form method="POST" enctype="multipart/form-data">
+                <form method="POST" enctype="multipart/form-data" action="{{url_for('process_landing_page')}}">
                     <div class="container modal-body " >
                         <div class="row">
                             <div class="col-6">
                                 <div class="form-group">
-                                    <label for="recipient-name" class="col-form-label headerfont ">Title: <span style="font-family:Arial, Helvetica, sans-serif; color: tomato;">{{ errors.title_is_blank
+                                    <label for="movie-title" class="col-form-label headerfont ">Title: <span style="font-family:Arial, Helvetica, sans-serif; color: tomato;">{{ errors.title_is_blank
                                         }}</span>
                                     </label>
-                                    <input type="text" value="{{old_values.name}}" class=" form-control {%if
-                                        errors.title_is_blank %} is-invalid{%endif%}" id="movie-name" name="name" style="border-color:#083864fe;">
+                                    <input type="text" value="{% if errors.title_is_blank %}{{old_values.name}} {% endif %}" class=" form-control {%if
+                                        errors.title_is_blank %} is-invalid{%endif%}" id="movie-name" name="name" style="border-color:#083864fe;" required>
                                 </div>
                                 <div class="form-group">
                                     <label for="message-text" class="col-form-label headerfont">
@@ -129,32 +129,35 @@
                                         Genre: <span style="font-family:Arial, Helvetica, sans-serif; color:tomato;">{{ errors.genre_is_blank }}
                                     </span>
                                     </label>
-                                    <input type="text" value="{{old_values.genre}}" class="form-control  {%if
-                                        errors.genre_is_blank %} is-invalid{%endif%}" id="movie-genre" name="genre" style="border-color:#083864fe;">
+                                    <input type="text" value="{% if errors.genre_is_blank %}{{old_values.genre}}{% endif %}" class="form-control  {%if
+                                        errors.genre_is_blank %} is-invalid{%endif%}" id="movie-genre" name="genre" style="border-color:#083864fe;" required>
                                 </div>
                                 <div class="form-group">
                                     <label for="message-text" class="col-form-label headerfont">Year: <span style="font-family:Arial, Helvetica, sans-serif; color:tomato;">{{ errors.year_is_blank or
                                         errors.year_is_less_than_0 or errors.year_is_string}}</span>
                                     </label>
-                                    <input value="{{old_values.year}}" class=" form-control {%if errors.year_is_blank
+                                    <input value="{%if errors.year_is_blank
+                                        or errors.year_is_less_than_0 or errors.year_is_string %}{{old_values.year}} {% endif %}" class=" form-control {%if errors.year_is_blank
                                         or errors.year_is_less_than_0 or errors.year_is_string %} is-invalid{%endif%}"
-                                        id="movie-year" name="year" style="border-color:#083864fe;">
+                                        id="movie-year" name="year" style="border-color:#083864fe;" required>
                                 </div>
                                 <div class="form-group">
                                     <label for="message-text" class="col-form-label headerfont">Main Casts: <span style="font-family:Arial, Helvetica, sans-serif; color:tomato;">{{
                                         errors.maincasts_is_blank }}</span>
                                     </label>
-                                    <input type="text" value="{{old_values.maincasts}}" class="form-control  {%if
-                                        errors.maincasts_is_blank %} is-invalid{%endif%}" id="movie-casts"
-                                        name="maincasts" style="border-color:#083864fe;">
+                                    <input type="text" value="{%if
+                                        errors.maincasts_is_blank %}{{old_values.maincasts}}{%endif%}" class="form-control  {%if
+                                        errors.maincasts_is_blank %} is-invalid {%endif%}" id="movie-casts"
+                                        name="maincasts" style="border-color:#083864fe;" required>
                                 </div>
                                 <div class="form-group">
                                     <label for="message-text" class="col-form-label headerfont">Directed by: <span style="font-family:Arial, Helvetica, sans-serif; color:tomato;"> {{
                                         errors.directors_is_blank}}</span>
                                     </label>
-                                    <input type="text" value="{{old_values.directors}}" class="form-control  {%if
-                                        errors.directors_is_blank %} is-invalid{%endif%}" id="movie-director"
-                                        name="directors" style="border-color:#083864fe;">
+                                    <input type="text" value="{%if
+                                        errors.directors_is_blank %} {{old_values.directors}} {%endif%}" class="form-control  {%if
+                                        errors.directors_is_blank %} is-invalid {%endif%}" id="movie-director"
+                                        name="directors" style="border-color:#083864fe;" required>
                                 </div>
                                 {%if errors|length > 0 %}
                         <div class="alert alert-danger">
@@ -168,31 +171,33 @@
                                     <label for="message-text" class="col-form-label headerfont">Trailer(url): <span style="font-family:Arial, Helvetica, sans-serif; color:tomato;">{{
                                         errors.youtubeurl_is_blank}}</span>
                                     </label>
-                                    <input type="text" value="{{old_values.youtubeurl}}" class="form-control  {%if
-                                        errors.youtubeurl_is_blank %} is-invalid{%endif%}" id="movie-trialer"
-                                        name="youtubeurl" style="border-color:#083864fe;">
+                                    <input type="text" value=" {%if
+                                        errors.youtubeurl_is_blank %} {{old_values.youtubeurl}} {%endif%}" class="form-control  {%if
+                                        errors.youtubeurl_is_blank %} is-invalid {%endif%}" id="movie-trialer"
+                                        name="youtubeurl" style="border-color:#083864fe;" required>
                                 </div>
                                 <div class="form-group">
                                     <label for="message-text" class="col-form-label headerfont">Synopsis: <span style="font-family:Arial, Helvetica, sans-serif; color:tomato;">{{
                                         errors.synopsis_is_blank}}</span>
                                     </label>
-                                    <textarea type="text" value="{{old_values.synopsis}}" class="form-control {%if
+                                    <textarea type="text" value="{%if
+                                        errors.synopsis_is_blank %} {{old_values.synopsis}} {%endif%}" class="form-control {%if
                                         errors.synopsis_is_blank %} is-invalid{%endif%} " style="height: 10rem; border-color:#083864fe;"
-                                        id="movie-synop" name="synopsis"></textarea>
+                                        id="movie-synop" name="synopsis"></textarea required>
                                 </div>
                                 <div> <label for="poster" class="col-form-label headerfont">Poster: <span style="font-family:Arial, Helvetica, sans-serif; color:tomato;">{{ errors.file_is_blank
                                         }}</span>
                                     </label>
                                 </div>
                                 <div> <input type="file" name="file" class=" {%if
-                                    errors.file_is_blank %} is-invalid{%endif%}" style="border-color:#083864fe;">
+                                    errors.file_is_blank %} is-invalid{%endif%}" style="border-color:#083864fe;" required>
                                 </div>
                                 <div> <label for="backdrop" class="col-form-label headerfont" >Backdrop: <span style="font-family:Arial, Helvetica, sans-serif; color:tomato;">{{
                                         errors.backdrop_is_blank}}</span>
                                     </label>
                                 </div>
                                 <div> <input type="file" name="backdrop" class=" {%if
-                                    errors.backdrop_is_blank %} is-invalid{%endif%}" style="border-color:#083864fe;">
+                                    errors.backdrop_is_blank %} is-invalid{%endif%}" style="border-color:#083864fe;" required>
                                 </div>
 
                                 <div> <label for="thumbnails" class="col-form-label headerfont">Thumbnails: <span style="font-family:Arial, Helvetica, sans-serif; color:tomato;">{{
@@ -200,7 +205,7 @@
                                     </label>
                                 </div>
                                 <div> <input type="file" name="thumbnails" class=" {%if
-                                    errors.thumbnails_is_blank %} is-invalid{%endif%}" multiple style="border-color:#083864fe;">
+                                    errors.thumbnails_is_blank %} is-invalid{%endif%}" multiple style="border-color:#083864fe;" required>
                                 </div>
                             </div>
                         </div>
@@ -247,15 +252,6 @@
         {% endwith %}
 
     </script>
-
-
-    <!-- <script src="{{ url_for('static', filename='js/dropzone-5.7.0/dist/dropzone.js')}}"></script> -->
-
-    <!-- Option 2: jQuery, Popper.js, and Bootstrap JS
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.min.js" integrity="sha384-w1Q4orYjBQndcko6MimVbzY0tgp4pWB4lZ7lr30WKz0vr/aWKhXdBNmNb5D92v7s" crossorigin="anonymous"></script>
-    -->
 </body>
 
 </html>
