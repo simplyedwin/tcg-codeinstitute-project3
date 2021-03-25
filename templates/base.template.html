@@ -13,9 +13,12 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" />
 
     <link rel="stylesheet" href="{{ url_for('static', filename='js/dropzone-5.7.0/dist/dropzone.css') }}" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
 
-    {{ dropzone.load_css() }}
-    {{ dropzone.style('border: 2px dashed #0087F7; margin: 10px 0 10px; min-height: 400px; width: auto') }}
+
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Bangers&display=swap" rel="stylesheet">
+
 
     <title>Movie Finder</title>
 </head>
@@ -29,7 +32,9 @@
     <div class="container-fluid sticky-top" style="background-color:white; opacity:0.9">
         <div class="row">
             <div class="col-3 d-flex p-2 justify-content-end">
-                <a href="{{url_for('show_landing_page')}}" class="btn btn-primary">Home</a>
+                <a href="{{url_for('show_landing_page')}}"> <img
+                        src="{{url_for('static',filename='images/moviehome.svg')}}" alt=""></a>
+                </a>
             </div>
 
             <div class="col-6 d-flex justify-content-center">
@@ -50,26 +55,25 @@
 
 
             <div class="col-3 d-flex p-2 justify-content-start">
-                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#AddMovieBackdrop">
-                    Add
-                </button>
+                <a href="#AddMovieBackdrop" role="button" data-toggle="modal">
+                    <img src="{{url_for('static',filename='images/addmovies.svg')}}" alt=""></a>
             </div>
         </div>
         <div class="row d-flex justify-content-center">
             <div class="dropdown px-2 pb-2">
-                <button class="bg-transparent border-0 dropdown-toggle" type="button" id="dropdownMenuButton"
+                <button class="bg-transparent border-0 dropdown-toggle headerfont" type="button" id="dropdownMenuButton"
                     data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     Genre
                 </button>
                 <div class="dropdown-menu " style="min-width:0em" aria-labelledby="dropdownMenuButton">
                     {% for genre in all_genre %}
-                    <a class="dropdown-item"
+                    <a class="dropdown-item headerfont"
                         href="{{url_for('show_movieinfolist_bygenre',genre=genre.genre)}}">{{genre.genre.capitalize()}}</a>
                     {% endfor %}
                 </div>
             </div>
             <div class="dropdown px-2 pb-2">
-                <button class="bg-transparent border-0 dropdown-toggle" type="button" id="dropdownMenuButton"
+                <button class="bg-transparent border-0 dropdown-toggle headerfont" type="button" id="dropdownMenuButton"
                     data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     Year
                 </button>
@@ -82,7 +86,8 @@
                     {% endfor %}
                     {% set years_sorted = years|unique|sort %}
                     {% for year in years_sorted %}
-                    <a class="dropdown-item text-wrap" href="{{url_for('show_movieinfolist_byyear',year=year)}}">{{year}} </a>
+                    <a class="dropdown-item text-wrap headerfont"
+                        href="{{url_for('show_movieinfolist_byyear',year=year)}}">{{year}} </a>
                     {% endfor %}
                 </div>
             </div>
@@ -124,8 +129,8 @@
                                         errors.year_is_less_than_0 or errors.year_is_string}}
                                     </label>
                                     <input value="{{old_values.year}}" class=" form-control {%if errors.year_is_blank
-                                        or errors.year_is_less_than_0 or errors.year_is_string %} is-invalid{%endif%}" id="movie-year"
-                                        name="year">
+                                        or errors.year_is_less_than_0 or errors.year_is_string %} is-invalid{%endif%}"
+                                        id="movie-year" name="year">
                                 </div>
                                 <div class="form-group">
                                     <label for="message-text" class="col-form-label">Main Casts: {{

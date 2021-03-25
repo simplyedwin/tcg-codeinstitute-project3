@@ -51,8 +51,6 @@ def validate_form(form):
     thumbnails = request.files['thumbnails']
 
     if len(name) == 0:
-        # the key of the key/value pair is the type of the error
-        # and the value is what we want to display to the user
         errors['title_is_blank'] = "Movie title field cannot be blank"
 
     if len(genre) == 0:
@@ -146,8 +144,6 @@ def show_landing_page():
 
     else:
         print("/ route return 2")
-        print(all_movies)
-
         return render_template('landingpage.template.html',
                                all_genre=list(all_genre),
                                all_movies=list(all_movies), old_values={}, errors={})
