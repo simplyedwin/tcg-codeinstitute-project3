@@ -7,6 +7,7 @@ import cloudinary
 import cloudinary.uploader
 import cloudinary.api
 from flask_dropzone import Dropzone
+import re
 
 # we can use ObjectId
 from bson.objectid import ObjectId
@@ -168,23 +169,26 @@ def process_landing_page():
         backdrop = request.files['backdrop']
         thumbnails = request.files.getlist("thumbnails")
 
+        valid_file_name = re.sub('[^\w_.)( -]', '', name)
+
+
         result_poster = cloudinary.uploader.upload(imageurl.stream,
-                                                   public_id=name,
-                                                   folder="tcgproj3/"+genre+"/"+name,
+                                                   public_id=valid_file_name,
+                                                   folder="tcgproj3/"+genre+"/"+valid_file_name+"_poster",
                                                    resource_type="image"
                                                    )
 
         result_backdrop = cloudinary.uploader.upload(backdrop.stream,
-                                                     public_id=name,
-                                                     folder="tcgproj3/"+genre+"/"+name,
+                                                     public_id=valid_file_name,
+                                                     folder="tcgproj3/"+genre+"/"+valid_file_name+"_backdrop",
                                                      resource_type="image"
                                                      )
         for i in range(len(thumbnails)):
 
             result_thumbnail = cloudinary.uploader.upload(thumbnails[i].stream,
-                                                          public_id=name +
+                                                          public_id=valid_file_name +
                                                           "tn"+str(i+1),
-                                                          folder="tcgproj3/"+genre+"/"+name,
+                                                          folder="tcgproj3/"+genre+"/"+valid_file_name,
                                                           resource_type="image"
                                                           )
             result_thumbnails.append(result_thumbnail['url'])
@@ -416,23 +420,26 @@ def process_update_movieinfo_page(movie_id):
         backdrop = request.files['backdrop']
         thumbnails = request.files.getlist("thumbnails")
 
+        valid_file_name = re.sub('[^\w_.)( -]', '', name)
+
+
         result_poster = cloudinary.uploader.upload(imageurl.stream,
-                                                   public_id=name,
-                                                   folder="tcgproj3/"+genre+"/"+name,
+                                                   public_id=valid_file_name,
+                                                   folder="tcgproj3/"+genre+"/"+ valid_file_name+"_poster",
                                                    resource_type="image"
                                                    )
 
         result_backdrop = cloudinary.uploader.upload(backdrop.stream,
-                                                     public_id=name,
-                                                     folder="tcgproj3/"+genre+"/"+name,
+                                                     public_id=valid_file_name,
+                                                     folder="tcgproj3/"+genre+"/"+valid_file_name+"_backdrop",
                                                      resource_type="image"
                                                      )
         for i in range(len(thumbnails)):
 
             result_thumbnail = cloudinary.uploader.upload(thumbnails[i].stream,
-                                                          public_id=name +
+                                                          public_id=valid_file_name +
                                                           "tn"+str(i+1),
-                                                          folder="tcgproj3/"+genre+"/"+name,
+                                                          folder="tcgproj3/"+genre+"/"+valid_file_name,
                                                           resource_type="image"
                                                           )
             result_thumbnails.append(result_thumbnail['url'])

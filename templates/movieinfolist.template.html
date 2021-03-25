@@ -5,14 +5,14 @@
     {% for movie in movieslist%}
             <div class="container w-50 py-5">
                 <a href="{{url_for('show_movieinfo_page',movie_id=movie._id)}}">
-                    <div class="card mb-3">
+                    <div class="card mb-3 shadow bg-white rounded">
                         <div class="row no-gutters align-items-center">
                             <div class="col-md-6">
                                 <img src="{{movie.imageurl}}" class="card-img my-auto " alt="...">
                             </div>
                             <div class="col-md-6">
                                 <div class="card-body">
-                                    <h5 class="card-title headerfont">{{movie.name}}</h5>
+                                    <p class="card-title headerfont h5">{{movie.name}}</p>
                                     <p class="card-text headerfont">Genre: {{movie.genre.capitalize()}}</p>
                                     <p class="card-text headerfont">Directed by:
                                         {% if movie.directors|length> 0 %}

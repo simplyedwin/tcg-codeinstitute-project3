@@ -30,7 +30,7 @@
 
     </div>
 
-    <div class="container-fluid sticky-top shadow mb-4 bg-white rounded" style="background-color:white; opacity:0.9">
+    <div class="container-fluid sticky-top shadow mb-2 bg-white rounded" style="background-color:white; opacity:0.9">
         <div class="row align-items-end">
             <div class="col-2 d-flex p-2 justify-content-end">
                 <img src="{{url_for('static',filename='images/moviefindericon.svg')}}" alt="">
@@ -106,14 +106,16 @@
             <div class="modal-content">
                 <div class="modal-header " style="border-color:#083864fe;">
                     <h2 class="modal-title headerfont" id="AddMovieBackdropLabel">Add New Movie Info</h2>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
+                    <button class="my-auto" type="button" data-dismiss="modal" aria-label="Close" style="border-width:0px; 
+                    background-color:transparent;">
+                        <img src="{{url_for('static',filename='images/cancel.svg')}}" alt="">
+
                     </button>
                 </div>
                 <!-- <form method="POST" enctype="multipart/form-data" action="{{ url_for('process_landing_page') }}"
                     class="dropzone"> -->
                 <form method="POST" enctype="multipart/form-data" action="{{url_for('process_landing_page')}}">
-                    <div class="container modal-body " >
+                    <div class="container modal-body my-auto" >
                         <div class="row">
                             <div class="col-6">
                                 <div class="form-group">
@@ -180,10 +182,10 @@
                                     <label for="message-text" class="col-form-label headerfont">Synopsis: <span style="font-family:Arial, Helvetica, sans-serif; color:tomato;">{{
                                         errors.synopsis_is_blank}}</span>
                                     </label>
-                                    <textarea type="text" value="{%if
-                                        errors.synopsis_is_blank %} {{old_values.synopsis}} {%endif%}" class="form-control {%if
+                                    <textarea type="text" class="form-control {%if
                                         errors.synopsis_is_blank %} is-invalid{%endif%} " style="height: 10rem; border-color:#083864fe;"
-                                        id="movie-synop" name="synopsis"></textarea required>
+                                        id="movie-synop" name="synopsis" required>{%if
+                                            errors.synopsis_is_blank %} {{old_values.synopsis}} {%endif%}</textarea >
                                 </div>
                                 <div> <label for="poster" class="col-form-label headerfont">Poster: <span style="font-family:Arial, Helvetica, sans-serif; color:tomato;">{{ errors.file_is_blank
                                         }}</span>
@@ -212,9 +214,9 @@
 
                     </div>
                     <div class="modal-footer" style="border-color:#083864fe;">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary" id="upload-btn">
-                            Add
+                        <button class="mx-auto my-auto" type="submit" style="border-width:0px; 
+                        background-color:transparent;">
+                            <img src="{{url_for('static',filename='images/uploadmovie.svg')}}" alt="">
                         </button>
                     </div>
                 </form>

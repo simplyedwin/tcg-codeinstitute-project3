@@ -24,16 +24,13 @@
                 <!-- <div class="container"> -->
                 <div class="row">
                     <div class="col mt-5 px-5">
-                        <div id="carouselMovieThumbnailsControls" class="carousel slide" data-ride="carousel"
-                            >
+                        <div id="carouselMovieThumbnailsControls" class="carousel slide" data-ride="carousel">
                             <div class="carousel-inner">
                                 {% for tn in old_values.thumbnails %}
-                                <div class="rounded carousel-item {% if loop.index == 1 %} active{% endif %}"
-                                style="height: 500px;
+                                <div class="rounded carousel-item {% if loop.index == 1 %} active{% endif %}" style="height: 500px;
                                 overflow: hidden;
                                 width: 100%;">
-                                    <img src="{{tn}}" class="img-fluid w-100" alt="Thumbnails"
-                                        >
+                                    <img src="{{tn}}" class="img-fluid w-100" alt="Thumbnails">
                                 </div>
                                 {% endfor %}
                             </div>
@@ -76,8 +73,7 @@
                     </div>
 
                 </div>
-                <div class="row rounded">
-                    <label for="">Trailer:</label>
+                <div class="row rounded headerfont h5">
                     <div class=" container">
                         <iframe style="border: 0; width:80%; height: 500px; overflow: auto;"
                             class="embed-responsive d-block mb-4 mx-auto" src="{{old_values.youtubeurl}}"
@@ -94,15 +90,16 @@
 
 <!-- Modal -->
 <form method="POST">
-    <div class="modal fade " id="deletemovieinfo" data-backdrop="static" data-keyboard="false" tabindex="-1"
+    <div class="modal fade " id="deletemovieinfo" tabindex="-1"
         aria-labelledby="deletemovieinfoLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header" style="border-color:tomato">
-                    <h5 class="modal-title" id="deletemovieinfoLabel" style="font-family: 'Bangers', cursive; color:tomato">Are you sure that you want to delete this
+                    <p class="modal-title h2" id="deletemovieinfoLabel"
+                        style="font-family: 'Bangers', cursive; color:tomato">Are you sure that you want to delete this
                         movie
                         info?
-                    </h5>
+                    </p>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -110,7 +107,7 @@
                 <div class="modal-body">
                     <button href="{{url_for('process_delete_movieinfo',movie_id=old_values._id)}}" type="submit"
                         class="btn btn-danger">Yes</button>
-                    <button type="button" class="btn btn-success" data-dismiss="modal">No</button>
+                    <button type="button" class="btn btn-success ml-5" data-dismiss="modal">No, I still need it...</button>
 
                 </div>
             </div>
@@ -123,9 +120,10 @@
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header" style="border-color:#083864fe;">
-                <h5 class="modal-title headerfont" id="updatemovieinfoLabel">Update Movie Info</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
+                <p class="modal-title headerfont h2" id="updatemovieinfoLabel">Update Movie Info</p>
+                <button class="my-auto" type="button" data-dismiss="modal" aria-label="Close" style="border-width:0px; 
+                    background-color:transparent;">
+                    <img src="{{url_for('static',filename='images/cancel.svg')}}" alt="">
                 </button>
             </div>
             <form action="{{url_for('process_update_movieinfo_page',movie_id=old_values._id)}}" method="POST"
@@ -134,14 +132,14 @@
                     <div class="row">
                         <div class="col-6">
                             <div class="form-group">
-                                <label for="movie-title" class="col-form-label headerfont" >Title: <span
+                                <label for="movie-title" class="col-form-label headerfont">Title: <span
                                         style="font-family:Arial, Helvetica, sans-serif; color: tomato;">{{
                                         errors.title_is_blank
                                         }}</span>
                                 </label>
                                 <input type="text" value="{{old_values.name}}" class=" form-control {%if
                                         errors.title_is_blank %} is-invalid{%endif%}" id="movie-name" name="name"
-                                    style="border-color:#083864fe;"required>
+                                    style="border-color:#083864fe;" required>
                             </div>
                             <div class="form-group">
                                 <label for="message-text" class="col-form-label headerfont">Genre: <span
@@ -150,7 +148,8 @@
                                     </span>
                                 </label>
                                 <input type="text" value="{{old_values.genre}}" class="form-control  {%if
-                                        errors.genre_is_blank %} is-invalid{%endif%}" id="movie-genre" name="genre" required>
+                                        errors.genre_is_blank %} is-invalid{%endif%}" id="movie-genre" name="genre"
+                                    required>
                             </div>
                             <div class="form-group">
                                 <label for="message-text" class="col-form-label headerfont">Year: <span
@@ -211,10 +210,10 @@
                                         style="font-family:Arial, Helvetica, sans-serif; color: tomato;">{{
                                         errors.synopsis_is_blank}}
                                     </span>
-                                </label>
-                                <textarea type="text" value="{{old_values.synopsis}}" class="form-control {%if
+                                </label> 
+                                <textarea type="text" class="form-control {%if
                                         errors.synopsis_is_blank %} is-invalid{%endif%} " style="height: 10rem;"
-                                    id="movie-synop" name="synopsis"></textarea required>
+                                    id="movie-synop" name="synopsis" required>{{old_values.synopsis}}</textarea >
                             </div>
                             <div> <label for="poster" class="col-form-label headerfont">Poster: <span
                                         style="font-family:Arial, Helvetica, sans-serif; color: tomato;">{{
@@ -249,11 +248,9 @@
 
                 </div>
                 <div class="modal-footer" style="border-color:#083864fe;">
-
-
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary" id="upload-btn">
-                        Post
+                    <button class="mx-auto my-auto" type="submit" style="border-width:0px; 
+                    background-color:transparent;">
+                        <img src="{{url_for('static',filename='images/uploadmovie.svg')}}" alt="">
                     </button>
                 </div>
 
