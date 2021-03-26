@@ -7,7 +7,6 @@ import cloudinary
 import cloudinary.uploader
 import cloudinary.api
 from flask_dropzone import Dropzone
-import re
 
 # we can use ObjectId
 from bson.objectid import ObjectId
@@ -16,8 +15,9 @@ load_dotenv()
 
 app = Flask(__name__)
 app.secret_key = os.environ.get('FLASK_SECRET_KEY')
-app.config['MAX_CONTENT_LENGTH'] = 1024 * 1024 
+app.config['MAX_CONTENT_LENGTH'] = 1024 * 1024 * 4
 app.config['UPLOAD_EXTENSIONS'] = ['.jpg', '.png', '.gif']
+
 
 dropzone = Dropzone(app)
 
@@ -51,6 +51,9 @@ def validate_form(form):
     backdrop = request.files['backdrop']
     thumbnails = request.files['thumbnails']
 
+    photo_size = imageurl.stream.tell()
+    print(photo_size)
+
     if len(name) == 0 or name.isspace():
         errors['title_is_blank'] = "Movie title field cannot be blank"
 
@@ -83,7 +86,7 @@ def validate_form(form):
     if len(youtubeurl) == 0 or youtubeurl.isspace():
         errors['youtubeurl_is_blank'] = "Youtubeurl field cannot be blank"
 
-    if len(imageurl.filename)  == 0:
+    if len(imageurl.filename) == 0:
         errors['file_is_blank'] = "Poster field cannot be blank"
 
     if len(backdrop.filename) == 0:
@@ -91,39 +94,41 @@ def validate_form(form):
 
     if len(thumbnails.filename) == 0:
         errors['thumbnails_is_blank'] = "Thumbnails field cannot be blank"
-    
+
     return errors
 
 
-def search_result(result, all_movies, castname, directorname, movieslist, dbmovieslist):
+def search_result(result, all_movies, movieslist, dbmovieslist):
 
     for movie in all_movies:
 
         name = movie['name'].lower()
+        maincasts = movie['maincasts']
+        directors = movie['directors']
+
         if result.lower() in name:
             movieslist.append(movie)
-        for cast in movie['maincasts']:
-            if (result.lower() in cast.lower()) and (result.lower()
-                                                     not in name) and (cast.lower() not in directorname):
-                castname = cast.lower()
+
+        for cast in maincasts:
+            if (result.lower() in cast.lower()) and (result.lower() not in name):
                 movieslist.append(movie)
-        for director in movie['directors']:
-            if (result.lower() in director.lower()) and (result.lower()
-                                                         not in name) and (director.lower() not in castname):
-                directorname = director.lower()
+
+        for director in directors:
+            if (result.lower() in director.lower()) and (result.lower() not in name):
                 movieslist.append(movie)
+
         dbmovieslist.append(movie)
+
+    movieslist = list({v['_id']: v for v in movieslist}.values())
 
     return movieslist, dbmovieslist
 
 
-@app.route('/')
+@ app.route('/')
 def show_landing_page():
 
     dbmovieslist = []
     movieslist = []
-    castname = ""
-    directorname = ""
 
     all_genre = db.movie_genres.find()
     all_movies = db.movies.find()
@@ -132,16 +137,20 @@ def show_landing_page():
     if result != None:
 
         movieslist, dbmovieslist = search_result(
-            result, all_movies, castname, directorname, movieslist, dbmovieslist)
+            result, all_movies, movieslist, dbmovieslist)
 
-        print("/ route return 1")
-        print(all_movies)
+        if not movieslist:
+            flash("Sorry we found no result for {}".format(result))
 
-        return render_template('movieinfolist.template.html',
-                               all_genre=list(all_genre),
-                               result=result,
-                               movieslist=movieslist,
-                               all_movies=dbmovieslist, old_values={}, errors={})
+            return redirect(url_for('show_landing_page'))
+
+        else:
+
+            return render_template('movieinfolist.template.html',
+                                   all_genre=list(all_genre),
+                                   result=result,
+                                   movieslist=movieslist,
+                                   all_movies=dbmovieslist, old_values={}, errors={})
 
     else:
         print("/ route return 2")
@@ -169,26 +178,23 @@ def process_landing_page():
         backdrop = request.files['backdrop']
         thumbnails = request.files.getlist("thumbnails")
 
-        valid_file_name = re.sub('[^\w_.)( -]', '', name)
-
-
         result_poster = cloudinary.uploader.upload(imageurl.stream,
-                                                   public_id=valid_file_name,
-                                                   folder="tcgproj3/"+genre+"/"+valid_file_name+"_poster",
+                                                   public_id=name+"_poster",
+                                                   folder="tcgproj3/"+genre+"/"+name,
                                                    resource_type="image"
                                                    )
 
         result_backdrop = cloudinary.uploader.upload(backdrop.stream,
-                                                     public_id=valid_file_name,
-                                                     folder="tcgproj3/"+genre+"/"+valid_file_name+"_backdrop",
+                                                     public_id=name+"_backdrop",
+                                                     folder="tcgproj3/"+genre+"/"+name,
                                                      resource_type="image"
                                                      )
         for i in range(len(thumbnails)):
 
             result_thumbnail = cloudinary.uploader.upload(thumbnails[i].stream,
-                                                          public_id=valid_file_name +
+                                                          public_id=name +
                                                           "tn"+str(i+1),
-                                                          folder="tcgproj3/"+genre+"/"+valid_file_name,
+                                                          folder="tcgproj3/"+genre+"/"+name,
                                                           resource_type="image"
                                                           )
             result_thumbnails.append(result_thumbnail['url'])
@@ -231,9 +237,6 @@ def show_movieinfolist_bygenre(genre):
     movieslist = []
     dbmovieslist = []
 
-    castname = ""
-    directorname = ""
-
     all_genre = db.movie_genres.find()
     all_movies = db.movies.find()
     result = request.args.get('result')
@@ -241,13 +244,20 @@ def show_movieinfolist_bygenre(genre):
     if result != None:
 
         movieslist, dbmovieslist = search_result(
-            result, all_movies, castname, directorname, movieslist, dbmovieslist)
+            result, all_movies, movieslist, dbmovieslist)
 
-        return render_template('movieinfolist.template.html',
-                               all_genre=list(all_genre),
-                               result=result,
-                               movieslist=movieslist,
-                               all_movies=dbmovieslist, old_values={}, errors={})
+        if not movieslist:
+            flash("Sorry we found no result for {}".format(result))
+
+            return redirect(url_for('show_landing_page'))
+
+        else:
+
+            return render_template('movieinfolist.template.html',
+                                   all_genre=list(all_genre),
+                                   result=result,
+                                   movieslist=movieslist,
+                                   all_movies=dbmovieslist, old_values={}, errors={})
 
     else:
 
@@ -272,9 +282,6 @@ def show_movieinfolist_byyear(year):
     dbmovieslist = []
     movieslist = []
 
-    castname = ""
-    directorname = ""
-
     all_genre = db.movie_genres.find()
     all_movies = db.movies.find()
     result = request.args.get('result')
@@ -283,13 +290,20 @@ def show_movieinfolist_byyear(year):
     if result != None:
 
         movieslist, dbmovieslist = search_result(
-            result, all_movies, castname, directorname, movieslist, dbmovieslist)
+            result, all_movies, movieslist, dbmovieslist)
 
-        return render_template('movieinfolist.template.html',
-                               all_genre=list(all_genre),
-                               result=result,
-                               movieslist=movieslist,
-                               all_movies=dbmovieslist, old_values={}, errors={})
+        if not movieslist:
+            flash("Sorry we found no result for {}".format(result))
+
+            return redirect(url_for('show_landing_page'))
+
+        else:
+
+            return render_template('movieinfolist.template.html',
+                                   all_genre=list(all_genre),
+                                   result=result,
+                                   movieslist=movieslist,
+                                   all_movies=dbmovieslist, old_values={}, errors={})
 
     else:
 
@@ -309,29 +323,32 @@ def show_movieinfolist_byyear(year):
                                all_movies=dbmovieslist, old_values={}, errors={})
 
 
-@app.route('/<movie_id>/movieinfo')
+@ app.route('/<movie_id>/movieinfo')
 def show_movieinfo_page(movie_id):
 
     dbmovieslist = []
     movieslist = []
-
-    castname = ""
-    directorname = ""
 
     all_genre = db.movie_genres.find()
     all_movies = db.movies.find()
     result = request.args.get('result')
 
     if result != None:
-        # print("/<movie_id>/movieinfo route return 1")
         movieslist, dbmovieslist = search_result(
-            result, all_movies, castname, directorname, movieslist, dbmovieslist)
+            result, all_movies, movieslist, dbmovieslist)
 
-        return render_template('movieinfolist.template.html',
-                               all_genre=list(all_genre),
-                               result=result,
-                               movieslist=movieslist,
-                               all_movies=dbmovieslist, old_values={}, errors={})
+        if not movieslist:
+            flash("Sorry we found no result for {}".format(result))
+
+            return redirect(url_for('show_landing_page'))
+
+        else:
+
+            return render_template('movieinfolist.template.html',
+                                   all_genre=list(all_genre),
+                                   result=result,
+                                   movieslist=movieslist,
+                                   all_movies=dbmovieslist, old_values={}, errors={})
     else:
         movie = db.movies.find_one({
             '_id': ObjectId(movie_id)
@@ -344,7 +361,7 @@ def show_movieinfo_page(movie_id):
                                old_values=movie, errors={})
 
 
-@app.route('/<movie_id>/movieinfo', methods=['POST'])
+@ app.route('/<movie_id>/movieinfo', methods=['POST'])
 def process_delete_movieinfo(movie_id):
     movie = db.movies.find_one({
         '_id': ObjectId(movie_id)
@@ -363,29 +380,32 @@ def process_delete_movieinfo(movie_id):
     return redirect(url_for('show_landing_page'))
 
 
-@app.route('/movieinfo/<movie_id>/update')
+@ app.route('/movieinfo/<movie_id>/update')
 def show_update_movieinfo_page(movie_id):
 
     dbmovieslist = []
     movieslist = []
-
-    castname = ""
-    directorname = ""
 
     all_genre = db.movie_genres.find()
     all_movies = db.movies.find()
     result = request.args.get('result')
 
     if result != None:
-        # print("/<movie_id>/movieinfo route return 1")
         movieslist, dbmovieslist = search_result(
-            result, all_movies, castname, directorname, movieslist, dbmovieslist)
+            result, all_movies, movieslist, dbmovieslist)
 
-        return render_template('movieinfolist.template.html',
-                               all_genre=list(all_genre),
-                               result=result,
-                               movieslist=movieslist,
-                               all_movies=dbmovieslist, old_values={}, errors={})
+        if not movieslist:
+            flash("Sorry we found no result for {}".format(result))
+
+            return redirect(url_for('show_landing_page'))
+
+        else:
+
+            return render_template('movieinfolist.template.html',
+                                   all_genre=list(all_genre),
+                                   result=result,
+                                   movieslist=movieslist,
+                                   all_movies=dbmovieslist, old_values={}, errors={})
     else:
         movie = db.movies.find_one({
             '_id': ObjectId(movie_id)
@@ -399,7 +419,7 @@ def show_update_movieinfo_page(movie_id):
                                old_values=movie, errors={})
 
 
-@app.route('/movieinfo/<movie_id>/update', methods=['POST'])
+@ app.route('/movieinfo/<movie_id>/update', methods=['POST'])
 def process_update_movieinfo_page(movie_id):
 
     result_thumbnails = []
@@ -420,26 +440,23 @@ def process_update_movieinfo_page(movie_id):
         backdrop = request.files['backdrop']
         thumbnails = request.files.getlist("thumbnails")
 
-        valid_file_name = re.sub('[^\w_.)( -]', '', name)
-
-
         result_poster = cloudinary.uploader.upload(imageurl.stream,
-                                                   public_id=valid_file_name,
-                                                   folder="tcgproj3/"+genre+"/"+ valid_file_name+"_poster",
+                                                   public_id=name+"_poster",
+                                                   folder="tcgproj3/"+genre+"/" + name,
                                                    resource_type="image"
                                                    )
 
         result_backdrop = cloudinary.uploader.upload(backdrop.stream,
-                                                     public_id=valid_file_name,
-                                                     folder="tcgproj3/"+genre+"/"+valid_file_name+"_backdrop",
+                                                     public_id=name+"_backdrop",
+                                                     folder="tcgproj3/"+genre+"/"+name,
                                                      resource_type="image"
                                                      )
         for i in range(len(thumbnails)):
 
             result_thumbnail = cloudinary.uploader.upload(thumbnails[i].stream,
-                                                          public_id=valid_file_name +
+                                                          public_id=name +
                                                           "tn"+str(i+1),
-                                                          folder="tcgproj3/"+genre+"/"+valid_file_name,
+                                                          folder="tcgproj3/"+genre+"/"+name,
                                                           resource_type="image"
                                                           )
             result_thumbnails.append(result_thumbnail['url'])
@@ -487,14 +504,14 @@ def process_update_movieinfo_page(movie_id):
                                old_values=old_values)
 
 
-@app.errorhandler(404)
+@ app.errorhandler(404)
 def page_not_found(e):
     return render_template('custom404.template.html')
 
 
-@app.errorhandler(413)
+@ app.errorhandler(413)
 def request_entity_too_large(error):
-    
+
     flash('File Too Large')
 
     return redirect(url_for('show_landing_page'))

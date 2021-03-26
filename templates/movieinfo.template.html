@@ -6,14 +6,14 @@
         <div class="col-1" style="height:100px">
             <div style="position:fixed">
                 <div class="col" style="width:10px">
-                    <a href="#deletemovieinfo" role="button" data-toggle="modal">
+                    <a id="delete-btn" href="#deletemovieinfo" role="button" data-toggle="modal">
                         <img class="p-2" src="{{url_for('static',filename='images/deletemovie.svg')}}"
-                            style="width:65px;height:70px;" alt=""></a>
+                            style="width:55px;height:60px;" alt=""></a>
                 </div>
                 <div class="col">
                     <a href="#updatemovieinfo" role="button" data-toggle="modal">
                         <img class="p-2" src="{{url_for('static',filename='images/editmovie.svg')}} "
-                            style="width:65px;height:70px" alt=""></a>
+                            style="width:55px;height:60px" alt=""></a>
                 </div>
             </div>
         </div>
@@ -90,8 +90,8 @@
 
 <!-- Modal -->
 <form method="POST">
-    <div class="modal fade " id="deletemovieinfo" tabindex="-1"
-        aria-labelledby="deletemovieinfoLabel" aria-hidden="true">
+    <div class="modal fade " id="deletemovieinfo" tabindex="-1" aria-labelledby="deletemovieinfoLabel"
+        aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header" style="border-color:tomato">
@@ -105,10 +105,17 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <button href="{{url_for('process_delete_movieinfo',movie_id=old_values._id)}}" type="submit"
-                        class="btn btn-danger">Yes</button>
-                    <button type="button" class="btn btn-success ml-5" data-dismiss="modal">No, I still need it...</button>
+                    <div class="row align-items-end">
+                        <div class="col-6 d-flex p-2 justify-content-start">
+                            <button type="button" class="btn btn-success mr-5" data-dismiss="modal">No! I still need
+                                it!</button>
+                        </div>
 
+                        <div class="col-6 d-flex p-2 justify-content-end">
+                            <button href="{{url_for('process_delete_movieinfo',movie_id=old_values._id)}}" type="submit"
+                                class="btn btn-danger ml-5">Yes</button>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -126,8 +133,8 @@
                     <img src="{{url_for('static',filename='images/cancel.svg')}}" alt="">
                 </button>
             </div>
-            <form action="{{url_for('process_update_movieinfo_page',movie_id=old_values._id)}}" method="POST"
-                enctype="multipart/form-data">
+            <form id="update-form" action="{{url_for('process_update_movieinfo_page',movie_id=old_values._id)}}"
+                method="POST" enctype="multipart/form-data">
                 <div class="container modal-body">
                     <div class="row">
                         <div class="col-6">
@@ -149,7 +156,7 @@
                                 </label>
                                 <input type="text" value="{{old_values.genre}}" class="form-control  {%if
                                         errors.genre_is_blank %} is-invalid{%endif%}" id="movie-genre" name="genre"
-                                    required>
+                                    style="border-color:#083864fe;" required>
                             </div>
                             <div class="form-group">
                                 <label for="message-text" class="col-form-label headerfont">Year: <span
@@ -161,7 +168,7 @@
                                 </label>
                                 <input value="{{old_values.year}}" class=" form-control {%if errors.year_is_blank
                                         or errors.year_is_less_than_0 or errors.year_is_string %} is-invalid{%endif%}"
-                                    id="movie-year" name="year" required>
+                                    id="movie-year" name="year" style="border-color:#083864fe;" required>
                             </div>
                             <div class="form-group">
                                 <label for="message-text" class="col-form-label headerfont">Main Casts: <span
@@ -171,7 +178,7 @@
                                 </label>
                                 <input type="text" value="{{', '.join(old_values.maincasts)}}" class="form-control  {%if
                                         errors.maincasts_is_blank %} is-invalid{%endif%}" id="movie-casts"
-                                    name="maincasts" required>
+                                    name="maincasts" style="border-color:#083864fe;" required>
                             </div>
                             <div class="form-group">
                                 <label for="message-text" class="col-form-label headerfont">Directed by: <span
@@ -186,7 +193,7 @@
                                 {% endif %}
                                 class="form-control {%if
                                 errors.directors_is_blank %} is-invalid{%endif%}" id="movie-director"
-                                name="directors" required>
+                                name="directors" style="border-color:#083864fe;" required>
                             </div>
                             {%if errors|length > 0 %}
                             <div class="alert alert-danger">
@@ -203,17 +210,18 @@
                                 </label>
                                 <input type="text" value="{{old_values.youtubeurl}}" class="form-control  {%if
                                         errors.youtubeurl_is_blank %} is-invalid{%endif%}" id="movie-trialer"
-                                    name="youtubeurl" required>
+                                    name="youtubeurl" style="border-color:#083864fe;" required>
                             </div>
                             <div class="form-group">
                                 <label for="message-text" class="col-form-label headerfont">Synopsis: <span
                                         style="font-family:Arial, Helvetica, sans-serif; color: tomato;">{{
                                         errors.synopsis_is_blank}}
                                     </span>
-                                </label> 
+                                </label>
                                 <textarea type="text" class="form-control {%if
-                                        errors.synopsis_is_blank %} is-invalid{%endif%} " style="height: 10rem;"
-                                    id="movie-synop" name="synopsis" required>{{old_values.synopsis}}</textarea >
+                                        errors.synopsis_is_blank %} is-invalid{%endif%} "
+                                    style="border-color:#083864fe;height: 10rem;" id="movie-synop" name="synopsis"
+                                    required>{{old_values.synopsis}}</textarea>
                             </div>
                             <div> <label for="poster" class="col-form-label headerfont">Poster: <span
                                         style="font-family:Arial, Helvetica, sans-serif; color: tomato;">{{
@@ -248,10 +256,16 @@
 
                 </div>
                 <div class="modal-footer" style="border-color:#083864fe;">
-                    <button class="mx-auto my-auto" type="submit" style="border-width:0px; 
+                    <button id="update-upload-btn" class="mx-auto my-auto" type="submit" style="border-width:0px; 
                     background-color:transparent;">
                         <img src="{{url_for('static',filename='images/uploadmovie.svg')}}" alt="">
                     </button>
+                </div>
+                <div class="progress">
+                    <div id="updateprogressBar" class="progress-bar" role="progressbar" aria-valuenow="0"
+                        aria-valuemin="0" aria-valuemax="100" style="width: 0%;">
+                        0%
+                    </div>
                 </div>
 
 
