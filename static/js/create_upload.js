@@ -1,26 +1,15 @@
 $(document).ready(function () {
   $("#add-form").on("submit", function (event) {
+    event.preventDefault();
+
     var formData = new FormData(document.getElementById("add-form"));
+
+    let name = formData.get("name");
+    let file = formData.get("file").size;
 
     $.ajax({
       xhr: function () {
         var xhr = new window.XMLHttpRequest();
-
-        xhr.upload.addEventListener("progress", function (e) {
-          if (e.lengthComputable) {
-            console.log("Bytes Loaded: " + e.loaded);
-            console.log("Total Size: " + e.total);
-            console.log("Percentage Uploaded: " + e.loaded / e.total);
-
-            var percent = Math.round((e.loaded / e.total) * 100);
-
-            $("#addprogressBar")
-              .attr("aria-valuenow", percent)
-              .css("width", percent + "%")
-              .text(percent + "%");
-          }
-        });
-
         return xhr;
       },
       type: "POST",
@@ -28,11 +17,45 @@ $(document).ready(function () {
       data: formData,
       processData: false,
       contentType: false,
-      success: function (data) {
-        console.log(data);
+      complete: function (xhr) {
+        statuscode = xhr.status;
+        // hide the preloader (progress bar)
+        console.log(statuscode);
+        var i = 0;
+        uploadingprogress(statuscode);
+        function uploadingprogress(scode) {
+          if (scode === 200) {
+            $("#addprogressBar").css("width", "100%").text("100%");
+          } else if(scode != 400) {
+            if (i < 100) {
+              i = i + 1;
+              $("#addprogressBar")
+                .css("width", i + "%")
+                .text(i + " %");
+            }
+            // Wait for sometime before running this script again
+            setTimeout(uploadingprogress, 100,scode);
+          }
+        }
       },
-    }).done(function () {
-      M.toast({ html: "Uploaded Done!", classes: "bg-success text-white" });
+      success: function (data) {
+        toastr.success(name + " successfully added!");
+      },
+      error: function (xhr, textStatus, errorThrown) {
+        console.log(xhr.responseText);
+        console.log(xhr.status);
+        let error_status;
+        let msg;
+        if (xhr.status === 400) {
+          resobj = JSON.parse(xhr.responseText);
+          console.log(resobj);
+          error_status = resobj["error_status"];
+          msg = resobj["message"];
+          for (var error in msg) {
+            toastr.warning(msg[error]);
+          }
+        }
+      },
     });
   });
 });

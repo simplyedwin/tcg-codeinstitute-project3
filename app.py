@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, flash
+from flask import Flask, render_template, request, redirect, url_for,flash, jsonify, make_response
 import os
 from dotenv import load_dotenv
 import pymongo
@@ -7,15 +7,20 @@ import cloudinary
 import cloudinary.uploader
 import cloudinary.api
 from flask_dropzone import Dropzone
+import requests
+from werkzeug.wrappers import BaseResponse as Response
 
 # we can use ObjectId
 from bson.objectid import ObjectId
 
 load_dotenv()
 
+IP = os.environ.get('IP')
+PORT=os.environ.get('PORT')
+
 app = Flask(__name__)
 app.secret_key = os.environ.get('FLASK_SECRET_KEY')
-app.config['MAX_CONTENT_LENGTH'] = 1024 * 1024 * 4
+app.config['MAX_CONTENT_LENGTH'] = 1024 * 1024
 app.config['UPLOAD_EXTENSIONS'] = ['.jpg', '.png', '.gif']
 
 
@@ -162,10 +167,18 @@ def show_landing_page():
 @ app.route('/', methods=['POST'])
 def process_landing_page():
 
+    url =   request.url   
+
+    response = requests.get(url)
+    status_code = int(response.status_code)
+
     result_thumbnails = []
     errors = validate_form(request.form)
 
-    if len(errors) == 0:
+    print(status_code)
+
+
+    if len(errors) == 0 and status_code == 200:
 
         name = request.form.get('name')
         genre = request.form.get('genre')
@@ -212,23 +225,35 @@ def process_landing_page():
             'thumbnails': result_thumbnails
         })
 
-        flash(name + " has been added!")
+        data = {'message':errors, 'error_status': 0}
 
-        print("/ route return post")
-        return redirect(url_for('show_landing_page'))
+        print("status code 200")
+
+        return make_response(jsonify(data), 200)
+
+
+        # flash(name + " has been added!")
+
+        # print("/ route return post")
+        # return redirect(url_for('process_landing_page'))
 
     else:
-        for k, v in errors.items():
-            flash(v)
-        all_genre = db.movie_genres.find()
-        all_movies = db.movies.find()
+        # for k, v in errors.items():
+        #     flash(v)
+        # all_genre = db.movie_genres.find()
+        # all_movies = db.movies.find()
+    
+        data = {'message':errors, 'error_status':1}
 
-        print("/create route errors")
-        return render_template('landingpage.template.html',
-                               all_movies=list(all_movies),
-                               all_genre=list(all_genre),
-                               errors=errors,
-                               old_values=request.form)
+        print("status code 400")
+
+        return make_response(jsonify(data), 400)
+        # print("/create route errors")
+        # return render_template('landingpage.template.html',
+        #                        all_movies=list(all_movies),
+        #                        all_genre=list(all_genre),
+        #                        errors=errors,
+        #                        old_values=request.form)
 
 
 @ app.route('/<genre>/bygenre')
@@ -380,7 +405,7 @@ def process_delete_movieinfo(movie_id):
     return redirect(url_for('show_landing_page'))
 
 
-@ app.route('/movieinfo/<movie_id>/update')
+@ app.route('/<movie_id>/movieinfo/update')
 def show_update_movieinfo_page(movie_id):
 
     dbmovieslist = []
@@ -419,15 +444,19 @@ def show_update_movieinfo_page(movie_id):
                                old_values=movie, errors={})
 
 
-@ app.route('/movieinfo/<movie_id>/update', methods=['POST'])
+@ app.route('/<movie_id>/movieinfo/update', methods=['POST'])
 def process_update_movieinfo_page(movie_id):
 
     result_thumbnails = []
     errors = validate_form(request.form)
+    url =   request.url   
+
+    response = requests.get(url)
+    status_code = int(response.status_code)
 
     print("Error length: {}".format(len(errors)))
 
-    if len(errors) == 0:
+    if len(errors) == 0 and status_code == 200:
 
         name = request.form.get('name')
         genre = request.form.get('genre')
@@ -478,30 +507,44 @@ def process_update_movieinfo_page(movie_id):
             }
         })
 
-        flash(name + " has been updated!")
+        data = {'message':errors, 'error_status': 0}
 
-        print("/<movie_id>/movieinfo/update route return post")
-        return redirect(url_for('show_update_movieinfo_page', movie_id=movie_id))
+        print("status code 200")
+
+        # return redirect(url_for('show_update_movieinfo_page', movie_id=movie_id))
+
+        return make_response(jsonify(data), 200)
+
+        # flash(name + " has been updated!")
+
+        # print("/<movie_id>/movieinfo/update route return post")
+        # return redirect(url_for('show_update_movieinfo_page', movie_id=movie_id))
 
     else:
 
-        for k, v in errors.items():
-            flash(v)
+        data = {'message':errors, 'error_status':1}
 
-        movie = db.movies.find_one({
-            '_id': ObjectId(movie_id)
-        })
+        print("status code 400")
 
-        all_genre = db.movie_genres.find()
-        all_movies = db.movies.find()
-        old_values = {**movie, **request.form}
+        return make_response(jsonify(data), 400)
 
-        print("/create route errors")
-        return render_template('movieinfo.template.html',
-                               all_movies=list(all_movies),
-                               all_genre=list(all_genre),
-                               errors=errors,
-                               old_values=old_values)
+        # for k, v in errors.items():
+        #     flash(v)
+
+        # movie = db.movies.find_one({
+        #     '_id': ObjectId(movie_id)
+        # })
+
+        # all_genre = db.movie_genres.find()
+        # all_movies = db.movies.find()
+        # old_values = {**movie, **request.form}
+
+        # print("/create route errors")
+        # return render_template('movieinfo.template.html',
+        #                        all_movies=list(all_movies),
+        #                        all_genre=list(all_genre),
+        #                        errors=errors,
+        #                        old_values=old_values)
 
 
 @ app.errorhandler(404)
@@ -520,5 +563,5 @@ def request_entity_too_large(error):
 if __name__ == '__main__':
     # app.run(host=os.environ.get('IP'),
     #         port=os.environ.get('PORT'), debug=True)
-    app.run(host=os.environ.get('IP'),
-            port=8080, debug=True)
+    app.run(host=IP,
+            port=PORT, debug=True)
