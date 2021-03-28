@@ -56,7 +56,7 @@ def validate_form(form):
     backdrop = request.files['backdrop']
     thumbnails = request.files['thumbnails']
 
-    photo_size = imageurl.stream.tell()
+    photo_size = imageurl.read()
     print(photo_size)
 
     if len(name) == 0 or name.isspace():
@@ -549,7 +549,7 @@ def process_update_movieinfo_page(movie_id):
 
 @ app.errorhandler(404)
 def page_not_found(e):
-    return render_template('custom404.template.html')
+    return render_template('custom404.template.html',old_values={}, errors={})
 
 
 @ app.errorhandler(413)
