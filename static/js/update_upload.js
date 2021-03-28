@@ -4,8 +4,7 @@ $(document).ready(function () {
 
     var url= window.location.href;
     var pathname = window.location.pathname;
-    console.log(url);
-    console.log(pathname);
+
 
     $("#update-upload-btn").click(function(){
       location.reload();

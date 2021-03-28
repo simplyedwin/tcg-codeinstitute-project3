@@ -112,19 +112,17 @@
 
                     </button>
                 </div>
-                <!-- <form method="POST" enctype="multipart/form-data" action="{{ url_for('process_landing_page') }}"
-                    class="dropzone"> -->
                 <form id='add-form' method="POST" enctype="multipart/form-data"
                     action="{{url_for('process_landing_page')}}">
                     <div class="container modal-body my-auto">
                         <div class="row">
                             <div class="col-6">
-                                <div class="form-group">
-                                    <label for="movie-title" class="col-form-label headerfont ">Title: <span
-                                            style="font-family:Arial, Helvetica, sans-serif; color: tomato;">{{
-                                            errors.title_is_blank
-                                            }}</span>
-                                    </label>
+                                <div class="form-group ">
+                                    <div class="d-flex flex-row justify-content-start">
+                                    <label for="movie-title" class="col-form-label headerfont ">Title: 
+                                    </label><p class='my-auto ml-1' id="add-title"
+                                    style="font-family:Arial, Helvetica, sans-serif; color: tomato;"></p>
+                                </div>
                                     <input type="text"
                                         value="{% if errors.title_is_blank %}{{old_values.name}} {% endif %}" class=" form-control {%if
                                         errors.title_is_blank %} is-invalid{%endif%}" id="movie-name" name="name"

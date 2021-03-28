@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for,flash, jsonify, make_response
+from flask import Flask, render_template, request, redirect, url_for, flash, jsonify, make_response
 import os
 from dotenv import load_dotenv
 import pymongo
@@ -16,13 +16,12 @@ from bson.objectid import ObjectId
 load_dotenv()
 
 IP = os.environ.get('IP')
-PORT=os.environ.get('PORT')
+PORT = os.environ.get('PORT')
 
 app = Flask(__name__)
 app.secret_key = os.environ.get('FLASK_SECRET_KEY')
-app.config['MAX_CONTENT_LENGTH'] = 1024 * 1024
 app.config['UPLOAD_EXTENSIONS'] = ['.jpg', '.png', '.gif']
-
+# app.config['MAX_CONTENT_LENGTH'] = 2 * 1024 * 1024
 
 dropzone = Dropzone(app)
 
@@ -54,10 +53,19 @@ def validate_form(form):
     directors = request.form.get('directors')
     youtubeurl = request.form.get('youtubeurl')
     backdrop = request.files['backdrop']
-    thumbnails = request.files['thumbnails']
+    thumbnails = request.files.getlist("thumbnails")
 
-    photo_size = imageurl.read()
-    print(photo_size)
+    thumbnails_size = 0
+    poster_size = len(imageurl.read())
+    backdrop_size = len(backdrop.read())
+    for tn in thumbnails:
+        thumbnails_size = thumbnails_size + len(tn.read())
+    print(imageurl)
+    print("Poster size is {} ".format(poster_size))
+    print(backdrop)
+    print("Backdrop size is {} ".format((backdrop_size)))
+    print(thumbnails)
+    print("Thumbnails size is {}".format(thumbnails_size))
 
     if len(name) == 0 or name.isspace():
         errors['title_is_blank'] = "Movie title field cannot be blank"
@@ -89,16 +97,41 @@ def validate_form(form):
         errors['directors_is_blank'] = "Directors field cannot be blank"
 
     if len(youtubeurl) == 0 or youtubeurl.isspace():
-        errors['youtubeurl_is_blank'] = "Youtubeurl field cannot be blank"
+        errors['youtubeurl_is_blank'] = "Trailer (Youtube url) field cannot be blank"
+    else:
+        if ('watch?v=' in youtubeurl) or ('embed/' in youtubeurl):
+            pass
+        else:
+            errors['youtubeurl_format_wrong'] = "Trailer (Youtube url) format is incorrect"
 
     if len(imageurl.filename) == 0:
         errors['file_is_blank'] = "Poster field cannot be blank"
+    elif '.' in imageurl.filename:
+        file_ext = os.path.splitext(imageurl.filename)[1]
+        if file_ext not in app.config['UPLOAD_EXTENSIONS']:
+            errors['poster_ext_is_wrong'] = "Poster file ext is invalid"
+    elif poster_size > 1024 * 1024:
+        errors['poster_size_above_limit'] = "Poster file size cannot be  more than 1MB"
 
     if len(backdrop.filename) == 0:
         errors['backdrop_is_blank'] = "Backdrop field cannot be blank"
+    elif '.' in backdrop.filename:
+        file_ext = os.path.splitext(backdrop.filename)[1]
+        if file_ext not in app.config['UPLOAD_EXTENSIONS']:
+            errors['bkdrp_ext_is_wrong'] = "Backdrop file ext is invalid"
+    elif backdrop_size > 1024 * 1024:
+        errors['backdrop_size_above_limit'] = "Backdrop file size cannot be more than 1MB"
 
-    if len(thumbnails.filename) == 0:
+    if len(thumbnails) == 0:
         errors['thumbnails_is_blank'] = "Thumbnails field cannot be blank"
+    elif thumbnails_size > 1024 * 1024 * 2:
+        errors['thumbnails_size_above_limit'] = "Thumbnails files size cannot be more than 2MB"
+    else:
+        for tn in thumbnails:
+            if '.' in tn.filename:
+                file_ext = os.path.splitext(backdrop.filename)[1]
+                if file_ext not in app.config['UPLOAD_EXTENSIONS']:
+                    errors['thn_ext_is_wrong'] = "Thumbnail files ext are invalid"
 
     return errors
 
@@ -167,70 +200,100 @@ def show_landing_page():
 @ app.route('/', methods=['POST'])
 def process_landing_page():
 
-    url =   request.url   
-
+    url = request.url
     response = requests.get(url)
     status_code = int(response.status_code)
 
-    result_thumbnails = []
+    movie_title = request.form.get('name')
+    movie_genre = request.form.get('genre')
+    movie_imageurl = request.files['file']
+    movie_year = request.form.get('year')
+    movie_maincasts = request.form.get('maincasts')
+    movie_synopsis = request.form.get('synopsis')
+    movie_directors = request.form.get('directors')
+    movie_youtubeurl = request.form.get('youtubeurl')
+    movie_backdrop = request.files['backdrop']
+    movie_thumbnails = request.files.getlist("thumbnails")
+
     errors = validate_form(request.form)
 
-    print(status_code)
+    result_thumbnails = []
 
+    uploaded__movie_youtubeurl = ""
 
     if len(errors) == 0 and status_code == 200:
 
-        name = request.form.get('name')
-        genre = request.form.get('genre')
-        imageurl = request.files['file']
-        year = request.form.get('year')
-        maincasts = request.form.get('maincasts')
-        synopsis = request.form.get('synopsis')
-        directors = request.form.get('directors')
-        youtubeurl = request.form.get('youtubeurl')
-        backdrop = request.files['backdrop']
-        thumbnails = request.files.getlist("thumbnails")
+        movie_title = request.form.get('name')
+        movie_genre = request.form.get('genre')
+        movie_imageurl = request.files['file']
+        movie_year = request.form.get('year')
+        movie_maincasts = request.form.get('maincasts')
+        movie_synopsis = request.form.get('synopsis')
+        movie_directors = request.form.get('directors')
+        movie_youtubeurl = request.form.get('youtubeurl')
+        movie_backdrop = request.files['backdrop']
+        movie_thumbnails = request.files.getlist("thumbnails")
 
-        result_poster = cloudinary.uploader.upload(imageurl.stream,
-                                                   public_id=name+"_poster",
-                                                   folder="tcgproj3/"+genre+"/"+name,
+        movie_imageurl.seek(0)
+        movie_backdrop.seek(0)
+
+        # poster_size = len(movie_imageurl.read())
+
+        # print("line 223 {} is of size {}".format(
+        #     movie_imageurl.filename, poster_size))
+
+        result_poster = cloudinary.uploader.upload(movie_imageurl.stream,
+                                                   public_id=movie_title+"_poster",
+                                                   folder="tcgproj3/"+movie_genre+"/"+movie_title,
                                                    resource_type="image"
                                                    )
 
-        result_backdrop = cloudinary.uploader.upload(backdrop.stream,
-                                                     public_id=name+"_backdrop",
-                                                     folder="tcgproj3/"+genre+"/"+name,
+        result_backdrop = cloudinary.uploader.upload(movie_backdrop.stream,
+                                                     public_id=movie_title+"_backdrop",
+                                                     folder="tcgproj3/"+movie_genre+"/"+movie_title,
                                                      resource_type="image"
                                                      )
-        for i in range(len(thumbnails)):
+        for i in range(len(movie_thumbnails)):
 
-            result_thumbnail = cloudinary.uploader.upload(thumbnails[i].stream,
-                                                          public_id=name +
+            movie_thumbnails[i].seek(0)
+
+            result_thumbnail = cloudinary.uploader.upload(movie_thumbnails[i].stream,
+                                                          public_id=movie_title +
                                                           "tn"+str(i+1),
-                                                          folder="tcgproj3/"+genre+"/"+name,
+                                                          folder="tcgproj3/"+movie_genre+"/"+movie_title,
                                                           resource_type="image"
                                                           )
             result_thumbnails.append(result_thumbnail['url'])
 
+        if "watch?v=" in movie_youtubeurl:
+            if "&" in movie_youtubeurl:
+                cleaned_movie_youtubeurl = movie_youtubeurl.replace(
+                    'watch?v=', 'embed/')
+                splitted_movie_youtubeurl = cleaned_movie_youtubeurl.split(
+                    '&', 1)
+                uploaded__movie_youtubeurl = splitted_movie_youtubeurl[0]
+            else:
+                uploaded__movie_youtubeurl = movie_youtubeurl.replace(
+                    'watch?v=', 'embed/')
+
         db.movies.insert_one({
-            "name": name,
-            "genre": genre.lower(),
+            "name": movie_title,
+            "genre": movie_genre.lower(),
             "imageurl": result_poster['url'],
-            "year": year,
-            "maincasts": maincasts.split(","),
-            "synopsis": synopsis,
-            "directors": directors.split(","),
-            "youtubeurl": youtubeurl.replace('watch?v=', 'embed/'),
+            "year": movie_year,
+            "maincasts": movie_maincasts.split(","),
+            "synopsis": movie_synopsis,
+            "directors": movie_directors.split(","),
+            "youtubeurl": uploaded__movie_youtubeurl,
             'backdrop': result_backdrop['url'],
             'thumbnails': result_thumbnails
         })
 
-        data = {'message':errors, 'error_status': 0}
+        data = {'message': errors, 'error_status': 0}
 
         print("status code 200")
 
         return make_response(jsonify(data), 200)
-
 
         # flash(name + " has been added!")
 
@@ -242,8 +305,8 @@ def process_landing_page():
         #     flash(v)
         # all_genre = db.movie_genres.find()
         # all_movies = db.movies.find()
-    
-        data = {'message':errors, 'error_status':1}
+
+        data = {'message': errors, 'error_status': 1}
 
         print("status code 400")
 
@@ -449,65 +512,81 @@ def process_update_movieinfo_page(movie_id):
 
     result_thumbnails = []
     errors = validate_form(request.form)
-    url =   request.url   
-
+    url = request.url
     response = requests.get(url)
     status_code = int(response.status_code)
+    uploaded__movie_youtubeurl = ""
 
     print("Error length: {}".format(len(errors)))
 
     if len(errors) == 0 and status_code == 200:
 
-        name = request.form.get('name')
-        genre = request.form.get('genre')
-        imageurl = request.files['file']
-        year = request.form.get('year')
-        maincasts = request.form.get('maincasts')
-        synopsis = request.form.get('synopsis')
-        directors = request.form.get('directors')
-        youtubeurl = request.form.get('youtubeurl')
-        backdrop = request.files['backdrop']
-        thumbnails = request.files.getlist("thumbnails")
+        movie_title = request.form.get('name')
+        movie_genre = request.form.get('genre')
+        movie_imageurl = request.files['file']
+        movie_year = request.form.get('year')
+        movie_maincasts = request.form.get('maincasts')
+        movie_synopsis = request.form.get('synopsis')
+        movie_directors = request.form.get('directors')
+        movie_youtubeurl = request.form.get('youtubeurl')
+        movie_backdrop = request.files['backdrop']
+        movie_thumbnails = request.files.getlist("thumbnails")
 
-        result_poster = cloudinary.uploader.upload(imageurl.stream,
-                                                   public_id=name+"_poster",
-                                                   folder="tcgproj3/"+genre+"/" + name,
+        movie_imageurl.seek(0)
+        movie_backdrop.seek(0)
+
+        result_poster = cloudinary.uploader.upload(movie_imageurl.stream,
+                                                   public_id=movie_title+"_poster",
+                                                   folder="tcgproj3/"+movie_genre+"/" + movie_title,
                                                    resource_type="image"
                                                    )
 
-        result_backdrop = cloudinary.uploader.upload(backdrop.stream,
-                                                     public_id=name+"_backdrop",
-                                                     folder="tcgproj3/"+genre+"/"+name,
+        result_backdrop = cloudinary.uploader.upload(movie_backdrop.stream,
+                                                     public_id=movie_title+"_backdrop",
+                                                     folder="tcgproj3/"+movie_genre+"/"+movie_title,
                                                      resource_type="image"
                                                      )
-        for i in range(len(thumbnails)):
+        for i in range(len(movie_thumbnails)):
 
-            result_thumbnail = cloudinary.uploader.upload(thumbnails[i].stream,
-                                                          public_id=name +
+            movie_thumbnails[i].seek(0)
+
+            result_thumbnail = cloudinary.uploader.upload(movie_thumbnails[i].stream,
+                                                          public_id=movie_title +
                                                           "tn"+str(i+1),
-                                                          folder="tcgproj3/"+genre+"/"+name,
+                                                          folder="tcgproj3/"+movie_genre+"/"+movie_title,
                                                           resource_type="image"
                                                           )
             result_thumbnails.append(result_thumbnail['url'])
+
+        if "watch?v=" in movie_youtubeurl:
+            if "&" in movie_youtubeurl:
+                cleaned_movie_youtubeurl = movie_youtubeurl.replace(
+                    'watch?v=', 'embed/')
+                splitted_movie_youtubeurl = cleaned_movie_youtubeurl.split(
+                    '&', 1)
+                uploaded__movie_youtubeurl = splitted_movie_youtubeurl[0]
+            else:
+                uploaded__movie_youtubeurl = movie_youtubeurl.replace(
+                    'watch?v=', 'embed/')
 
         db.movies.update_one({
             "_id": ObjectId(movie_id)
         }, {
             '$set': {
-                "name": name,
-                "genre": genre.lower(),
+                "name": movie_title,
+                "genre": movie_genre.lower(),
                 "imageurl": result_poster['url'],
-                "year": year,
-                "maincasts": maincasts.split(","),
-                "synopsis": synopsis,
-                "directors": directors.split(","),
-                "youtubeurl": youtubeurl.replace('watch?v=', 'embed/'),
+                "year": movie_year,
+                "maincasts": movie_maincasts.split(","),
+                "synopsis": movie_synopsis,
+                "directors": movie_directors.split(","),
+                "youtubeurl": uploaded__movie_youtubeurl,
                 'backdrop': result_backdrop['url'],
                 'thumbnails': result_thumbnails
             }
         })
 
-        data = {'message':errors, 'error_status': 0}
+        data = {'message': errors, 'error_status': 0}
 
         print("status code 200")
 
@@ -522,7 +601,7 @@ def process_update_movieinfo_page(movie_id):
 
     else:
 
-        data = {'message':errors, 'error_status':1}
+        data = {'message': errors, 'error_status': 1}
 
         print("status code 400")
 
@@ -549,15 +628,7 @@ def process_update_movieinfo_page(movie_id):
 
 @ app.errorhandler(404)
 def page_not_found(e):
-    return render_template('custom404.template.html',old_values={}, errors={})
-
-
-@ app.errorhandler(413)
-def request_entity_too_large(error):
-
-    flash('File Too Large')
-
-    return redirect(url_for('show_landing_page'))
+    return render_template('custom404.template.html', old_values={}, errors={})
 
 
 if __name__ == '__main__':

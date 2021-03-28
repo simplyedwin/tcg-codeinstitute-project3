@@ -5,7 +5,6 @@ $(document).ready(function () {
     var formData = new FormData(document.getElementById("add-form"));
 
     let name = formData.get("name");
-    let file = formData.get("file").size;
 
     $.ajax({
       xhr: function () {
@@ -26,7 +25,7 @@ $(document).ready(function () {
         function uploadingprogress(scode) {
           if (scode === 200) {
             $("#addprogressBar").css("width", "100%").text("100%");
-          } else if(scode != 400) {
+          } else if (scode != 400) {
             if (i < 100) {
               i = i + 1;
               $("#addprogressBar")
@@ -34,7 +33,7 @@ $(document).ready(function () {
                 .text(i + " %");
             }
             // Wait for sometime before running this script again
-            setTimeout(uploadingprogress, 100,scode);
+            setTimeout(uploadingprogress, 100, scode);
           }
         }
       },
@@ -52,6 +51,14 @@ $(document).ready(function () {
           error_status = resobj["error_status"];
           msg = resobj["message"];
           for (var error in msg) {
+            if (error === "title_is_blank") {
+              console.log(error);
+              $("#add-title").text(msg[error]);
+            }
+            $("#add-title").html('Testing');
+
+            console.log(error);
+
             toastr.warning(msg[error]);
           }
         }
