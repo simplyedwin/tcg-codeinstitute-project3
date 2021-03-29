@@ -1,6 +1,7 @@
-![brandlogo](https://aqua-junglefowl-id5ki4og.ws-us03.gitpod.io/files/download/?id=6b3d9de8-0713-488e-ade6-185f027da193)
+![brandlogo](static/images/moviefindericon.svg)
 
 # Milestone Project 3 Data Centric - MovieFinder
+<img src="static/images/moviefindergif.gif" height=400>
 
 ## Problem Statement
 
@@ -168,31 +169,34 @@ The project uses Heroku to host the application.
 
 ### Responsiveness
 **360 x 640**<br>
-<img src="https://aqua-junglefowl-id5ki4og.ws-us03.gitpod.io/files/download/?id=2d2d3bf1-341c-41bc-9947-87db731bd7c8" height=200>
-<img src="https://aqua-junglefowl-id5ki4og.ws-us03.gitpod.io/files/download/?id=f90db65b-e859-4d19-b981-641ecc3f84f6" height=200>
-<img src="https://aqua-junglefowl-id5ki4og.ws-us03.gitpod.io/files/download/?id=06f5b2cb-e4dd-4d86-bcf5-5e7784908e6f" height=200>
-<img src="https://aqua-junglefowl-id5ki4og.ws-us03.gitpod.io/files/download/?id=5bfed3b4-8454-4025-b807-0196fdb5dfd6" height=200>
-<img src="https://aqua-junglefowl-id5ki4og.ws-us03.gitpod.io/files/download/?id=185120e7-8b64-4c00-9e86-210a5be37a34" height=200>
+<img src="static/images/360by640_1.JPG" height=200>
+<img src="static/images/360by640_2.JPG" height=200>
+<img src="static/images/360by640_3.JPG" height=200>
+<img src="static/images/360by640_4.JPG" height=200>
+<img src="static/images/360by640_5.JPG" height=200>
 
 
 
 <br>
 
 **375 x 667**<br>
-<img src="https://aqua-junglefowl-id5ki4og.ws-us03.gitpod.io/files/download/?id=3c655d2a-5b81-4bfa-87be-85c6f34ac23b" height=200>
-<img src="https://aqua-junglefowl-id5ki4og.ws-us03.gitpod.io/files/download/?id=e8ce701a-783e-43b8-b2ad-685bfeec8500" height=200>
-<img src="https://aqua-junglefowl-id5ki4og.ws-us03.gitpod.io/files/download/?id=28370908-f968-4306-a15f-4db879911460" height=200>
-<img src="https://aqua-junglefowl-id5ki4og.ws-us03.gitpod.io/files/download/?id=add9415b-3e4d-4b38-8b8d-e05db12a314d" height=200>
-<img src="https://aqua-junglefowl-id5ki4og.ws-us03.gitpod.io/files/download/?id=24fdfa4e-1cb1-4e94-b914-ea41dfe55477" height=200>
+<img src="static/images/375by667_1.JPG" height=200>
+<img src="static/images/375by667_2.JPG" height=200>
+<img src="static/images/375by667_3.JPG" height=200>
+<img src="static/images/375by667_4.JPG" height=200>
+<img src="static/images/375by667_5.JPG" height=200>
 
 <br>
 
 
 **768 x 1024**<br>
-<img src="https://aqua-junglefowl-id5ki4og.ws-us03.gitpod.io/files/download/?id=3520bc05-51ce-458c-b727-5feb602c2614" height=200>
-<img src="https://aqua-junglefowl-id5ki4og.ws-us03.gitpod.io/files/download/?id=d74cab09-42e5-4040-b622-84e237911905" height=200>
-<img src="https://aqua-junglefowl-id5ki4og.ws-us03.gitpod.io/files/download/?id=1a6e9afa-e06b-4e31-a562-1c37dde01976" height=200>
-<img src="https://aqua-junglefowl-id5ki4og.ws-us03.gitpod.io/files/download/?id=18f059dd-7083-4a31-8e1b-28eb0ad42ff9" height=200><br>
+<img src="static/images/768by1024_1.JPG" height=200>
+<img src="static/images/768by1024_2.JPG" height=200>
+<img src="static/images/768by1024_3.JPG" height=200>
+<img src="static/images/768by1024_4.JPG" height=200>
+<img src="static/images/768by1024_5.JPG" height=200>
+
+<br>
 
 ### Bugs/Problems Encountered
 There are a numbers of bugs or problems encountered during the development of the project are as explained below:
