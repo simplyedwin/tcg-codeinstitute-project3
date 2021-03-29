@@ -1,4 +1,157 @@
-.headerfont {
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  /* font-size: 3.2vw; */
+}
+
+.headerfont,
+.h1 {
   font-family: "Bangers", cursive;
   color: #083864fe;
+}
+
+#carouselimg {
+  height: 500px;
+  overflow: hidden;
+  width: 100%;
+}
+
+#utube {
+  border: 0;
+  width: 80%;
+  height: 500px;
+  overflow: auto;
+}
+
+@media screen and (min-width: 1518px) {
+  .landingimg {
+    height: 300px;
+    width: 450px;
+  }
+}
+
+@media screen and (max-width: 1517px) and (min-width: 769px) {
+  .landingimg {
+    height: 180px;
+    width: 230px;
+  }
+
+  #carouselimg {
+    height: 500px;
+    overflow: hidden;
+    width: 100%;
+  }
+}
+
+@media screen and (max-width: 768px) and (min-width: 542px) {
+  .landingimg {
+    height: 150px;
+    width: 200px;
+  }
+
+  #utube {
+    border: 0;
+    width: 80%;
+    height: 200px;
+    overflow: auto;
+  }
+
+  #carouselimg {
+    height: 300px;
+    overflow: hidden;
+    width: 100%;
+  }
+
+}
+
+@media screen and (max-width: 541px) and (min-width: 422px) {
+  .landingimg {
+    height: 300px;
+    width: 450px;
+  }
+
+  #carouselimg {
+    height: 220px;
+    overflow: hidden;
+    width: 100%;
+  }
+
+  #utube {
+    border: 0;
+    width: 80%;
+    height: 200px;
+    overflow: auto;
+  }
+}
+
+@media screen and (max-width: 421px) and (min-width: 400px) {
+  .landingimg {
+    height: 230px;
+    width: 380px;
+  }
+
+  #carouselimg {
+    height: 120px;
+    overflow: hidden;
+    width: 100%;
+  }
+
+}
+
+@media screen and (max-width: 376px) and (min-width: 330px) {
+  .h1 {
+    font-size: 7vw;
+  }
+
+  .headerfont {
+    font-size: 3vw;
+  }
+
+  .landingimg {
+    height: 200px;
+    width: 300px;
+  }
+
+  #carouselimg {
+    height: 120px;
+    overflow: hidden;
+    width: 100%;
+  }
+
+  #utube {
+    border: 0;
+    width: 80%;
+    height: 200px;
+    overflow: auto;
+  }
+}
+
+@media screen and (max-width: 329px) {
+  .h1 {
+    font-size: 7vw;
+  }
+
+  .headerfont {
+    font-size: 3vw;
+  }
+
+  .landingimg {
+    height: 120px;
+    width: 200px;
+  }
+
+  #carouselimg {
+    height: 60px;
+    overflow: hidden;
+    width: 100%;
+  }
+
+  #utube {
+    border: 0;
+    width: 80%;
+    height: 100px;
+    overflow: auto;
+  }
+
 }

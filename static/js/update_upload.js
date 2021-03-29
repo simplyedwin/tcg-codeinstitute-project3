@@ -1,6 +1,7 @@
 $(document).ready(function () {
   $("#update-form").on("submit", function (event) {
     event.preventDefault();
+    toastr.options.preventDuplicates = true;
 
     var url= window.location.href;
     var pathname = window.location.pathname;

@@ -1,6 +1,7 @@
 $(document).ready(function () {
   $("#add-form").on("submit", function (event) {
     event.preventDefault();
+    toastr.options.preventDuplicates = true;
 
     var formData = new FormData(document.getElementById("add-form"));
 
@@ -51,14 +52,6 @@ $(document).ready(function () {
           error_status = resobj["error_status"];
           msg = resobj["message"];
           for (var error in msg) {
-            if (error === "title_is_blank") {
-              console.log(error);
-              $("#add-title").text(msg[error]);
-            }
-            $("#add-title").html('Testing');
-
-            console.log(error);
-
             toastr.warning(msg[error]);
           }
         }

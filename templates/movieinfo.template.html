@@ -3,8 +3,7 @@
 {% block content %}
 <div class="container-fluid">
     <div class="row">
-        <div class="col-1" style="height:100px">
-            <div style="position:fixed">
+        <div style="position:fixed">
                 <div class="col" style="width:10px">
                     <a id="delete-btn" href="#deletemovieinfo" role="button" data-toggle="modal">
                         <img class="p-2" src="{{url_for('static',filename='images/deletemovie.svg')}}"
@@ -15,21 +14,18 @@
                         <img class="p-2" src="{{url_for('static',filename='images/editmovie.svg')}} "
                             style="width:55px;height:60px" alt=""></a>
                 </div>
-            </div>
         </div>
-        <div class="col-10 ml-5 pt-2 pb-4">
+        <div class="col-md-10 ml-5 pt-2 pb-4">
 
             <div class="container"
                 style="border-radius: 10px; background-image: url({{old_values.backdrop}}); background-repeat:no-repeat; background-size:cover ; background-blend-mode: normal">
                 <!-- <div class="container"> -->
                 <div class="row">
-                    <div class="col mt-5 px-5">
+                    <div class="col-md-12 mt-5 px-5">
                         <div id="carouselMovieThumbnailsControls" class="carousel slide" data-ride="carousel">
                             <div class="carousel-inner">
                                 {% for tn in old_values.thumbnails %}
-                                <div class="rounded carousel-item {% if loop.index == 1 %} active{% endif %}" style="height: 500px;
-                                overflow: hidden;
-                                width: 100%;">
+                                <div id = "carouselimg" class="rounded carousel-item {% if loop.index == 1 %} active{% endif %}" >
                                     <img src="{{tn}}" class="img-fluid w-100" alt="Thumbnails">
                                 </div>
                                 {% endfor %}
@@ -48,7 +44,7 @@
                     </div>
                 </div>
                 <div class="row bg-light m-5 rounded" style="opacity: 0.8;">
-                    <div class="col-6 headerfont mt-3 h5">
+                    <div class="col-md-6 headerfont mt-3 h5">
                         <label class="h-4" for="">Title:</label>
                         <p style="color:grey">{{old_values.name}}</p>
                         <label for="">Genre:</label>
@@ -64,7 +60,7 @@
                         <label for="">Main casts:</label>
                         <p style="color:grey">{{', '.join(old_values.maincasts)}}</p>
                     </div>
-                    <div class="col-6 headerfont mt-3 h5">
+                    <div class="col-md-6 headerfont mt-3 h5">
 
                         <label for="">Synopsis:</label>
                         <p style="color:grey">
@@ -75,7 +71,7 @@
                 </div>
                 <div class="row rounded headerfont h5">
                     <div class=" container">
-                        <iframe style="border: 0; width:80%; height: 500px; overflow: auto;"
+                        <iframe id="utube"
                             class="embed-responsive d-block mb-4 mx-auto" src="{{old_values.youtubeurl}}"
                             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                             allowfullscreen></iframe>
@@ -106,12 +102,12 @@
                 </div>
                 <div class="modal-body">
                     <div class="row align-items-end">
-                        <div class="col-6 d-flex p-2 justify-content-start">
+                        <div class="col-md-6 d-flex p-2 justify-content-start">
                             <button type="button" class="btn btn-success mr-5" data-dismiss="modal">No! I still need
                                 it!</button>
                         </div>
 
-                        <div class="col-6 d-flex p-2 justify-content-end">
+                        <div class="col-md-6 d-flex p-2 justify-content-end">
                             <button href="{{url_for('process_delete_movieinfo',movie_id=old_values._id)}}" type="submit"
                                 class="btn btn-danger ml-5">Yes</button>
                         </div>
@@ -137,54 +133,37 @@
                 method="POST" enctype="multipart/form-data">
                 <div class="container modal-body">
                     <div class="row">
-                        <div class="col-6">
+                        <div class="col-md-6">
                             <div class="form-group">
-                                <label for="movie-title" class="col-form-label headerfont">Title: <span
-                                        style="font-family:Arial, Helvetica, sans-serif; color: tomato;">{{
-                                        errors.title_is_blank
-                                        }}</span>
+                                <label for="movie-title" class="col-form-label headerfont">Title: 
                                 </label>
                                 <input type="text" value="{{old_values.name}}" class=" form-control {%if
                                         errors.title_is_blank %} is-invalid{%endif%}" id="movie-name" name="name"
                                     style="border-color:#083864fe;" required>
                             </div>
                             <div class="form-group">
-                                <label for="message-text" class="col-form-label headerfont">Genre: <span
-                                        style="font-family:Arial, Helvetica, sans-serif; color:tomato;">{{
-                                        errors.genre_is_blank }}
-                                    </span>
+                                <label for="message-text" class="col-form-label headerfont">Genre: 
                                 </label>
                                 <input type="text" value="{{old_values.genre}}" class="form-control  {%if
                                         errors.genre_is_blank %} is-invalid{%endif%}" id="movie-genre" name="genre"
                                     style="border-color:#083864fe;" required>
                             </div>
                             <div class="form-group">
-                                <label for="message-text" class="col-form-label headerfont">Year: <span
-                                        style="font-family:Arial, Helvetica, sans-serif; color: tomato;">{{
-                                        errors.year_is_blank
-                                        or
-                                        errors.year_is_less_than_0 or errors.year_is_string}}
-                                    </span>
+                                <label for="message-text" class="col-form-label headerfont">Year:
                                 </label>
                                 <input value="{{old_values.year}}" class=" form-control {%if errors.year_is_blank
                                         or errors.year_is_less_than_0 or errors.year_is_string %} is-invalid{%endif%}"
                                     id="movie-year" name="year" style="border-color:#083864fe;" required>
                             </div>
                             <div class="form-group">
-                                <label for="message-text" class="col-form-label headerfont">Main Casts: <span
-                                        style="font-family:Arial, Helvetica, sans-serif; color: tomato;">{{
-                                        errors.maincasts_is_blank }}
-                                    </span>
+                                <label for="message-text" class="col-form-label headerfont">Main Casts: 
                                 </label>
                                 <input type="text" value="{{', '.join(old_values.maincasts)}}" class="form-control  {%if
                                         errors.maincasts_is_blank %} is-invalid{%endif%}" id="movie-casts"
                                     name="maincasts" style="border-color:#083864fe;" required>
                             </div>
                             <div class="form-group">
-                                <label for="message-text" class="col-form-label headerfont">Directed by: <span
-                                        style="font-family:Arial, Helvetica, sans-serif; color: tomato;">{{
-                                        errors.directors_is_blank}}
-                                    </span>
+                                <label for="message-text" class="col-form-label headerfont">Directed by:
                                 </label>
                                 <input type="text" value={% if old_values.directors|length> 0 %}
                                 " {{', '.join(old_values.directors)}}"
@@ -195,57 +174,38 @@
                                 errors.directors_is_blank %} is-invalid{%endif%}" id="movie-director"
                                 name="directors" style="border-color:#083864fe;" required>
                             </div>
-                            {%if errors|length > 0 %}
-                            <div class="alert alert-danger">
-                                Please correct all the errors and resubmit the form.
-                            </div>
-                            {% endif %}
+
                         </div>
-                        <div class="col-6">
+                        <div class="col-md-6">
                             <div class="form-group">
-                                <label for="message-text" class="col-form-label headerfont">Trailer(url): <span
-                                        style="font-family:Arial, Helvetica, sans-serif; color: tomato;">{{
-                                        errors.youtubeurl_is_blank}}
-                                    </span>
+                                <label for="message-text" class="col-form-label headerfont">Trailer(youtube url): 
                                 </label>
                                 <input type="text" value="{{old_values.youtubeurl}}" class="form-control  {%if
                                         errors.youtubeurl_is_blank %} is-invalid{%endif%}" id="movie-trialer"
                                     name="youtubeurl" style="border-color:#083864fe;" required>
                             </div>
                             <div class="form-group">
-                                <label for="message-text" class="col-form-label headerfont">Synopsis: <span
-                                        style="font-family:Arial, Helvetica, sans-serif; color: tomato;">{{
-                                        errors.synopsis_is_blank}}
-                                    </span>
+                                <label for="message-text" class="col-form-label headerfont">Synopsis:
                                 </label>
                                 <textarea type="text" class="form-control {%if
                                         errors.synopsis_is_blank %} is-invalid{%endif%} "
                                     style="border-color:#083864fe;height: 10rem;" id="movie-synop" name="synopsis"
                                     required>{{old_values.synopsis}}</textarea>
                             </div>
-                            <div> <label for="poster" class="col-form-label headerfont">Poster: <span
-                                        style="font-family:Arial, Helvetica, sans-serif; color: tomato;">{{
-                                        errors.file_is_blank
-                                        }}
-                                    </span>
+                            <div> <label for="poster" class="col-form-label headerfont">Poster: 
                                 </label>
                             </div>
                             <div> <input type="file" name="file" class=" {%if
                                     errors.file_is_blank %} is-invalid{%endif%}" required>
                             </div>
-                            <div> <label for="backdrop" class="col-form-label headerfont">Backdrop: <span
-                                        style="font-family:Arial, Helvetica, sans-serif; color: tomato;">{{
-                                        errors.backdrop_is_blank}}
-                                    </span>
+                            <div> <label for="backdrop" class="col-form-label headerfont">Backdrop: 
                                 </label>
                             </div>
                             <div> <input type="file" name="backdrop" class=" {%if
                                     errors.backdrop_is_blank %} is-invalid{%endif%}" required>
                             </div>
 
-                            <div> <label for="thumbnails" class="col-form-label headerfont">Thumbnails: <span
-                                        style="font-family:Arial, Helvetica, sans-serif; color: tomato;">{{
-                                        errors.thumbnails_is_blank}}</span>
+                            <div> <label for="thumbnails" class="col-form-label headerfont">Thumbnails:
                                 </label>
                             </div>
                             <div> <input type="file" name="thumbnails" class=" {%if
