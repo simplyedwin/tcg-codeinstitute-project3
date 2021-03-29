@@ -98,38 +98,47 @@ def validate_form(form):
     if len(youtubeurl) == 0 or youtubeurl.isspace():
         errors['youtubeurl_is_blank'] = "Trailer (Youtube url) field cannot be blank"
     else:
-        # To check whether right format is provided
+        # To check whether there is any acceptable format in the url
         if ('watch?v=' in youtubeurl) or ('embed/' in youtubeurl):
             pass
         else:
             errors['youtubeurl_format_wrong'] = "Trailer (Youtube url) format is incorrect"
-
+    
+    # To check whether field is empty
     if len(imageurl.filename) == 0:
         errors['file_is_blank'] = "Poster field cannot be blank"
     elif '.' in imageurl.filename:
         file_ext = os.path.splitext(imageurl.filename)[1]
+        #To validate file extension
         if file_ext not in app.config['UPLOAD_EXTENSIONS']:
             errors['poster_ext_is_wrong'] = "Poster file ext is invalid"
+    #To validate file size
     elif poster_size > 1024 * 1024:
         errors['poster_size_above_limit'] = "Poster file size cannot be  more than 1MB"
 
+    # To check whether field is empty
     if len(backdrop.filename) == 0:
         errors['backdrop_is_blank'] = "Backdrop field cannot be blank"
     elif '.' in backdrop.filename:
         file_ext = os.path.splitext(backdrop.filename)[1]
+        #To validate file extension
         if file_ext not in app.config['UPLOAD_EXTENSIONS']:
             errors['bkdrp_ext_is_wrong'] = "Backdrop file ext is invalid"
+    #To validate file size
     elif backdrop_size > 1024 * 1024:
         errors['backdrop_size_above_limit'] = "Backdrop file size cannot be more than 1MB"
 
+    # To check whether field is empty
     if len(thumbnails) == 0:
         errors['thumbnails_is_blank'] = "Thumbnails field cannot be blank"
+    #To validate file size
     elif thumbnails_size > 1024 * 1024 * 2:
         errors['thumbnails_size_above_limit'] = "Thumbnails files size cannot be more than 2MB"
     else:
         for tn in thumbnails:
             if '.' in tn.filename:
                 file_ext = os.path.splitext(backdrop.filename)[1]
+                #To validate file extension
                 if file_ext not in app.config['UPLOAD_EXTENSIONS']:
                     errors['thn_ext_is_wrong'] = "Thumbnail files ext are invalid"
 
@@ -144,14 +153,17 @@ def search_result(result, all_movies, movieslist, dbmovieslist):
         maincasts = movie['maincasts']
         directors = movie['directors']
 
+        #To check if searched result is in movie title
         if result.lower() in name:
             movieslist.append(movie)
 
         for cast in maincasts:
+            #To check if searched result is a cast member
             if (result.lower() in cast.lower()) and (result.lower() not in name):
                 movieslist.append(movie)
 
         for director in directors:
+            #To check if searched result is a director
             if (result.lower() in director.lower()) and (result.lower() not in name):
                 movieslist.append(movie)
 
@@ -203,6 +215,7 @@ def process_landing_page():
     response = requests.get(url)
     status_code = int(response.status_code)
 
+    # To retreive inputs from user
     movie_title = request.form.get('name')
     movie_genre = request.form.get('genre')
     movie_imageurl = request.files['file']
@@ -233,20 +246,24 @@ def process_landing_page():
         movie_backdrop = request.files['backdrop']
         movie_thumbnails = request.files.getlist("thumbnails")
 
+        # To shift the file pointer to starting of file due to read file done in validaton for file size check
         movie_imageurl.seek(0)
         movie_backdrop.seek(0)
 
+        # To store the poster image file to cloud storage
         result_poster = cloudinary.uploader.upload(movie_imageurl.stream,
                                                    public_id=movie_title+"_poster",
                                                    folder="tcgproj3/"+movie_genre+"/"+movie_title,
                                                    resource_type="image"
                                                    )
-
+        # To store the backdrop image file to cloud storage
         result_backdrop = cloudinary.uploader.upload(movie_backdrop.stream,
                                                      public_id=movie_title+"_backdrop",
                                                      folder="tcgproj3/"+movie_genre+"/"+movie_title,
                                                      resource_type="image"
                                                      )
+                                                     
+        # To store the thumbnail files to cloud storage
         for i in range(len(movie_thumbnails)):
 
             movie_thumbnails[i].seek(0)
@@ -257,8 +274,10 @@ def process_landing_page():
                                                           folder="tcgproj3/"+movie_genre+"/"+movie_title,
                                                           resource_type="image"
                                                           )
+            
             result_thumbnails.append(result_thumbnail['url'])
 
+        # To convert the youtube file to embeded format
         if "watch?v=" in movie_youtubeurl:
             if "&" in movie_youtubeurl:
                 cleaned_movie_youtubeurl = movie_youtubeurl.replace(
@@ -269,7 +288,8 @@ def process_landing_page():
             else:
                 uploaded__movie_youtubeurl = movie_youtubeurl.replace(
                     'watch?v=', 'embed/')
-
+                    
+        #To store the new movie info to MongoDB
         db.movies.insert_one({
             "name": movie_title,
             "genre": movie_genre.lower(),
@@ -291,6 +311,7 @@ def process_landing_page():
 
         data = {'message': errors, 'error_status': 1}
 
+        # To return response to jquery Ajax to flash error
         return make_response(jsonify(data), 400)
 
 
@@ -416,7 +437,7 @@ def show_movieinfo_page(movie_id):
                                all_movies=list(all_movies),
                                old_values=movie, errors={})
 
-
+# Route to process a delete
 @ app.route('/<movie_id>/movieinfo', methods=['POST'])
 def process_delete_movieinfo(movie_id):
     movie = db.movies.find_one({
@@ -494,6 +515,7 @@ def process_update_movieinfo_page(movie_id):
         movie_backdrop = request.files['backdrop']
         movie_thumbnails = request.files.getlist("thumbnails")
 
+        # To shift the file pointer to starting of file due to read file done in validaton for file size check
         movie_imageurl.seek(0)
         movie_backdrop.seek(0)
 
@@ -556,9 +578,10 @@ def process_update_movieinfo_page(movie_id):
 
         data = {'message': errors, 'error_status': 1}
 
+        # To return response to jquery Ajax to flash error
         return make_response(jsonify(data), 400)
 
-
+# To render to a custom 404 page
 @ app.errorhandler(404)
 def page_not_found(e):
     return render_template('custom404.template.html', old_values={}, errors={})
