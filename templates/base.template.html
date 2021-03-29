@@ -64,16 +64,15 @@
 
             <a href="{{url_for('show_landing_page')}}"> <img src="{{url_for('static',filename='images/moviehome.svg')}}"
                     alt=""></a>
-            </a>
 
             <div class="col-md-4 d-flex p-2 justify-content-center">
 
                 <div class="col-md-4 dropdown px-2 pb-2 d-flex justify-content-center">
                     <button class="bg-transparent border-0 dropdown-toggle headerfont" type="button"
-                        id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        id="genredropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         Genre
                     </button>
-                    <div class="dropdown-menu " style="min-width:0em" aria-labelledby="dropdownMenuButton">
+                    <div class="dropdown-menu " style="min-width:0em" aria-labelledby="genredropdownMenuButton">
                         {% for genre in all_genre %}
                         <a class="dropdown-item headerfont"
                             href="{{url_for('show_movieinfolist_bygenre',genre=genre.genre)}}">{{genre.genre.capitalize()}}</a>
@@ -82,10 +81,10 @@
                 </div>
                 <div class=" col-md-4 dropdown px-2 pb-2 d-flex justify-content-center">
                     <button class="bg-transparent border-0 dropdown-toggle headerfont" type="button"
-                        id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        id="yeardropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         Year
                     </button>
-                    <div class="dropdown-menu" style="min-width:0em" aria-labelledby="dropdownMenuButton">
+                    <div class="dropdown-menu" style="min-width:0em" aria-labelledby="yeardropdownMenuButton">
                         {% set years =[] %}
                         {% for movie in all_movies %}
                         {% if years.append(movie.year|int) is none %}
@@ -108,7 +107,6 @@
 
 
     </div>
-    </div>
 
     <!-- Modal -->
     <div class="modal fade " id="AddMovieBackdrop" data-backdrop="static" data-keyboard="false" tabindex="-1"
@@ -123,7 +121,7 @@
 
                     </button>
                 </div>
-                <form id='add-form' method="POST" enctype="multipart/form-data"
+                <form id="add-form" method="POST" enctype="multipart/form-data"
                     action="{{url_for('process_landing_page')}}">
                     <div class="container modal-body my-auto">
                         <div class="row">
@@ -136,11 +134,11 @@
                                     </div>
                                     <input type="text"
                                         value="{% if errors.title_is_blank %}{{old_values.name}} {% endif %}" class=" form-control {%if
-                                        errors.title_is_blank %} is-invalid{%endif%}" id="movie-name" name="name"
+                                        errors.title_is_blank %} is-invalid{%endif%}" id="movie-title" name="name"
                                         style="border-color:#083864fe;" required>
                                 </div>
                                 <div class="form-group">
-                                    <label for="message-text" class="col-form-label headerfont">
+                                    <label for="movie-genre" class="col-form-label headerfont">
 
                                         Genre:
                                     </label>
@@ -150,9 +148,9 @@
                                         style="border-color:#083864fe;" required>
                                 </div>
                                 <div class="form-group">
-                                    <label for="message-text" class="col-form-label headerfont">Year:
+                                    <label for="movie-year" class="col-form-label headerfont">Year:
                                     </label>
-                                    <input
+                                    <input  type="text"
                                         value="{%if errors.year_is_blank
                                         or errors.year_is_less_than_0 or errors.year_is_string %}{{old_values.year}} {% endif %}"
                                         class=" form-control {%if errors.year_is_blank
@@ -160,7 +158,7 @@
                                         id="movie-year" name="year" style="border-color:#083864fe;" required>
                                 </div>
                                 <div class="form-group">
-                                    <label for="message-text" class="col-form-label headerfont">Main Casts:
+                                    <label for="movie-casts" class="col-form-label headerfont">Main Casts:
                                     </label>
                                     <input type="text" value="{%if
                                         errors.maincasts_is_blank %}{{old_values.maincasts}}{%endif%}" class="form-control  {%if
@@ -168,7 +166,7 @@
                                         name="maincasts" style="border-color:#083864fe;" required>
                                 </div>
                                 <div class="form-group">
-                                    <label for="message-text" class="col-form-label headerfont">Directed by:
+                                    <label for="movie-director" class="col-form-label headerfont">Directed by:
                                     </label>
                                     <input type="text" value="{%if
                                         errors.directors_is_blank %} {{old_values.directors}} {%endif%}" class="form-control  {%if
@@ -180,7 +178,7 @@
 
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="message-text" class="col-form-label headerfont">Trailer(youtube url):
+                                    <label for="movie-trialer" class="col-form-label headerfont">Trailer(youtube url):
                                     </label>
                                     <input type="text" value=" {%if
                                         errors.youtubeurl_is_blank %} {{old_values.youtubeurl}} {%endif%}" class="form-control  {%if
@@ -188,9 +186,9 @@
                                         name="youtubeurl" style="border-color:#083864fe;" required>
                                 </div>
                                 <div class="form-group">
-                                    <label for="message-text" class="col-form-label headerfont">Synopsis:
+                                    <label for="movie-synop" class="col-form-label headerfont">Synopsis:
                                     </label>
-                                    <textarea type="text" class="form-control {%if
+                                    <textarea class="form-control {%if
                                         errors.synopsis_is_blank %} is-invalid{%endif%} "
                                         style="height: 10rem; border-color:#083864fe;" id="movie-synop" name="synopsis"
                                         required>{%if
@@ -199,14 +197,14 @@
                                 <div> <label for="poster" class="col-form-label headerfont">Poster:
                                     </label>
                                 </div>
-                                <div> <input type="file" name="file" class=" {%if
+                                <div> <input id="poster" type="file" name="file" class=" {%if
                                     errors.file_is_blank %} is-invalid{%endif%}" style="border-color:#083864fe;"
                                         required>
                                 </div>
                                 <div> <label for="backdrop" class="col-form-label headerfont">Backdrop:
                                     </label>
                                 </div>
-                                <div> <input type="file" name="backdrop" class=" {%if
+                                <div> <input id ="backdrop" type="file" name="backdrop" class=" {%if
                                     errors.backdrop_is_blank %} is-invalid{%endif%}" style="border-color:#083864fe;"
                                         required>
                                 </div>
@@ -214,7 +212,7 @@
                                 <div> <label for="thumbnails" class="col-form-label headerfont">Thumbnails:
                                     </label>
                                 </div>
-                                <div> <input type="file" name="thumbnails" class=" {%if
+                                <div> <input id = "thumbnails" type="file" name="thumbnails" class=" {%if
                                     errors.thumbnails_is_blank %} is-invalid{%endif%}" multiple
                                         style="border-color:#083864fe;" required>
                                 </div>

@@ -1,10 +1,9 @@
-![brandlogo](https://github.com/simplyedwin/tcg_codeinstitute_project_2/blob/master/images/AlightLiaoLahBrandLogo.svg?raw=true)
+![brandlogo](https://aqua-junglefowl-id5ki4og.ws-us03.gitpod.io/files/download/?id=6b3d9de8-0713-488e-ade6-185f027da193)
 
 # Milestone Project 3 Data Centric - MovieFinder
-<img src="images/ALL_landingpage.PNG">
-Fig 1 - The landing page of AlightLiaoLah (ALL) Singapore Bus Stop and Bus Finder
 
 ## Problem Statement
+
 - Many people woring at home start to exercise at home such as high intensive individual training (HIIIT)
 - Need know what exercise at home set can be used for HIIIT
 - Share information of effective HIIT or individual exercise set
@@ -86,13 +85,14 @@ Fig 4 - Page showing bus information and location in the "FROM" and "TO" query b
 <br/>
   
 ### Feature Left to Implement
-- ***Bus Path/Route between Starting Point and Destination with user location***<br/>
-  This feature will shows the path between the starting point to the destination together with the user location. This can also be shown onto the bus stop information card.<br/><br/> 
-- ***Alight Alert***<br/> This feature will reminds the user when to alight from the bus.
-  <br/><br/>
-- ***Bus Service Number Recommendation***<br/>
-  This feature will guide the user which bus service number to board in order to reach the destination.
+- ***User Account Creation***<br/>
+This feature will allow user to create an account and provide a database of user of this application.<br/><br/> 
+- ***User comments and likes***<br/>
+This feature will allow user to provide their comments for a particular movie and whether they like the movie.  <br/><br/>
+- ***Movie rating***<br/>
+This feature will allow user to rate a movie.
 <br/><br/>
+
 ## Technologies Used
 
 - [HTML/CSS](https://html.com/)<br/>
@@ -105,18 +105,10 @@ The project uses Bootstrap for the application responsiveness for different scre
 The project uses SVG animation for the animation of markers.
 - [Inkscape](https://inkscape.org/)<br/>
 The project uses inkscape for creating svg files.
-- [MapboxGL JS](docs.mapbox.com/mapbox-gl-js/api/)<br/>
-The project uses MapboxGL.js for manipulation of map using javascript.
-- [Mapbox Studio](docs.mapbox.com/studio-manual/guides/)<br/>
-The project uses Mapbox Studio for manipulation of map to include bus stop location and icons.
-- [JQuery UI](jqueryui.com)<br/>
-The project uses JQuery UI for the autocomplete function when user type into the query boxes.
 - [JQuery](https://jquery.com/)<br/>
 The project uses JQuery to ease the manipulation of DOM. 
-- [Jupyter Notebook](jupyter.org)<br/>
-The project uses Jupyter Notebook for the creation of the bus stop location geodata, which is used in the mapbox studio. 
 - [Heroku](https://www.heroku.com/)<br/>
-The project uses Heroku to host the cors anywhere instance to address the [CORS setting issue](developer.mozilla.org/en-US/docs/Web/HTTP/CORS/Errors) when pulling from the bus stop information api. 
+The project uses Heroku to host the application. 
 <br/><br/>
 
 ## Testing
@@ -176,24 +168,31 @@ The project uses Heroku to host the cors anywhere instance to address the [CORS 
 
 ### Responsiveness
 **360 x 640**<br>
-<img src="images/360by640Screen_1.JPG" height=200>
-<img src="images/360by640Screen_2.JPG" height=200>
-<img src="images/360by640Screen_3.JPG" height=200><br>
+<img src="https://aqua-junglefowl-id5ki4og.ws-us03.gitpod.io/files/download/?id=2d2d3bf1-341c-41bc-9947-87db731bd7c8" height=200>
+<img src="https://aqua-junglefowl-id5ki4og.ws-us03.gitpod.io/files/download/?id=f90db65b-e859-4d19-b981-641ecc3f84f6" height=200>
+<img src="https://aqua-junglefowl-id5ki4og.ws-us03.gitpod.io/files/download/?id=06f5b2cb-e4dd-4d86-bcf5-5e7784908e6f" height=200>
+<img src="https://aqua-junglefowl-id5ki4og.ws-us03.gitpod.io/files/download/?id=5bfed3b4-8454-4025-b807-0196fdb5dfd6" height=200>
+<img src="https://aqua-junglefowl-id5ki4og.ws-us03.gitpod.io/files/download/?id=185120e7-8b64-4c00-9e86-210a5be37a34" height=200>
 
-**375 x 812**<br>
-<img src="images/375by812Screen_1.JPG" height=200>
-<img src="images/375by812Screen_2.JPG" height=200>
-<img src="images/375by812Screen_3.JPG" height=200><br>
 
-**411 x 731**<br>
-<img src="images/411by731Screen_1.JPG" height=200>
-<img src="images/411by731Screen_2.JPG" height=200>
-<img src="images/411by731Screen_3.JPG" height=200><br>
+
+<br>
+
+**375 x 667**<br>
+<img src="https://aqua-junglefowl-id5ki4og.ws-us03.gitpod.io/files/download/?id=3c655d2a-5b81-4bfa-87be-85c6f34ac23b" height=200>
+<img src="https://aqua-junglefowl-id5ki4og.ws-us03.gitpod.io/files/download/?id=e8ce701a-783e-43b8-b2ad-685bfeec8500" height=200>
+<img src="https://aqua-junglefowl-id5ki4og.ws-us03.gitpod.io/files/download/?id=28370908-f968-4306-a15f-4db879911460" height=200>
+<img src="https://aqua-junglefowl-id5ki4og.ws-us03.gitpod.io/files/download/?id=add9415b-3e4d-4b38-8b8d-e05db12a314d" height=200>
+<img src="https://aqua-junglefowl-id5ki4og.ws-us03.gitpod.io/files/download/?id=24fdfa4e-1cb1-4e94-b914-ea41dfe55477" height=200>
+
+<br>
+
 
 **768 x 1024**<br>
-<img src="images/768by1024Screen_1.JPG" height=200>
-<img src="images/768by1024Screen_2.JPG" height=200>
-<img src="images/768by1024Screen_3.JPG" height=200><br>
+<img src="https://aqua-junglefowl-id5ki4og.ws-us03.gitpod.io/files/download/?id=3520bc05-51ce-458c-b727-5feb602c2614" height=200>
+<img src="https://aqua-junglefowl-id5ki4og.ws-us03.gitpod.io/files/download/?id=d74cab09-42e5-4040-b622-84e237911905" height=200>
+<img src="https://aqua-junglefowl-id5ki4og.ws-us03.gitpod.io/files/download/?id=1a6e9afa-e06b-4e31-a562-1c37dde01976" height=200>
+<img src="https://aqua-junglefowl-id5ki4og.ws-us03.gitpod.io/files/download/?id=18f059dd-7083-4a31-8e1b-28eb0ad42ff9" height=200><br>
 
 ### Bugs/Problems Encountered
 There are a numbers of bugs or problems encountered during the development of the project are as explained below:
@@ -208,7 +207,7 @@ During the request of api response from the bus stop information api, an CORs er
 
 ## Deployment
 
-The website is hosted using github page and can be accessed via [here]( https://simplyedwin.github.io/tcg_codeinstitute_project_2/).
+The website is hosted using heroku and can be accessed via [here]( https://simplyedwin-tgc-proj3-movfdr.herokuapp.com/).
 
 
 ## Credits
@@ -220,8 +219,6 @@ The website is hosted using github page and can be accessed via [here]( https://
 
 ### Acknowledgements
 
-- [Geodatasource](https://www.geodatasource.com/developers/javascript) on the sample code for the calculation of distance between 2 coordiates distance.
-
 - Trent colleage staff and classmates for feedbacks on website design
 
 - Design of logo are sourced from [Freepik](https://www.flaticon.com/authors/freepik).
@@ -231,7 +228,3 @@ The website is hosted using github page and can be accessed via [here]( https://
 - Bootstrap 4 floating label css from [floatinglabel](https://www.cssscript.com/pure-css-floating-label-pattern-bootstrap/).
 
 - Readme template from [Code Institute](https://github.com/Code-Institute-Solutions/readme-template).
-
-- For hosting the cors anywhere instance [Cors Anywhere](https://github.com/Rob--W/cors-anywhere).
-
-- [Bus information api](https://datamall.lta.gov.sg/content/datamall/en/dynamic-data.html) for the Singapore bus stop information.

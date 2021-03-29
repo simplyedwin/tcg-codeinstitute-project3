@@ -45,24 +45,24 @@
                 </div>
                 <div class="row bg-light m-5 rounded" style="opacity: 0.8;">
                     <div class="col-md-6 headerfont mt-3 h5">
-                        <label class="h-4" for="">Title:</label>
+                        <h4>Title:</h4>
                         <p style="color:grey">{{old_values.name}}</p>
-                        <label for="">Genre:</label>
+                        <h4 >Genre:</h4>
                         <p style="color:grey">{{old_values.genre.capitalize()}}</p>
-                        <label for="">Directed by:</label>
+                        <h4>Directed by:</h4>
                         {% if old_values.directors|length > 0 %}
                         <p style="color:grey">{{', '.join(old_values.directors)}}</p>
                         {% else %}
                         <p style="color:grey">{{old_values.directors[0]}}</p>
                         {% endif %}
-                        <label for="">Release on:</label>
+                        <h4 >Release on:</h4>
                         <p style="color:grey">{{old_values.year}}</p>
-                        <label for="">Main casts:</label>
+                        <h4 >Main casts:</h4>
                         <p style="color:grey">{{', '.join(old_values.maincasts)}}</p>
                     </div>
                     <div class="col-md-6 headerfont mt-3 h5">
 
-                        <label for="">Synopsis:</label>
+                        <h4>Synopsis:</h4>
                         <p style="color:grey">
                             {{old_values.synopsis}}
                         </p>
@@ -108,8 +108,8 @@
                         </div>
 
                         <div class="col-md-6 d-flex p-2 justify-content-end">
-                            <button href="{{url_for('process_delete_movieinfo',movie_id=old_values._id)}}" type="submit"
-                                class="btn btn-danger ml-5">Yes</button>
+                            <a href="{{url_for('process_delete_movieinfo',movie_id=old_values._id)}}" type="submit"
+                                class="btn btn-danger ml-5">Yes</a>
                         </div>
                     </div>
                 </div>
@@ -138,38 +138,38 @@
                                 <label for="movie-title" class="col-form-label headerfont">Title: 
                                 </label>
                                 <input type="text" value="{{old_values.name}}" class=" form-control {%if
-                                        errors.title_is_blank %} is-invalid{%endif%}" id="movie-name" name="name"
+                                        errors.title_is_blank %} is-invalid{%endif%}" id="movie-title" name="name"
                                     style="border-color:#083864fe;" required>
                             </div>
                             <div class="form-group">
-                                <label for="message-text" class="col-form-label headerfont">Genre: 
+                                <label for="movie-genre" class="col-form-label headerfont">Genre: 
                                 </label>
                                 <input type="text" value="{{old_values.genre}}" class="form-control  {%if
                                         errors.genre_is_blank %} is-invalid{%endif%}" id="movie-genre" name="genre"
                                     style="border-color:#083864fe;" required>
                             </div>
                             <div class="form-group">
-                                <label for="message-text" class="col-form-label headerfont">Year:
+                                <label for="movie-year" class="col-form-label headerfont">Year:
                                 </label>
                                 <input value="{{old_values.year}}" class=" form-control {%if errors.year_is_blank
                                         or errors.year_is_less_than_0 or errors.year_is_string %} is-invalid{%endif%}"
                                     id="movie-year" name="year" style="border-color:#083864fe;" required>
                             </div>
                             <div class="form-group">
-                                <label for="message-text" class="col-form-label headerfont">Main Casts: 
+                                <label for="movie-casts" class="col-form-label headerfont">Main Casts: 
                                 </label>
                                 <input type="text" value="{{', '.join(old_values.maincasts)}}" class="form-control  {%if
                                         errors.maincasts_is_blank %} is-invalid{%endif%}" id="movie-casts"
                                     name="maincasts" style="border-color:#083864fe;" required>
                             </div>
                             <div class="form-group">
-                                <label for="message-text" class="col-form-label headerfont">Directed by:
+                                <label for="movie-director" class="col-form-label headerfont">Directed by:
                                 </label>
-                                <input type="text" value={% if old_values.directors|length> 0 %}
-                                " {{', '.join(old_values.directors)}}"
+                                <input type="text" value="{% if old_values.directors|length> 0 %}
+                                {{', '.join(old_values.directors)}}
                                 {% else %}
-                                " {{old_values.directors[0]}}"
-                                {% endif %}
+                                 {{old_values.directors[0]}}
+                                {% endif %}"
                                 class="form-control {%if
                                 errors.directors_is_blank %} is-invalid{%endif%}" id="movie-director"
                                 name="directors" style="border-color:#083864fe;" required>
@@ -178,16 +178,16 @@
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="message-text" class="col-form-label headerfont">Trailer(youtube url): 
+                                <label for="movie-trialer" class="col-form-label headerfont">Trailer(youtube url): 
                                 </label>
                                 <input type="text" value="{{old_values.youtubeurl}}" class="form-control  {%if
                                         errors.youtubeurl_is_blank %} is-invalid{%endif%}" id="movie-trialer"
                                     name="youtubeurl" style="border-color:#083864fe;" required>
                             </div>
                             <div class="form-group">
-                                <label for="message-text" class="col-form-label headerfont">Synopsis:
+                                <label for="movie-synop" class="col-form-label headerfont">Synopsis:
                                 </label>
-                                <textarea type="text" class="form-control {%if
+                                <textarea class="form-control {%if
                                         errors.synopsis_is_blank %} is-invalid{%endif%} "
                                     style="border-color:#083864fe;height: 10rem;" id="movie-synop" name="synopsis"
                                     required>{{old_values.synopsis}}</textarea>
@@ -195,20 +195,20 @@
                             <div> <label for="poster" class="col-form-label headerfont">Poster: 
                                 </label>
                             </div>
-                            <div> <input type="file" name="file" class=" {%if
+                            <div> <input id="poster" type="file" name="file" class=" {%if
                                     errors.file_is_blank %} is-invalid{%endif%}" required>
                             </div>
                             <div> <label for="backdrop" class="col-form-label headerfont">Backdrop: 
                                 </label>
                             </div>
-                            <div> <input type="file" name="backdrop" class=" {%if
+                            <div> <input id="backdrop" type="file" name="backdrop" class=" {%if
                                     errors.backdrop_is_blank %} is-invalid{%endif%}" required>
                             </div>
 
                             <div> <label for="thumbnails" class="col-form-label headerfont">Thumbnails:
                                 </label>
                             </div>
-                            <div> <input type="file" name="thumbnails" class=" {%if
+                            <div> <input id="thumbnails" type="file" name="thumbnails" class=" {%if
                                     errors.thumbnails_is_blank %} is-invalid{%endif%}" multiple required>
                             </div>
                         </div>

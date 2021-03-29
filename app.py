@@ -596,4 +596,4 @@ def page_not_found(e):
 if __name__ == '__main__':
 
     app.run(host=IP,
-            port=PORT, debug=True)
+            port=PORT, debug=False)
