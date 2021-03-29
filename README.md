@@ -42,7 +42,8 @@ By using front-end and back-end technologies such as bootstrap,  restful api, th
 
 - ***Top Bar Buttons*** - (From left to right) The "i" classic movie film recorder button directs the user back to the landing page. 
 The genre dropdown menu displays a range of available genre and if selected, it directs the user to the movie info list of the selected genre.
-The year dropdown menu displays a range of available year and if selected, it directs the user to the movie info list of the selected year
+The year dropdown menu displays a range of available year and if selected, it directs the user to the movie info list of the selected year. The add movie
+button displays the add new movie popout.
  <br/><img src="static/images/moviefindertopbarbuttons.JPG">
   <br/>
 
@@ -142,7 +143,6 @@ The project uses inkscape for creating svg files.
 The project uses JQuery to ease the manipulation of DOM. 
 - [Heroku](https://www.heroku.com/)<br/>
 The project uses Heroku to host the application. 
-<br/>
 - [Flask](https://flask.palletsprojects.com/en/1.1.x/)<br/>
 The project uses Flask as the backend frame for server side scipting. 
 <br/><br/>
