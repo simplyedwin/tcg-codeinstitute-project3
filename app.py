@@ -39,6 +39,8 @@ client = pymongo.MongoClient(MONGO_URI)
 db = client[DB_NAME]
 
 # For form validation during adding and updating of movies
+
+
 def validate_form(form):
 
     errors = {}
@@ -93,7 +95,7 @@ def validate_form(form):
     # To check whether a space has been entered or field is empty
     if len(directors) == 0 or directors.isspace():
         errors['directors_is_blank'] = "Directors field cannot be blank"
-    
+
     # To check whether a space has been entered or field is empty
     if len(youtubeurl) == 0 or youtubeurl.isspace():
         errors['youtubeurl_is_blank'] = "Trailer (Youtube url) field cannot be blank"
@@ -103,16 +105,16 @@ def validate_form(form):
             pass
         else:
             errors['youtubeurl_format_wrong'] = "Trailer (Youtube url) format is incorrect"
-    
+
     # To check whether field is empty
     if len(imageurl.filename) == 0:
         errors['file_is_blank'] = "Poster field cannot be blank"
     elif '.' in imageurl.filename:
         file_ext = os.path.splitext(imageurl.filename)[1]
-        #To validate file extension
+        # To validate file extension
         if file_ext not in app.config['UPLOAD_EXTENSIONS']:
             errors['poster_ext_is_wrong'] = "Poster file ext is invalid"
-    #To validate file size
+    # To validate file size
     elif poster_size > 1024 * 1024:
         errors['poster_size_above_limit'] = "Poster file size cannot be  more than 1MB"
 
@@ -121,24 +123,24 @@ def validate_form(form):
         errors['backdrop_is_blank'] = "Backdrop field cannot be blank"
     elif '.' in backdrop.filename:
         file_ext = os.path.splitext(backdrop.filename)[1]
-        #To validate file extension
+        # To validate file extension
         if file_ext not in app.config['UPLOAD_EXTENSIONS']:
             errors['bkdrp_ext_is_wrong'] = "Backdrop file ext is invalid"
-    #To validate file size
+    # To validate file size
     elif backdrop_size > 1024 * 1024:
         errors['backdrop_size_above_limit'] = "Backdrop file size cannot be more than 1MB"
 
     # To check whether field is empty
     if len(thumbnails) == 0:
         errors['thumbnails_is_blank'] = "Thumbnails field cannot be blank"
-    #To validate file size
+    # To validate file size
     elif thumbnails_size > 1024 * 1024 * 2:
         errors['thumbnails_size_above_limit'] = "Thumbnails files size cannot be more than 2MB"
     else:
         for tn in thumbnails:
             if '.' in tn.filename:
                 file_ext = os.path.splitext(backdrop.filename)[1]
-                #To validate file extension
+                # To validate file extension
                 if file_ext not in app.config['UPLOAD_EXTENSIONS']:
                     errors['thn_ext_is_wrong'] = "Thumbnail files ext are invalid"
 
@@ -153,17 +155,17 @@ def search_result(result, all_movies, movieslist, dbmovieslist):
         maincasts = movie['maincasts']
         directors = movie['directors']
 
-        #To check if searched result is in movie title
+        # To check if searched result is in movie title
         if result.lower() in name:
             movieslist.append(movie)
 
         for cast in maincasts:
-            #To check if searched result is a cast member
+            # To check if searched result is a cast member
             if (result.lower() in cast.lower()) and (result.lower() not in name):
                 movieslist.append(movie)
 
         for director in directors:
-            #To check if searched result is a director
+            # To check if searched result is a director
             if (result.lower() in director.lower()) and (result.lower() not in name):
                 movieslist.append(movie)
 
@@ -262,7 +264,7 @@ def process_landing_page():
                                                      folder="tcgproj3/"+movie_genre+"/"+movie_title,
                                                      resource_type="image"
                                                      )
-                                                     
+
         # To store the thumbnail files to cloud storage
         for i in range(len(movie_thumbnails)):
 
@@ -274,7 +276,7 @@ def process_landing_page():
                                                           folder="tcgproj3/"+movie_genre+"/"+movie_title,
                                                           resource_type="image"
                                                           )
-            
+
             result_thumbnails.append(result_thumbnail['url'])
 
         # To convert the youtube file to embeded format
@@ -288,8 +290,8 @@ def process_landing_page():
             else:
                 uploaded__movie_youtubeurl = movie_youtubeurl.replace(
                     'watch?v=', 'embed/')
-                    
-        #To store the new movie info to MongoDB
+
+        # To store the new movie info to MongoDB
         db.movies.insert_one({
             "name": movie_title,
             "genre": movie_genre.lower(),
@@ -438,6 +440,8 @@ def show_movieinfo_page(movie_id):
                                old_values=movie, errors={})
 
 # Route to process a delete
+
+
 @ app.route('/<movie_id>/movieinfo', methods=['POST'])
 def process_delete_movieinfo(movie_id):
     movie = db.movies.find_one({
@@ -582,6 +586,8 @@ def process_update_movieinfo_page(movie_id):
         return make_response(jsonify(data), 400)
 
 # To render to a custom 404 page
+
+
 @ app.errorhandler(404)
 def page_not_found(e):
     return render_template('custom404.template.html', old_values={}, errors={})
