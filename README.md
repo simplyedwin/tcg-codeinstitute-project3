@@ -270,7 +270,7 @@ This was solved by changing the type from pymongo cursor to list object on the s
 - ***Reading same file*** <br>
 During uploading of the image file to the Cloudinary cloud database, the Cloudinary api responded with an error on empty file being uploaded.
 It was discovered that after performing a read operation on the file in the form validation function, the pointer of the file was shifted to the end
-of the file. Hence, this caused Cloudinary to detect an [empty image file](stackoverflow.com/questions/28320658/python-why-a-file-is-empty-after-reading-it-and-writing-to-another-one). This was solved by shifting the file pointer to the start of the file using 
+of the file. Hence, this caused Cloudinary to detect an [empty image file](https://stackoverflow.com/questions/28320658/python-why-a-file-is-empty-after-reading-it-and-writing-to-another-one). This was solved by shifting the file pointer to the start of the file using 
 [seek](https://www.codestudyblog.com/questions/sf/0421194141.html) and then read the file again.
     
 
