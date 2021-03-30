@@ -289,8 +289,6 @@ The website is hosted using heroku and can be accessed via [here]( https://simpl
 
 - [Toast scripts](https://github.com/CodeSeven/toastr) used for flashing message.
 
-- Bootstrap 4 floating label css from [floatinglabel](https://www.cssscript.com/pure-css-floating-label-pattern-bootstrap/).
-
 - Readme template from [Code Institute](https://github.com/Code-Institute-Solutions/readme-template).
 
 - For creating the [progress bar](https://www.youtube.com/watch?v=f-wXTpbNWoM) during update or add movie
