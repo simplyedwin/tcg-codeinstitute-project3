@@ -1,13 +1,12 @@
 ![brandlogo](static/images/moviefindericon.svg)
 
 # Milestone Project 3 Data Centric - MovieFinder
-<img src="static/images/landingpage.JPG" height=400><br/>
-Fig 1 - Landing page of MovieFinder <br/>
-
+<p align="center">
 <img src="static/images/moviefindergif.gif" height=340>
-
+</p>
 ## Problem Statement
-
+The drive and motivation of this project is to demonstrate ones abiity to utilize python web framework , Flask, to perform create, read, update and delete (CRUD) operation
+with a database. 
 - Many people woring at home start to exercise at home such as high intensive individual training (HIIIT)
 - Need know what exercise at home set can be used for HIIIT
 - Share information of effective HIIT or individual exercise set
@@ -20,21 +19,36 @@ Fig 1 - Landing page of MovieFinder <br/>
 <br/>
 
 ## UX
-Realization of this project depends on the availability of users and technologies. Users would be public bus commuters or individual who has lost his/her way at some unfamiliar places. This application should fulfill their following needs:
+Realization of this project depends on the availability of users and technologies. Users would be moviegoers or moive reviewers who wants to share 
+different types of movie they have watched. This application should fulfill their following needs:
 
-- "I want to find the nearest bus stop from my location within a walkable distance."
-- "I want to find the bus stop which I need to alight."
-- "I want to find a particular bus stop."
-- "I want to know where is the bus now."
-- "I want to know my current location."
-- "I want to know when is the bus going to arrival."
-- "I want to know what are the bus services available at the bus stop."
-- "I want to know the name of the street or road or bus stop code."
+- "I want to different ways to filter for a particular movie information."
+- "I want to know what type of movie which I have just watched."
+- "I want to share and add this old movie info to somewhere for others to know."
+- "I want to edit and delete movie info which is wrong."
+- "I want to know which movies this particular actor/director is casted in."
 
-By using front-end and back-end technologies such as bootstrap,  restful api, the user's needs can be achieved. This application would present a landing page of a singapore map with clickable buttons and text boxes for user's inputs. It would provides user on the location of the bus, bus stop and user, as well as real-time information of a bus stop and bus.  A wireframe of this application can be found [here](https://xd.adobe.com/view/fbc25fb5-8cc7-4cdf-afc6-19bc692072b8-ae91/).
+By using front-end and back-end technologies such as bootstrap, flask, the user's needs can be achieved.<br/>
+
+As filtering by genre is a common queries ones will seek before 
+reading further about a movie, this application would present a landing page showing different movies filtered by genre. For ease of access to filter movies by year
+or genre or keywords and adding movie info, the top bar is built with these features and would be available in every pages.
+
+<p align="center">
+<img src="static/images/moviefinder_landingpage.JPG" height=500>
+<br/>Fig-1 Landing page of MovieFinder
+</p>
+
+A wireframe of this application can be found [here](https://xd.adobe.com/view/fbc25fb5-8cc7-4cdf-afc6-19bc692072b8-ae91/).<br/>
 
 ## Features
 ### Existing Features
+
+- ***Landing Page*** - The landing page displays movies filtered by different genre.
+<p align="center">
+<img src="static/images/moviefinder_landingpage.JPG" height=500>
+</p>
+
 - ***Movie Info Search Bar*** - This feature allow user to search for different number of movies in the movie database that are related to the queried content.
 <img src="static/images/searchbar.JPG"><br/>
   
@@ -126,6 +140,12 @@ This feature will allow user to rate a movie.
 - ***New Added Genre***<br/>
 This feature will allow user to have more genre to choose by retrieving newly added genre from the genre collection in the database.
 <br/><br/>
+- ***Image File Content Check***<br/>
+This feature will check whether the uploaded images are appropriate using artifical intelligence.
+<br/><br/>
+- ***Filtering Genre for Landing Page***<br/>
+This feature will allow user to chose the order of the genre to be showed on the landing page.
+<br/><br/>
 
 ## Technologies Used
 
@@ -145,6 +165,12 @@ The project uses JQuery to ease the manipulation of DOM.
 The project uses Heroku to host the application. 
 - [Flask](https://flask.palletsprojects.com/en/1.1.x/)<br/>
 The project uses Flask as the backend frame for server side scipting. 
+<br/>
+- [MongoDB](https://www.mongodb.com/)<br/>
+The project uses Mongo DB to store moive information. 
+<br/>
+- [Cloudinary](https://cloudinary.com/)<br/>
+The project uses Cloudinary to store image files and provide the image url links. 
 <br/><br/>
 
 ## Testing
@@ -256,7 +282,6 @@ The website is hosted using heroku and can be accessed via [here]( https://simpl
 ## Credits
 
 ### Media
- Bus stop display board photo was obtained from [LandTransportGuru](https://www.google.com/search?q=bus%20routing%20information%20at%20bus%20stop&tbm=isch&tbs=rimg:CT679JLzyUtsYdwbmfa5wM9v&rlz=1C1CHBF_enSG748SG748&hl=en&sa=X&ved=0CBsQuIIBahcKEwio7vmusq3uAhUAAAAAHQAAAAAQLw&biw=1519&bih=674#imgrc=d53gD2hDpEValM)
 
 
 
@@ -266,7 +291,7 @@ The website is hosted using heroku and can be accessed via [here]( https://simpl
 
 - Design of logo are sourced from [Freepik](https://www.flaticon.com/authors/freepik).
 
-- Reference script for [toast message](https://www.w3schools.com/howto/tryit.asp?filename=tryhow_js_snackbar).
+- [Toast scripts](https://github.com/CodeSeven/toastr) used for flashing message.
 
 - Bootstrap 4 floating label css from [floatinglabel](https://www.cssscript.com/pure-css-floating-label-pattern-bootstrap/).
 
