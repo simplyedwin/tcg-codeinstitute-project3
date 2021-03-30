@@ -19,9 +19,8 @@ $(document).ready(function () {
       contentType: false,
       complete: function (xhr) {
         statuscode = xhr.status;
-        // hide the preloader (progress bar)
-        console.log(statuscode);
         var i = 0;
+        // to show the progress bar if receive code 200
         uploadingprogress(statuscode);
         function uploadingprogress(scode) {
           if (scode === 200) {
@@ -41,15 +40,11 @@ $(document).ready(function () {
       success: function (data) {
         toastr.success(name + " successfully added!");
       },
-      error: function (xhr, textStatus, errorThrown) {
-        console.log(xhr.responseText);
-        console.log(xhr.status);
-        let error_status;
+      error: function (xhr) {
         let msg;
+        // if resceive response to be code 400, flash error message
         if (xhr.status === 400) {
           resobj = JSON.parse(xhr.responseText);
-          console.log(resobj);
-          error_status = resobj["error_status"];
           msg = resobj["message"];
           for (var error in msg) {
             toastr.warning(msg[error]);
