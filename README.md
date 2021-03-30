@@ -166,11 +166,9 @@ The project uses JQuery to ease the manipulation of DOM.
 - [Heroku](https://www.heroku.com/)<br/>
 The project uses Heroku to host the application. 
 - [Flask](https://flask.palletsprojects.com/en/1.1.x/)<br/>
-The project uses Flask as the backend frame for server side scripting. 
-<br/>
+The project uses Flask as the backend frame for server side scripting.<br/>
 - [MongoDB](https://www.mongodb.com/)<br/>
-The project uses Mongo DB to store movie information. 
-<br/>
+The project uses Mongo DB to store movie information.<br/>
 - [Cloudinary](https://cloudinary.com/)<br/>
 The project uses Cloudinary to store image files and provides the image url links. 
 <br/><br/>
@@ -282,10 +280,6 @@ The website is hosted using heroku and can be accessed via [here]( https://simpl
 
 
 ## Credits
-
-### Media
-
-
 
 ### Acknowledgements
 
