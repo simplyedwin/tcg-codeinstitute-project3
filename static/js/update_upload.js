@@ -18,11 +18,11 @@ $(document).ready(function () {
     let name = formData.get("name");
 
     $.ajax({
-      xhr: function () {
-        var xhr = new window.XMLHttpRequest();
+    //   xhr: function () {
+    //     var xhr = new window.XMLHttpRequest();
 
-        return xhr;
-      },
+    //     return xhr;
+    //   },
       type: "POST",
       url: pathname + "/update",
       data: formData,

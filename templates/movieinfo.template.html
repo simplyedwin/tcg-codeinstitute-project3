@@ -4,16 +4,16 @@
 <div class="container-fluid">
     <div class="row">
         <div style="position:fixed">
-                <div class="col" style="width:10px">
-                    <a id="delete-btn" href="#deletemovieinfo" role="button" data-toggle="modal">
-                        <img class="p-2" src="{{url_for('static',filename='images/deletemovie.svg')}}"
-                            style="width:55px;height:60px;" alt=""></a>
-                </div>
-                <div class="col">
-                    <a href="#updatemovieinfo" role="button" data-toggle="modal">
-                        <img class="p-2" src="{{url_for('static',filename='images/editmovie.svg')}} "
-                            style="width:55px;height:60px" alt=""></a>
-                </div>
+            <div class="col" style="width:10px">
+                <a id="delete-btn" href="#deletemovieinfo" role="button" data-toggle="modal">
+                    <img class="p-2" src="{{url_for('static',filename='images/deletemovie.svg')}}"
+                        style="width:55px;height:60px;" alt=""></a>
+            </div>
+            <div class="col">
+                <a href="#updatemovieinfo" role="button" data-toggle="modal">
+                    <img class="p-2" src="{{url_for('static',filename='images/editmovie.svg')}} "
+                        style="width:55px;height:60px" alt=""></a>
+            </div>
         </div>
         <div class="col-md-10 ml-5 pt-2 pb-4">
 
@@ -25,7 +25,8 @@
                         <div id="carouselMovieThumbnailsControls" class="carousel slide" data-ride="carousel">
                             <div class="carousel-inner">
                                 {% for tn in old_values.thumbnails %}
-                                <div id = "carouselimg" class="rounded carousel-item {% if loop.index == 1 %} active{% endif %}" >
+                                <div id="carouselimg"
+                                    class="rounded carousel-item {% if loop.index == 1 %} active{% endif %}">
                                     <img src="{{tn}}" class="img-fluid w-100" alt="Thumbnails">
                                 </div>
                                 {% endfor %}
@@ -47,7 +48,7 @@
                     <div class="col-md-6 headerfont mt-3 h5">
                         <h4>Title:</h4>
                         <p style="color:grey">{{old_values.name}}</p>
-                        <h4 >Genre:</h4>
+                        <h4>Genre:</h4>
                         <p style="color:grey">{{old_values.genre.capitalize()}}</p>
                         <h4>Directed by:</h4>
                         {% if old_values.directors|length > 0 %}
@@ -55,9 +56,9 @@
                         {% else %}
                         <p style="color:grey">{{old_values.directors[0]}}</p>
                         {% endif %}
-                        <h4 >Release on:</h4>
+                        <h4>Release on:</h4>
                         <p style="color:grey">{{old_values.year}}</p>
-                        <h4 >Main casts:</h4>
+                        <h4>Main casts:</h4>
                         <p style="color:grey">{{', '.join(old_values.maincasts)}}</p>
                     </div>
                     <div class="col-md-6 headerfont mt-3 h5">
@@ -71,8 +72,7 @@
                 </div>
                 <div class="row rounded headerfont h5">
                     <div class=" container">
-                        <iframe id="utube"
-                            class="embed-responsive d-block mb-4 mx-auto" src="{{old_values.youtubeurl}}"
+                        <iframe id="utube" class="embed-responsive d-block mb-4 mx-auto" src="{{old_values.youtubeurl}}"
                             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                             allowfullscreen></iframe>
                     </div>
@@ -85,7 +85,7 @@
 
 
 <!-- Modal -->
-<form method="POST">
+<form method="POST" action="{{url_for('process_delete_movieinfo',movie_id=old_values._id)}}">
     <div class="modal fade " id="deletemovieinfo" tabindex="-1" aria-labelledby="deletemovieinfoLabel"
         aria-hidden="true">
         <div class="modal-dialog modal-lg">
@@ -108,8 +108,7 @@
                         </div>
 
                         <div class="col-md-6 d-flex p-2 justify-content-end">
-                            <a href="{{url_for('process_delete_movieinfo',movie_id=old_values._id)}}" type="submit"
-                                class="btn btn-danger ml-5">Yes</a>
+                            <button type="submit" class="btn btn-danger ml-5">Yes</button>
                         </div>
                     </div>
                 </div>
@@ -124,7 +123,8 @@
         <div class="modal-content">
             <div class="modal-header" style="border-color:#083864fe;">
                 <p class="modal-title headerfont h2" id="updatemovieinfoLabel">Update Movie Info</p>
-                <button id="closeupdate-btn" class="my-auto" type="button" data-dismiss="modal" aria-label="Close" style="border-width:0px; 
+                <button id="closeupdate-btn" class="my-auto" type="button" data-dismiss="modal" aria-label="Close"
+                    style="border-width:0px; 
                     background-color:transparent;">
                     <img src="{{url_for('static',filename='images/cancel.svg')}}" alt="">
                 </button>
@@ -135,14 +135,14 @@
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="movie-title" class="col-form-label headerfont">Title: 
+                                <label for="movie-title" class="col-form-label headerfont">Title:
                                 </label>
                                 <input type="text" value="{{old_values.name}}" class=" form-control {%if
                                         errors.title_is_blank %} is-invalid{%endif%}" id="movie-title" name="name"
                                     style="border-color:#083864fe;" required>
                             </div>
                             <div class="form-group">
-                                <label for="movie-genre" class="col-form-label headerfont">Genre: 
+                                <label for="movie-genre" class="col-form-label headerfont">Genre:
                                 </label>
                                 <input type="text" value="{{old_values.genre}}" class="form-control  {%if
                                         errors.genre_is_blank %} is-invalid{%endif%}" id="movie-genre" name="genre"
@@ -156,7 +156,7 @@
                                     id="movie-year" name="year" style="border-color:#083864fe;" required>
                             </div>
                             <div class="form-group">
-                                <label for="movie-casts" class="col-form-label headerfont">Main Casts: 
+                                <label for="movie-casts" class="col-form-label headerfont">Main Casts:
                                 </label>
                                 <input type="text" value="{{', '.join(old_values.maincasts)}}" class="form-control  {%if
                                         errors.maincasts_is_blank %} is-invalid{%endif%}" id="movie-casts"
@@ -169,16 +169,15 @@
                                 {{', '.join(old_values.directors)}}
                                 {% else %}
                                  {{old_values.directors[0]}}
-                                {% endif %}"
-                                class="form-control {%if
-                                errors.directors_is_blank %} is-invalid{%endif%}" id="movie-director"
-                                name="directors" style="border-color:#083864fe;" required>
+                                {% endif %}" class="form-control {%if
+                                errors.directors_is_blank %} is-invalid{%endif%}" id="movie-director" name="directors"
+                                    style="border-color:#083864fe;" required>
                             </div>
 
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="movie-trialer" class="col-form-label headerfont">Trailer(youtube url): 
+                                <label for="movie-trialer" class="col-form-label headerfont">Trailer(youtube url):
                                 </label>
                                 <input type="text" value="{{old_values.youtubeurl}}" class="form-control  {%if
                                         errors.youtubeurl_is_blank %} is-invalid{%endif%}" id="movie-trialer"
@@ -192,13 +191,13 @@
                                     style="border-color:#083864fe;height: 10rem;" id="movie-synop" name="synopsis"
                                     required>{{old_values.synopsis}}</textarea>
                             </div>
-                            <div> <label for="poster" class="col-form-label headerfont">Poster: 
+                            <div> <label for="poster" class="col-form-label headerfont">Poster:
                                 </label>
                             </div>
                             <div> <input id="poster" type="file" name="file" class=" {%if
                                     errors.file_is_blank %} is-invalid{%endif%}" required>
                             </div>
-                            <div> <label for="backdrop" class="col-form-label headerfont">Backdrop: 
+                            <div> <label for="backdrop" class="col-form-label headerfont">Backdrop:
                                 </label>
                             </div>
                             <div> <input id="backdrop" type="file" name="backdrop" class=" {%if
