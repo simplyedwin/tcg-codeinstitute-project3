@@ -39,7 +39,7 @@ or genre or keywords and adding movie info, the top bar would be built with thes
 <br/>Fig-1 Landing page of MovieFinder
 </p>
 
-A wireframe of this application can be found [here](https://xd.adobe.com/view/fbc25fb5-8cc7-4cdf-afc6-19bc692072b8-ae91/).<br/>
+A wireframe of this application can be found [here](https://xd.adobe.com/view/b9de51c0-dc0c-4f05-b796-5655a8f68da1-ec8d/).<br/>
 
 ## Features
 ### Existing Features
@@ -298,3 +298,5 @@ The website is hosted using heroku and can be accessed via [here]( https://simpl
 - Bootstrap 4 floating label css from [floatinglabel](https://www.cssscript.com/pure-css-floating-label-pattern-bootstrap/).
 
 - Readme template from [Code Institute](https://github.com/Code-Institute-Solutions/readme-template).
+
+- For creating the [progress bar](https://www.youtube.com/watch?v=f-wXTpbNWoM) during update or add movie
