@@ -177,7 +177,7 @@
                                         errors.maincasts_is_blank }}
                                     </span>
                                 </label>
-                                <input type="text" value="{{old_values.maincasts}}" class="form-control  {%if
+                                <input type="text" value="{{', '.join(old_values.maincasts)}}" class="form-control  {%if
                                         errors.maincasts_is_blank %} is-invalid{%endif%}" id="movie-casts"
                                     name="maincasts" style="border-color:#083864fe;" required>
                             </div>

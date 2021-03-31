@@ -213,9 +213,9 @@ def show_landing_page():
 @ app.route('/', methods=['POST'])
 def process_landing_page():
 
-    # url = request.url
-    # response = requests.get(url)
-    # status_code = int(response.status_code)
+    url = request.url
+    response = requests.get(url)
+    status_code = int(response.status_code)
 
     errors = validate_form(request.form)
     result_thumbnails = []
@@ -223,7 +223,7 @@ def process_landing_page():
     directors = []
     uploaded__movie_youtubeurl = ""
 
-    if len(errors) == 0:
+    if len(errors) == 0 and status_code ==200:
 
         # To retreive inputs from user
         movie_title = request.form.get('name')
@@ -306,30 +306,30 @@ def process_landing_page():
             'thumbnails': result_thumbnails
         })
 
-        # data = {'message': errors, 'error_status': 0}
+        data = {'message': errors, 'error_status': 0}
 
-        # return make_response(jsonify(data), 200)
+        return make_response(jsonify(data), 200)
 
-        flash(movie_title + " has been added!")
+        # flash(movie_title + " has been added!")
 
-        return redirect(url_for('process_landing_page'))
+        # return redirect(url_for('process_landing_page'))
 
     else:
-        for k, v in errors.items():
-            flash(v)
-        all_genre = db.movie_genres.find()
-        all_movies = db.movies.find()
+        # for k, v in errors.items():
+        #     flash(v)
+        # all_genre = db.movie_genres.find()
+        # all_movies = db.movies.find()
 
-        return render_template('landingpage.template.html',
-                               all_movies=list(all_movies),
-                               all_genre=list(all_genre),
-                               errors=errors,
-                               old_values=request.form)
+        # return render_template('landingpage.template.html',
+        #                        all_movies=list(all_movies),
+        #                        all_genre=list(all_genre),
+        #                        errors=errors,
+        #                        old_values=request.form)
 
-        # data = {'message': errors, 'error_status': 1}
+        data = {'message': errors, 'error_status': 1}
 
-        # # To return response to jquery Ajax to flash error
-        # return make_response(jsonify(data), 400)
+        # To return response to jquery Ajax to flash error
+        return make_response(jsonify(data), 400)
 
 
 @ app.route('/<genre>/bygenre')
@@ -516,14 +516,14 @@ def process_update_movieinfo_page(movie_id):
 
     result_thumbnails = []
     errors = validate_form(request.form)
-    # url = request.url
-    # response = requests.get(url)
-    # status_code = int(response.status_code)
+    url = request.url
+    response = requests.get(url)
+    status_code = int(response.status_code)
     uploaded__movie_youtubeurl = ""
     maincasts = []
     directors = []
 
-    if len(errors) == 0:
+    if len(errors) == 0 and status_code ==200:
 
         print("1. Running Route /update")
 
@@ -611,64 +611,61 @@ def process_update_movieinfo_page(movie_id):
             }
         })
 
-        # print("3. Running Route /update completed")
 
-        # data = {'message': errors, 'error_status': 0}
+        data = {'message': errors, 'error_status': 0}
 
-        # return make_response(jsonify(data), 200)
+        return make_response(jsonify(data), 200)
 
-        # print("/<movie_id>/movieinfo/update route return post")
+        # flash(movie_title + " has been updated!")
 
-        flash(movie_title + " has been updated!")
-
-        return redirect(url_for('show_update_movieinfo_page', movie_id=movie_id))
+        # return redirect(url_for('show_update_movieinfo_page', movie_id=movie_id))
 
     else:
 
-        for k, v in errors.items():
-            flash(v)
+        # for k, v in errors.items():
+        #     flash(v)
 
-        movie = db.movies.find_one({
-            '_id': ObjectId(movie_id)
-        })
+        # movie = db.movies.find_one({
+        #     '_id': ObjectId(movie_id)
+        # })
 
-        all_genre = db.movie_genres.find()
-        all_movies = db.movies.find()
+        # all_genre = db.movie_genres.find()
+        # all_movies = db.movies.find()
 
-        # Due to the list type for the directors and maincasts, the below scripts
-        # transform the info for directors and maincasts to be readable
-        movie_title = request.form.get('name')
-        movie_genre = request.form.get('genre')
-        movie_year = request.form.get('year')
-        movie_synopsis = request.form.get('synopsis')
-        movie_youtubeurl = request.form.get('youtubeurl')
+        # # Due to the list type for the directors and maincasts, the below scripts
+        # # transform the info for directors and maincasts to be readable
+        # movie_title = request.form.get('name')
+        # movie_genre = request.form.get('genre')
+        # movie_year = request.form.get('year')
+        # movie_synopsis = request.form.get('synopsis')
+        # movie_youtubeurl = request.form.get('youtubeurl')
 
-        updated_directors = request.form.get('directors')
-        updated_maincasts = request.form.get('maincasts')
+        # updated_directors = request.form.get('directors')
+        # updated_maincasts = request.form.get('maincasts')
 
-        updated_directors = updated_directors.replace('"', '')
-        updated_directors = updated_directors.split(",")
+        # updated_directors = updated_directors.replace('"', '')
+        # updated_directors = updated_directors.split(",")
 
-        updated_maincasts = updated_maincasts.replace('"', '')
-        updated_maincasts = updated_maincasts.split(",")
+        # updated_maincasts = updated_maincasts.replace('"', '')
+        # updated_maincasts = updated_maincasts.split(",")
 
-        updated_form = {'name': movie_title, 'genre': movie_genre, 'year': movie_year, 'synopsis': movie_synopsis,
-                        'youtubeurl': movie_youtubeurl, 'maincasts': updated_maincasts, 'directors': updated_directors}
+        # updated_form = {'name': movie_title, 'genre': movie_genre, 'year': movie_year, 'synopsis': movie_synopsis,
+        #                 'youtubeurl': movie_youtubeurl, 'maincasts': updated_maincasts, 'directors': updated_directors}
 
-        old_values = {**movie, **updated_form}
+        # old_values = {**movie, **updated_form}
 
-        return render_template('movieinfo.template.html',
-                               all_movies=list(all_movies),
-                               all_genre=list(all_genre),
-                               errors=errors,
-                               old_values=old_values)
+        # return render_template('movieinfo.template.html',
+        #                        all_movies=list(all_movies),
+        #                        all_genre=list(all_genre),
+        #                        errors=errors,
+        #                        old_values=old_values)
 
     #     print("4. Running Route /update error")
 
-    #     data = {'message': errors, 'error_status': 1}
+        data = {'message': errors, 'error_status': 1}
 
-    #     # To return response to jquery Ajax to flash error
-    #     return make_response(jsonify(data), 400)
+        # To return response to jquery Ajax to flash error
+        return make_response(jsonify(data), 400)
 
 # To render to a custom 404 page
 
