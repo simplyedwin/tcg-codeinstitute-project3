@@ -89,26 +89,26 @@ info to be uploaded into the database. Partial of the validation script is as sh
   <br/>
 
   ```
-        # To check whether field is empty
-            if len(imageurl.filename) == 0:
-                errors['file_is_blank'] = "Poster field cannot be blank"
-            elif '.' in imageurl.filename:
-                file_ext = os.path.splitext(imageurl.filename)[1]
-                # To validate file extension
-                if file_ext not in app.config['UPLOAD_EXTENSIONS']:
-                    errors['poster_ext_is_wrong'] = "Poster file ext is invalid"
+            # To check whether field is empty
+        if len(imageurl.filename) == 0:
+            errors['file_is_blank'] = "Poster field cannot be blank"
+        elif '.' in imageurl.filename:
+            file_ext = os.path.splitext(imageurl.filename)[1]
+            # To validate file extension
+            if file_ext.lower() not in app.config['UPLOAD_EXTENSIONS']:
+                errors['poster_ext_is_wrong'] = "Poster file ext is invalid"
             # To validate file size
             elif poster_size > 1024 * 1024:
                 errors['poster_size_above_limit'] = "Poster file size cannot be  more than 1MB"
 
-            # To check whether field is empty
-            if len(backdrop.filename) == 0:
-                errors['backdrop_is_blank'] = "Backdrop field cannot be blank"
-            elif '.' in backdrop.filename:
-                file_ext = os.path.splitext(backdrop.filename)[1]
-                # To validate file extension
-                if file_ext not in app.config['UPLOAD_EXTENSIONS']:
-                    errors['bkdrp_ext_is_wrong'] = "Backdrop file ext is invalid"
+        # To check whether field is empty
+        if len(backdrop.filename) == 0:
+            errors['backdrop_is_blank'] = "Backdrop field cannot be blank"
+        elif '.' in backdrop.filename:
+            file_ext = os.path.splitext(backdrop.filename)[1]
+            # To validate file extension
+            if file_ext.lower() not in app.config['UPLOAD_EXTENSIONS']:
+                errors['bkdrp_ext_is_wrong'] = "Backdrop file ext is invalid"
             # To validate file size
             elif backdrop_size > 1024 * 1024:
                 errors['backdrop_size_above_limit'] = "Backdrop file size cannot be more than 1MB"
