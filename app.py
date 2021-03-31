@@ -112,11 +112,11 @@ def validate_form(form):
     elif '.' in imageurl.filename:
         file_ext = os.path.splitext(imageurl.filename)[1]
         # To validate file extension
-        if file_ext not in app.config['UPLOAD_EXTENSIONS']:
+        if file_ext.lower() not in app.config['UPLOAD_EXTENSIONS']:
             errors['poster_ext_is_wrong'] = "Poster file ext is invalid"
-    # To validate file size
-    elif poster_size > 1024 * 1024:
-        errors['poster_size_above_limit'] = "Poster file size cannot be  more than 1MB"
+        # To validate file size
+        elif poster_size > 1024 * 1024:
+            errors['poster_size_above_limit'] = "Poster file size cannot be  more than 1MB"
 
     # To check whether field is empty
     if len(backdrop.filename) == 0:
@@ -124,11 +124,11 @@ def validate_form(form):
     elif '.' in backdrop.filename:
         file_ext = os.path.splitext(backdrop.filename)[1]
         # To validate file extension
-        if file_ext not in app.config['UPLOAD_EXTENSIONS']:
+        if file_ext.lower() not in app.config['UPLOAD_EXTENSIONS']:
             errors['bkdrp_ext_is_wrong'] = "Backdrop file ext is invalid"
-    # To validate file size
-    elif backdrop_size > 1024 * 1024:
-        errors['backdrop_size_above_limit'] = "Backdrop file size cannot be more than 1MB"
+        # To validate file size
+        elif backdrop_size > 1024 * 1024:
+            errors['backdrop_size_above_limit'] = "Backdrop file size cannot be more than 1MB"
 
     # To check whether field is empty
     if len(thumbnails) == 0:
@@ -141,7 +141,7 @@ def validate_form(form):
             if '.' in tn.filename:
                 file_ext = os.path.splitext(backdrop.filename)[1]
                 # To validate file extension
-                if file_ext not in app.config['UPLOAD_EXTENSIONS']:
+                if file_ext.lower() not in app.config['UPLOAD_EXTENSIONS']:
                     errors['thn_ext_is_wrong'] = "Thumbnail files ext are invalid"
 
     return errors
@@ -213,30 +213,19 @@ def show_landing_page():
 @ app.route('/', methods=['POST'])
 def process_landing_page():
 
-    url = request.url
-    response = requests.get(url)
-    status_code = int(response.status_code)
-
-    # To retreive inputs from user
-    movie_title = request.form.get('name')
-    movie_genre = request.form.get('genre')
-    movie_imageurl = request.files['file']
-    movie_year = request.form.get('year')
-    movie_maincasts = request.form.get('maincasts')
-    movie_synopsis = request.form.get('synopsis')
-    movie_directors = request.form.get('directors')
-    movie_youtubeurl = request.form.get('youtubeurl')
-    movie_backdrop = request.files['backdrop']
-    movie_thumbnails = request.files.getlist("thumbnails")
+    # url = request.url
+    # response = requests.get(url)
+    # status_code = int(response.status_code)
 
     errors = validate_form(request.form)
-
     result_thumbnails = []
-
+    maincasts = []
+    directors = []
     uploaded__movie_youtubeurl = ""
 
-    if len(errors) == 0 and status_code == 200:
+    if len(errors) == 0:
 
+        # To retreive inputs from user
         movie_title = request.form.get('name')
         movie_genre = request.form.get('genre')
         movie_imageurl = request.files['file']
@@ -291,30 +280,56 @@ def process_landing_page():
                 uploaded__movie_youtubeurl = movie_youtubeurl.replace(
                     'watch?v=', 'embed/')
 
+        if ',' in movie_maincasts:
+            splited_moviescasts = movie_maincasts.split(",")
+            maincasts = splited_moviescasts
+        else:
+            maincasts.append(movie_maincasts)
+
+        if ',' in movie_directors:
+            splited_directors = movie_directors.split(",")
+            directors = splited_directors
+        else:
+            directors.append(movie_maincasts)
+
         # To store the new movie info to MongoDB
         db.movies.insert_one({
             "name": movie_title,
             "genre": movie_genre.lower(),
             "imageurl": result_poster['url'],
             "year": movie_year,
-            "maincasts": movie_maincasts.split(","),
+            "maincasts": maincasts,
             "synopsis": movie_synopsis,
-            "directors": movie_directors.split(","),
+            "directors": directors,
             "youtubeurl": uploaded__movie_youtubeurl,
             'backdrop': result_backdrop['url'],
             'thumbnails': result_thumbnails
         })
 
-        data = {'message': errors, 'error_status': 0}
+        # data = {'message': errors, 'error_status': 0}
 
-        return make_response(jsonify(data), 200)
+        # return make_response(jsonify(data), 200)
+
+        flash(movie_title + " has been added!")
+
+        return redirect(url_for('process_landing_page'))
 
     else:
+        for k, v in errors.items():
+            flash(v)
+        all_genre = db.movie_genres.find()
+        all_movies = db.movies.find()
 
-        data = {'message': errors, 'error_status': 1}
+        return render_template('landingpage.template.html',
+                               all_movies=list(all_movies),
+                               all_genre=list(all_genre),
+                               errors=errors,
+                               old_values=request.form)
 
-        # To return response to jquery Ajax to flash error
-        return make_response(jsonify(data), 400)
+        # data = {'message': errors, 'error_status': 1}
+
+        # # To return response to jquery Ajax to flash error
+        # return make_response(jsonify(data), 400)
 
 
 @ app.route('/<genre>/bygenre')
@@ -501,12 +516,18 @@ def process_update_movieinfo_page(movie_id):
 
     result_thumbnails = []
     errors = validate_form(request.form)
-    url = request.url
-    response = requests.get(url)
-    status_code = int(response.status_code)
+    # url = request.url
+    # response = requests.get(url)
+    # status_code = int(response.status_code)
     uploaded__movie_youtubeurl = ""
+    maincasts = []
+    directors = []
 
-    if len(errors) == 0 and status_code == 200:
+    if len(errors) == 0:
+
+        print("1. Running Route /update")
+
+        #    if len(errors) == 0:
 
         movie_title = request.form.get('name')
         movie_genre = request.form.get('genre')
@@ -522,6 +543,8 @@ def process_update_movieinfo_page(movie_id):
         # To shift the file pointer to starting of file due to read file done in validaton for file size check
         movie_imageurl.seek(0)
         movie_backdrop.seek(0)
+
+        print("2. Running Route /update uploading to cloudinary")
 
         result_poster = cloudinary.uploader.upload(movie_imageurl.stream,
                                                    public_id=movie_title+"_poster",
@@ -557,6 +580,20 @@ def process_update_movieinfo_page(movie_id):
                 uploaded__movie_youtubeurl = movie_youtubeurl.replace(
                     'watch?v=', 'embed/')
 
+        if ',' in movie_maincasts:
+            splited_moviescasts = movie_maincasts.split(",")
+            maincasts = splited_moviescasts
+        else:
+            maincasts.append(movie_maincasts)
+
+        if ',' in movie_directors:
+            splited_directors = movie_directors.split(",")
+            directors = splited_directors
+        else:
+            directors.append(movie_maincasts)
+
+        print("3. Running Route /update uploading to mongodb")
+
         db.movies.update_one({
             "_id": ObjectId(movie_id)
         }, {
@@ -565,25 +602,55 @@ def process_update_movieinfo_page(movie_id):
                 "genre": movie_genre.lower(),
                 "imageurl": result_poster['url'],
                 "year": movie_year,
-                "maincasts": movie_maincasts.split(","),
+                "maincasts": maincasts,
                 "synopsis": movie_synopsis,
-                "directors": movie_directors.split(","),
+                "directors": directors,
                 "youtubeurl": uploaded__movie_youtubeurl,
                 'backdrop': result_backdrop['url'],
                 'thumbnails': result_thumbnails
             }
         })
 
-        data = {'message': errors, 'error_status': 0}
+        # print("3. Running Route /update completed")
 
-        return make_response(jsonify(data), 200)
+        # data = {'message': errors, 'error_status': 0}
+
+        # return make_response(jsonify(data), 200)
+
+        # print("/<movie_id>/movieinfo/update route return post")
+
+        flash(movie_title + " has been updated!")
+
+        return redirect(url_for('show_update_movieinfo_page', movie_id=movie_id))
 
     else:
 
-        data = {'message': errors, 'error_status': 1}
+        for k, v in errors.items():
+            flash(v)
 
-        # To return response to jquery Ajax to flash error
-        return make_response(jsonify(data), 400)
+        movie = db.movies.find_one({
+            '_id': ObjectId(movie_id)
+        })
+
+        all_genre = db.movie_genres.find()
+        all_movies = db.movies.find()
+        old_values = {**movie, **request.form}
+        print(request.form)
+        # old_values = {**request.form, **movie}
+
+        print("/create route errors")
+        return render_template('movieinfo.template.html',
+                               all_movies=list(all_movies),
+                               all_genre=list(all_genre),
+                               errors=errors,
+                               old_values=old_values)
+
+    #     print("4. Running Route /update error")
+
+    #     data = {'message': errors, 'error_status': 1}
+
+    #     # To return response to jquery Ajax to flash error
+    #     return make_response(jsonify(data), 400)
 
 # To render to a custom 404 page
 

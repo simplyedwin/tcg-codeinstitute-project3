@@ -128,7 +128,10 @@
                             <div class="col-md-6">
                                 <div class="form-group ">
                                     <div class="d-flex flex-row justify-content-start">
-                                        <label for="movie-title" class="col-form-label headerfont ">Title:
+                                        <label for="movie-title" class="col-form-label headerfont ">Title:<span
+                                                style="font-family:Arial, Helvetica, sans-serif; color: tomato;"> {{
+                                            errors.title_is_blank
+                                            }}</span>
                                         </label>
 
                                     </div>
@@ -139,8 +142,10 @@
                                 </div>
                                 <div class="form-group">
                                     <label for="movie-genre" class="col-form-label headerfont">
+                                        Genre:<span style="font-family:Arial, Helvetica, sans-serif; color:tomato;"> {{
+                                            errors.genre_is_blank }}
+                                        </span>
 
-                                        Genre:
                                     </label>
                                     <input type="text"
                                         value="{% if errors.genre_is_blank %}{{old_values.genre}}{% endif %}" class="form-control  {%if
@@ -149,8 +154,11 @@
                                 </div>
                                 <div class="form-group">
                                     <label for="movie-year" class="col-form-label headerfont">Year:
+                                        <span style="font-family:Arial, Helvetica, sans-serif; color:tomato;"> {{
+                                            errors.year_is_blank or
+                                            errors.year_is_less_than_0 or errors.year_is_string}}</span>
                                     </label>
-                                    <input  type="text"
+                                    <input type="text"
                                         value="{%if errors.year_is_blank
                                         or errors.year_is_less_than_0 or errors.year_is_string %}{{old_values.year}} {% endif %}"
                                         class=" form-control {%if errors.year_is_blank
@@ -158,7 +166,9 @@
                                         id="movie-year" name="year" style="border-color:#083864fe;" required>
                                 </div>
                                 <div class="form-group">
-                                    <label for="movie-casts" class="col-form-label headerfont">Main Casts:
+                                    <label for="movie-casts" class="col-form-label headerfont">Main Casts:<span
+                                            style="font-family:Arial, Helvetica, sans-serif; color:tomato;"> {{
+                                            errors.maincasts_is_blank }}</span>
                                     </label>
                                     <input type="text" value="{%if
                                         errors.maincasts_is_blank %}{{old_values.maincasts}}{%endif%}" class="form-control  {%if
@@ -167,18 +177,29 @@
                                 </div>
                                 <div class="form-group">
                                     <label for="movie-director" class="col-form-label headerfont">Directed by:
+                                        <span style="font-family:Arial, Helvetica, sans-serif; color:tomato;"> {{
+                                            errors.directors_is_blank}}</span>
                                     </label>
                                     <input type="text" value="{%if
-                                        errors.directors_is_blank %} {{old_values.directors}} {%endif%}" class="form-control  {%if
+                                        errors.directors_is_blank %}{{old_values.directors}}{%endif%}" class="form-control  {%if
                                         errors.directors_is_blank %} is-invalid {%endif%}" id="movie-director"
                                         name="directors" style="border-color:#083864fe;" required>
                                 </div>
+
+                                {%if errors|length > 0 %}
+                                <div class="alert alert-danger">
+                                    Please correct all the errors and resubmit the form.
+                                </div>
+                                {% endif %}
 
                             </div>
 
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="movie-trialer" class="col-form-label headerfont">Trailer(youtube url):
+                                    <label for="movie-trialer" class="col-form-label headerfont">Trailer(youtube
+                                        url):<span style="font-family:Arial, Helvetica, sans-serif; color:tomato;"> {{
+                                            errors.youtubeurl_is_blank or
+                                         errors.youtubeurl_format_wrong}}</span>
                                     </label>
                                     <input type="text" value=" {%if
                                         errors.youtubeurl_is_blank %} {{old_values.youtubeurl}} {%endif%}" class="form-control  {%if
@@ -187,6 +208,8 @@
                                 </div>
                                 <div class="form-group">
                                     <label for="movie-synop" class="col-form-label headerfont">Synopsis:
+                                        <span style="font-family:Arial, Helvetica, sans-serif; color:tomato;"> {{
+                                            errors.synopsis_is_blank}}</span>
                                     </label>
                                     <textarea class="form-control {%if
                                         errors.synopsis_is_blank %} is-invalid{%endif%} "
@@ -194,25 +217,39 @@
                                         required>{%if
                                             errors.synopsis_is_blank %} {{old_values.synopsis}} {%endif%}</textarea>
                                 </div>
-                                <div> <label for="poster" class="col-form-label headerfont">Poster:
+                                <div> <label for="poster" class="col-form-label headerfont">Poster(jpg/png/gif):
+                                        <span style="font-family:Arial, Helvetica, sans-serif; color:tomato;"> {{
+                                            errors.file_is_blank or
+                                            errors.poster_size_above_limit or
+                                            errors.poster_ext_is_wrong
+                                            }}</span>
                                     </label>
                                 </div>
                                 <div> <input id="poster" type="file" name="file" class=" {%if
                                     errors.file_is_blank %} is-invalid{%endif%}" style="border-color:#083864fe;"
                                         required>
                                 </div>
-                                <div> <label for="backdrop" class="col-form-label headerfont">Backdrop:
+                                <div> <label for="backdrop" class="col-form-label headerfont">Backdrop(jpg/png/gif):
+                                        <span style="font-family:Arial, Helvetica, sans-serif; color:tomato;"> {{
+                                            errors.backdrop_is_blank or
+                                            errors.bkdrp_ext_is_wrong or
+                                            errors.backdrop_size_above_limit
+                                        }}</span>
                                     </label>
                                 </div>
-                                <div> <input id ="backdrop" type="file" name="backdrop" class=" {%if
+                                <div> <input id="backdrop" type="file" name="backdrop" class=" {%if
                                     errors.backdrop_is_blank %} is-invalid{%endif%}" style="border-color:#083864fe;"
                                         required>
                                 </div>
 
-                                <div> <label for="thumbnails" class="col-form-label headerfont">Thumbnails:
+                                <div> <label for="thumbnails" class="col-form-label headerfont">Thumbnails(jpg/png/gif):<span
+                                            style="font-family:Arial, Helvetica, sans-serif; color:tomato;"> {{
+                                            errors.thumbnails_is_blank or
+                                             errors.thn_ext_is_wrong or
+                                            errors.thumbnails_size_above_limit}}</span>
                                     </label>
                                 </div>
-                                <div> <input id = "thumbnails" type="file" name="thumbnails" class=" {%if
+                                <div> <input id="thumbnails" type="file" name="thumbnails" class=" {%if
                                     errors.thumbnails_is_blank %} is-invalid{%endif%}" multiple
                                         style="border-color:#083864fe;" required>
                                 </div>
@@ -241,6 +278,7 @@
 
     {% block content %} {% endblock %}
 
+
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"
         integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js"
@@ -248,17 +286,44 @@
         crossorigin="anonymous"></script>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
-
-    <script src="static/js/update_upload.js"></script>
-    <script src="{{url_for('static',filename='js/update_upload.js')}}"></script>
-    <script src="{{url_for('static',filename='js/create_upload.js')}}"></script>
+    
+    <!-- <script src="{{url_for('static',filename='js/update_upload.js')}}"></script>
+    <script src="{{url_for('static',filename='js/create_upload.js')}}"></script> -->
 
     <script>
 
+        {% set errormsg = ["Movie title field cannot be blank",
+            "Genre field cannot be blank",
+            "Backdrop field cannot be blank",
+            "Year field cannot be less than or equal to zero",
+            "Year field cannot be blank",
+            "Year field cannot be words or characters",
+            "Synopsis field cannot be blank",
+            "Maincasts field cannot be blank",
+            "Directors field cannot be blank",
+            "Trailer (Youtube url) field cannot be blank",
+            "Trailer (Youtube url) format is incorrect",
+            "Poster field cannot be blank",
+            "Poster file ext is invalid",
+            "Poster file size cannot be  more than 1MB",
+            "Backdrop field cannot be blank",
+            "Backdrop file ext is invalid",
+            "Backdrop file size cannot be more than 1MB",
+            "Thumbnails field cannot be blank",
+            "Thumbnails files size cannot be more than 2MB",
+            "Thumbnail files ext are invalid"] %}
         {% with messages = get_flashed_messages() %}
+
+        console.log("{{messages}}")
         {% if messages %}
         {% for message in messages %}
+        {% if message in errormsg %}
+        toastr.warning("{{message}}");
+        {% elif "Sorry" in message %}
         toastr.info("{{message}}");
+        {%else%}
+        toastr.success("{{message}}");
+        {% endif %}
         {% endfor %}
         {% endif %}
         {% endwith %}

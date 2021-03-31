@@ -18,17 +18,18 @@ $(document).ready(function () {
     let name = formData.get("name");
 
     $.ajax({
-    //   xhr: function () {
-    //     var xhr = new window.XMLHttpRequest();
+      xhr: function () {
+        var xhr = new window.XMLHttpRequest();
 
-    //     return xhr;
-    //   },
+        return xhr;
+      },
       type: "POST",
       url: pathname + "/update",
       data: formData,
       processData: false,
-      contentType: false,
+      contentType: "application/json; charset=utf-8",
       dataType: "json",
+      crossDomain: true,
       complete: function (xhr) {
         statuscode = xhr.status;
         var i = 0;
@@ -54,7 +55,7 @@ $(document).ready(function () {
       },
       error: function (xhr) {
         let msg;
-        // if resceive response to be code 400, flash error message
+        // Flash error message
         if (xhr.status === 400) {
           resobj = JSON.parse(xhr.responseText);
           msg = resobj["message"];
