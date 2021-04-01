@@ -43,9 +43,9 @@
                         <form method="GET" enctype="multipart/form-data" class="w-100">
 
                             <div class="input-group p-2">
-                                <input minlength="3" name="result" type="text" class="form-control headerfont"
+                                <input name="result" type="text" class="form-control headerfont"
                                     placeholder="Search for a movie title, main cast or director name..."
-                                    style="border-color:#083864fe;">
+                                    style="border-color:#083864fe;" input pattern=".{3,}"   required title="3 characters minimum">
                                 <div class="input-group-append">
                                     <button id="search-btn" type="submit" class="btn">
                                         <img class="img-fluid" src="{{url_for('static',filename='images/search.svg')}}"
