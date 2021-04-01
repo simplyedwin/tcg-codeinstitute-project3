@@ -2,8 +2,8 @@
 
 {% block content %}
 <div class="container-fluid">
-    <div class="row">
-        <div style="position:fixed">
+    <div class="row justify-content-center">
+        <div class="col-md-12 mr-5 pt-2 pb-4" style="position:fixed">
             <div class="col" style="width:10px">
                 <a id="delete-btn" href="#deletemovieinfo" role="button" data-toggle="modal">
                     <img class="p-2" src="{{url_for('static',filename='images/deletemovie.svg')}}"
@@ -26,8 +26,10 @@
                             <div class="carousel-inner">
                                 {% for tn in old_values.thumbnails %}
                                 <div id="carouselimg"
-                                    class="rounded carousel-item {% if loop.index == 1 %} active{% endif %}">
-                                    <img src="{{tn}}" class="img-fluid w-100" alt="Thumbnails">
+                                    class="rounded carousel-item {% if loop.index == 1 %} active{% endif %}" 
+                                    style="border-radius: 10px; background-image: url({{tn}}); background-repeat:no-repeat; background-size:cover ; background-blend-mode: normal"
+                                    >
+                                    <!-- <img src="{{tn}}" class="img-fluid w-100" style="height:500px !important;" alt="Thumbnails"> -->
                                 </div>
                                 {% endfor %}
                             </div>
@@ -177,7 +179,7 @@
                                         errors.maincasts_is_blank }}
                                     </span>
                                 </label>
-                                <input type="text" value="{{old_values.maincasts}}" class="form-control  {%if
+                                <input type="text" value="{{','.join(old_values.maincasts)}}" class="form-control  {%if
                                         errors.maincasts_is_blank %} is-invalid{%endif%}" id="movie-casts"
                                     name="maincasts" style="border-color:#083864fe;" required>
                             </div>
@@ -188,7 +190,7 @@
                                         errors.directors_is_blank}}
                                     </span>
                                 </label>
-                                <input type="text" value="{{', '.join(old_values.directors)}}" class="form-control {%if
+                                <input type="text" value="{{','.join(old_values.directors)}}" class="form-control {%if
                                 errors.directors_is_blank %} is-invalid{%endif%}" id="movie-director" name="directors"
                                     style="border-color:#083864fe;" required>
                             </div>

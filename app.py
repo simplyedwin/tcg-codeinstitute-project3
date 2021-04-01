@@ -11,6 +11,7 @@ from werkzeug.wrappers import BaseResponse as Response
 
 from bson.objectid import ObjectId
 
+# To keep secret keys
 load_dotenv()
 
 # To get current IP and PORT info from dot-env
@@ -45,6 +46,7 @@ def validate_form(form):
 
     errors = {}
 
+    # To retrieve all form inputs for validation
     name = request.form.get('name')
     genre = request.form.get('genre')
     imageurl = request.files['file']
@@ -56,6 +58,7 @@ def validate_form(form):
     backdrop = request.files['backdrop']
     thumbnails = request.files.getlist("thumbnails")
 
+    # To retrieve file silzes
     thumbnails_size = 0
     poster_size = len(imageurl.read())
     backdrop_size = len(backdrop.read())
@@ -146,6 +149,8 @@ def validate_form(form):
 
     return errors
 
+# To process the keywords from the search bar
+
 
 def search_result(result, all_movies, movieslist, dbmovieslist):
 
@@ -169,11 +174,31 @@ def search_result(result, all_movies, movieslist, dbmovieslist):
             if (result.lower() in director.lower()) and (result.lower() not in name):
                 movieslist.append(movie)
 
+        # To return all the movie in a list after reading from a pymongo cursor object
         dbmovieslist.append(movie)
 
     movieslist = list({v['_id']: v for v in movieslist}.values())
 
     return movieslist, dbmovieslist
+
+# To retrieve all genre from the movie genres collection and return a unique list
+
+
+def genreslist(all_genre):
+    allgenredb = []
+    genreslist = []
+
+    for genres in all_genre:
+        allgenredb.append(genres)
+    for genres in allgenredb:
+        genreslist.append(genres['genre'])
+
+    # To remove duplicates and return as a list
+    genreslist = list(set(genreslist))
+
+    return genreslist
+
+# Route to the landing page
 
 
 @ app.route('/')
@@ -181,11 +206,14 @@ def show_landing_page():
 
     dbmovieslist = []
     movieslist = []
+    landing_page_genre = []
 
     all_genre = db.movie_genres.find()
     all_movies = db.movies.find()
     result = request.args.get('result')
+    genreslists = genreslist(all_genre)
 
+    # To return the result if there is keyword provided from the search bar
     if result != None:
 
         movieslist, dbmovieslist = search_result(
@@ -205,17 +233,28 @@ def show_landing_page():
                                    all_movies=dbmovieslist, old_values={}, errors={})
 
     else:
+
+        for movie in all_movies:
+            if movie['genre'] in genreslists:
+                dbmovieslist.append(movie)
+                landing_page_genre.append(movie['genre'])
+
+        # To make remove duplicates after appending movie
+        landing_page_genre = list(set(landing_page_genre))
+
         return render_template('landingpage.template.html',
-                               all_genre=list(all_genre),
-                               all_movies=list(all_movies), old_values={}, errors={})
+                               all_genre=landing_page_genre,
+                               all_movies=dbmovieslist, old_values={}, errors={})
+
+# Route to process add movie
 
 
 @ app.route('/', methods=['POST'])
 def process_landing_page():
 
-    # url = request.url
-    # response = requests.get(url)
-    # status_code = int(response.status_code)
+    all_genre = db.movie_genres.find()
+    all_movies = db.movies.find()
+    genreslists = genreslist(all_genre)
 
     errors = validate_form(request.form)
     result_thumbnails = []
@@ -280,6 +319,7 @@ def process_landing_page():
                 uploaded__movie_youtubeurl = movie_youtubeurl.replace(
                     'watch?v=', 'embed/')
 
+        # To process input from the maincasts and directors field to store in array
         if ',' in movie_maincasts:
             splited_moviescasts = movie_maincasts.split(",")
             maincasts = splited_moviescasts
@@ -306,9 +346,11 @@ def process_landing_page():
             'thumbnails': result_thumbnails
         })
 
-        # data = {'message': errors, 'error_status': 0}
-
-        # return make_response(jsonify(data), 200)
+        # To store the genre in the genre collections if it not does exist
+        if movie_genre not in genreslists:
+            db.movie_genres.insert_one({
+                "genre": movie_genre.lower(),
+            })
 
         flash(movie_title + " has been added!")
 
@@ -317,8 +359,6 @@ def process_landing_page():
     else:
         for k, v in errors.items():
             flash(v)
-        all_genre = db.movie_genres.find()
-        all_movies = db.movies.find()
 
         return render_template('landingpage.template.html',
                                all_movies=list(all_movies),
@@ -326,22 +366,18 @@ def process_landing_page():
                                errors=errors,
                                old_values=request.form)
 
-        # data = {'message': errors, 'error_status': 1}
-
-        # # To return response to jquery Ajax to flash error
-        # return make_response(jsonify(data), 400)
-
 
 @ app.route('/<genre>/bygenre')
 def show_movieinfolist_bygenre(genre):
 
     movieslist = []
     dbmovieslist = []
-
     all_genre = db.movie_genres.find()
     all_movies = db.movies.find()
     result = request.args.get('result')
+    genreslists = genreslist(all_genre)
 
+    # To return the result if there is keyword provided from the search bar
     if result != None:
 
         movieslist, dbmovieslist = search_result(
@@ -355,7 +391,7 @@ def show_movieinfolist_bygenre(genre):
         else:
 
             return render_template('movieinfolist.template.html',
-                                   all_genre=list(all_genre),
+                                   all_genre=genreslists,
                                    result=result,
                                    movieslist=movieslist,
                                    all_movies=dbmovieslist, old_values={}, errors={})
@@ -370,9 +406,9 @@ def show_movieinfolist_bygenre(genre):
             dbmovieslist.append(movie)
 
         return render_template('movieinfolist.template.html',
-                               all_genre=list(all_genre),
+                               all_genre=genreslists,
                                movieslist=movieslist,
-                               all_movies=dbmovieslist, old_values={}, errors={})
+                               all_movies=dbmovieslist, old_values={}, errors={}, genre=genre)
 
 
 @ app.route('/<year>/byyear')
@@ -380,11 +416,12 @@ def show_movieinfolist_byyear(year):
 
     dbmovieslist = []
     movieslist = []
-
     all_genre = db.movie_genres.find()
     all_movies = db.movies.find()
     result = request.args.get('result')
+    genreslists = genreslist(all_genre)
 
+    # To return the result if there is keyword provided from the search bar
     if result != None:
 
         movieslist, dbmovieslist = search_result(
@@ -398,7 +435,7 @@ def show_movieinfolist_byyear(year):
         else:
 
             return render_template('movieinfolist.template.html',
-                                   all_genre=list(all_genre),
+                                   all_genre=genreslists,
                                    result=result,
                                    movieslist=movieslist,
                                    all_movies=dbmovieslist, old_values={}, errors={})
@@ -413,9 +450,9 @@ def show_movieinfolist_byyear(year):
             dbmovieslist.append(movie)
 
         return render_template('movieinfolist.template.html',
-                               all_genre=list(all_genre),
+                               all_genre=genreslists,
                                movieslist=movieslist,
-                               all_movies=dbmovieslist, old_values={}, errors={})
+                               all_movies=dbmovieslist, old_values={}, errors={}, year=year)
 
 
 @ app.route('/<movie_id>/movieinfo')
@@ -427,7 +464,9 @@ def show_movieinfo_page(movie_id):
     all_genre = db.movie_genres.find()
     all_movies = db.movies.find()
     result = request.args.get('result')
+    genreslists = genreslist(all_genre)
 
+    # To return the result if there is keyword provided from the search bar
     if result != None:
         movieslist, dbmovieslist = search_result(
             result, all_movies, movieslist, dbmovieslist)
@@ -440,7 +479,7 @@ def show_movieinfo_page(movie_id):
         else:
 
             return render_template('movieinfolist.template.html',
-                                   all_genre=list(all_genre),
+                                   all_genre=genreslists,
                                    result=result,
                                    movieslist=movieslist,
                                    all_movies=dbmovieslist, old_values={}, errors={})
@@ -450,7 +489,7 @@ def show_movieinfo_page(movie_id):
         })
 
         return render_template('movieinfo.template.html',
-                               all_genre=list(all_genre),
+                               all_genre=genreslists,
                                all_movies=list(all_movies),
                                old_values=movie, errors={})
 
@@ -483,7 +522,9 @@ def show_update_movieinfo_page(movie_id):
     all_genre = db.movie_genres.find()
     all_movies = db.movies.find()
     result = request.args.get('result')
+    genreslists = genreslist(all_genre)
 
+    # To return the result if there is keyword provided from the search bar
     if result != None:
         movieslist, dbmovieslist = search_result(
             result, all_movies, movieslist, dbmovieslist)
@@ -496,7 +537,7 @@ def show_update_movieinfo_page(movie_id):
         else:
 
             return render_template('movieinfolist.template.html',
-                                   all_genre=list(all_genre),
+                                   all_genre=genreslists,
                                    result=result,
                                    movieslist=movieslist,
                                    all_movies=dbmovieslist, old_values={}, errors={})
@@ -506,9 +547,11 @@ def show_update_movieinfo_page(movie_id):
         })
 
         return render_template('movieinfo.template.html',
-                               all_genre=list(all_genre),
+                               all_genre=genreslists,
                                all_movies=list(all_movies),
                                old_values=movie, errors={})
+
+# Route to process an update
 
 
 @ app.route('/<movie_id>/movieinfo/update', methods=['POST'])
@@ -516,18 +559,15 @@ def process_update_movieinfo_page(movie_id):
 
     result_thumbnails = []
     errors = validate_form(request.form)
-    # url = request.url
-    # response = requests.get(url)
-    # status_code = int(response.status_code)
     uploaded__movie_youtubeurl = ""
     maincasts = []
     directors = []
 
+    all_genre = db.movie_genres.find()
+    all_movies = db.movies.find()
+    genreslists = genreslist(all_genre)
+
     if len(errors) == 0:
-
-        print("1. Running Route /update")
-
-        #    if len(errors) == 0:
 
         movie_title = request.form.get('name')
         movie_genre = request.form.get('genre')
@@ -543,8 +583,6 @@ def process_update_movieinfo_page(movie_id):
         # To shift the file pointer to starting of file due to read file done in validaton for file size check
         movie_imageurl.seek(0)
         movie_backdrop.seek(0)
-
-        print("2. Running Route /update uploading to cloudinary")
 
         result_poster = cloudinary.uploader.upload(movie_imageurl.stream,
                                                    public_id=movie_title+"_poster",
@@ -592,8 +630,6 @@ def process_update_movieinfo_page(movie_id):
         else:
             directors.append(movie_maincasts)
 
-        print("3. Running Route /update uploading to mongodb")
-
         db.movies.update_one({
             "_id": ObjectId(movie_id)
         }, {
@@ -611,13 +647,10 @@ def process_update_movieinfo_page(movie_id):
             }
         })
 
-        # print("3. Running Route /update completed")
-
-        # data = {'message': errors, 'error_status': 0}
-
-        # return make_response(jsonify(data), 200)
-
-        # print("/<movie_id>/movieinfo/update route return post")
+        if movie_genre not in genreslists:
+            db.movie_genres.insert_one({
+                "genre": movie_genre.lower(),
+            })
 
         flash(movie_title + " has been updated!")
 
@@ -632,32 +665,46 @@ def process_update_movieinfo_page(movie_id):
             '_id': ObjectId(movie_id)
         })
 
-        all_genre = db.movie_genres.find()
-        all_movies = db.movies.find()
-        old_values = {**movie, **request.form}
-        print(request.form)
-        # old_values = {**request.form, **movie}
+        # To corret the format of the casts and directors when
+        # shown on the update popout
+        movie_title = request.form.get('name')
+        movie_genre = request.form.get('genre')
+        movie_year = request.form.get('year')
+        movie_synopsis = request.form.get('synopsis')
+        movie_youtubeurl = request.form.get('youtubeurl')
 
-        print("/create route errors")
+        updated_directors = request.form.get('directors')
+        updated_maincasts = request.form.get('maincasts')
+
+        updated_directors = updated_directors.replace('"', '')
+        updated_directors = updated_directors.split(",")
+
+        updated_maincasts = updated_maincasts.replace('"', '')
+        updated_maincasts = updated_maincasts.split(",")
+
+        updated_form = {'name': movie_title, 'genre': movie_genre, 'year': movie_year, 'synopsis': movie_synopsis,
+                        'youtubeurl': movie_youtubeurl, 'maincasts': updated_maincasts, 'directors': updated_directors}
+
+        old_values = {**movie, **updated_form}
+
         return render_template('movieinfo.template.html',
                                all_movies=list(all_movies),
-                               all_genre=list(all_genre),
+                               all_genre=genreslists,
                                errors=errors,
                                old_values=old_values)
-
-    #     print("4. Running Route /update error")
-
-    #     data = {'message': errors, 'error_status': 1}
-
-    #     # To return response to jquery Ajax to flash error
-    #     return make_response(jsonify(data), 400)
 
 # To render to a custom 404 page
 
 
 @ app.errorhandler(404)
 def page_not_found(e):
-    return render_template('custom404.template.html', old_values={}, errors={})
+
+    all_genre = db.movie_genres.find()
+    all_movies = db.movies.find()
+    genreslists = genreslist(all_genre)
+
+    return render_template('custom404.template.html', all_movies=list(all_movies),
+                           all_genre=genreslists, old_values={}, errors={})
 
 
 if __name__ == '__main__':

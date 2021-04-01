@@ -1,91 +1,96 @@
 {% extends "base.template.html" %}
 
 {% block content %}
+    {% for genre in all_genre %}
+        {% if loop.index is divisibleby 2 %}
+            <div style="background-color: lightgrey;">
+                <p class="h1 px-5 pt-2">
+                    {{genre.capitalize()}}
+                </p>
+                <div class="container-fluid py-3">
+                    <div class="row mx-5">
+                        {% set moviebygenre = [] %}
+                        {% for movie in all_movies %}
+                            {% if genre == movie.genre %}
+                                {% if moviebygenre.append(movie) is none %}
+                                    {{''}}
+                                {% endif %}
+                            {% endif %}
+                        {% endfor %}
 
-{% for genre in all_genre %}
-{% if loop.index is divisibleby 2 %}
-<div style="background-color: lightgrey;">
-    <p class="h1 px-5 pt-2">
-        {{genre.genre.capitalize()}}
-    </p>
-    <div class="container-fluid py-3">
+                        {% set limit = 0 %}
+                        {% if moviebygenre|length > 3 %}
+                                    {% set limit = 3 %}
+                        {% else %}
+                                    {% set limit = moviebygenre|length %}
+                        {% endif %}
 
-        <div class="row mx-5">
-            {% set moviebygenre = [] %}
-            {% for movie in all_movies %}
-            {% if genre.genre == movie.genre %}
-            {% if moviebygenre.append(movie) is none %}
-            {{''}}
-            {% endif %}
-            {% endif %}
-            {% endfor %}
-            {% set limit = 0 %}
-            {% if moviebygenre|length > 3 %}
-            {% set limit = 3 %}
-            {% else %}
-            {% set limit = moviebygenre|length %}
-            {% endif %}
-            {% for i in range (limit) %}
-            <div class="col-md-4 d-flex justify-content-center">
-                <a href="{{url_for('show_movieinfo_page',movie_id=moviebygenre[i]._id)}}">
-                    <div class="container">
-                        <img src="{{moviebygenre[i].imageurl}}" alt="" class="rounded landingimg"
-                            >
-                        <p class="text-center headerfont">{{moviebygenre[i].name}}</p>
+                        {% set reverse_moviebygenre = moviebygenre|reverse|list%}
+
+                            {% for movie in reverse_moviebygenre[0:limit] %}
+                                    <div class="col-md-4 d-flex justify-content-center">
+                                        <a href="{{url_for('show_movieinfo_page',movie_id=movie._id)}}">
+                                            <div class="container">
+                                                <img src="{{movie.imageurl}}" alt="" class="rounded landingimg"
+                                                    >
+                                                <p class="text-center headerfont">{{movie.name}}</p>
+                                            </div>
+                                        </a>
+                                    </div>
+                            {% endfor %}
+
+                        <div class="col-md-3 d-flex justify-content-start my-auto">
+                            <a
+                        href="{{url_for('show_movieinfolist_bygenre',genre=genre)}}"><img src="{{url_for('static',filename='images/viewmore.svg')}}" alt="" style="width:150px;height:30px"></a>                           
+                        </div>
                     </div>
-                </a>
+                </div>
             </div>
-            {% endfor %}
-            <div class="col-md-3 d-flex justify-content-start">
-                <a
-            href="{{url_for('show_movieinfolist_bygenre',genre=genre.genre)}}"><img src="{{url_for('static',filename='images/viewmore.svg')}}" alt="" style="width:150px;height:30px"></a>
-                
-            </div>
-        </div>
-    </div>
-</div>
-{% else %}
-<div >
-    <p class="h1 px-5 pt-2">
-           {{genre.genre.capitalize()}}
-    </p>
-    <div class="container-fluid py-3">
+        {% else %}
+            <div >
+                <p class="h1 px-5 pt-2">
+                    {{genre.capitalize()}}
+                </p>
+                <div class="container-fluid py-3">
 
-        <div class="row mx-5">
-            {% set moviebygenre = [] %}
-            {% for movie in all_movies %}
-            {% if genre.genre == movie.genre %}
-            {% if moviebygenre.append(movie) is none %}
-            {{''}}
-            {% endif %}
-            {% endif %}
-            {% endfor %}
-            {% set limit = 0 %}
-            {% if moviebygenre|length > 3 %}
-            {% set limit = 3 %}
-            {% else %}
-            {% set limit = moviebygenre|length %}
-            {% endif %}
-            {% for i in range (limit) %}
-            <div class="col-md-4 d-flex justify-content-center">
-                <a href="{{url_for('show_movieinfo_page',movie_id=moviebygenre[i]._id)}}">
-                    <div class="container">
-                        <img src="{{moviebygenre[i].imageurl}}" alt="" class="rounded landingimg"
-                            >
-                        <p class="text-center headerfont">{{moviebygenre[i].name}}</p>
+                    <div class="row mx-5">
+                        {% set moviebygenre = [] %}
+                        {% for movie in all_movies %}
+                            {% if genre == movie.genre %}
+                                {% if moviebygenre.append(movie) is none %}
+                                    {{''}}
+                                {% endif %}
+                            {% endif %}
+                        {% endfor %}
+
+                        {% set limit = 0 %}
+                        {% if moviebygenre|length > 3 %}
+                                    {% set limit = 3 %}
+                        {% else %}
+                                    {% set limit = moviebygenre|length %}
+                        {% endif %}
+                        {% set reverse_moviebygenre = moviebygenre|reverse|list%}
+
+                            {% for movie in reverse_moviebygenre[0:limit] %}
+                                    <div class="col-md-4 d-flex justify-content-center">
+                                        <a href="{{url_for('show_movieinfo_page',movie_id=movie._id)}}">
+                                            <div class="container">
+                                                <img src="{{movie.imageurl}}" alt="" class="rounded landingimg"
+                                                    >
+                                                <p class="text-center headerfont">{{movie.name}}</p>
+                                            </div>
+                                        </a>
+                                    </div>
+                            {% endfor %}
+                        <div class="col-md-3 d-flex justify-content-start my-auto">
+                            <a
+                        href="{{url_for('show_movieinfolist_bygenre',genre=genre)}}"><img src="{{url_for('static',filename='images/viewmore.svg')}}" alt="" style="width:150px;height:30px"></a>
+                            
+                        </div>
                     </div>
-                </a>
+                </div>
             </div>
-            {% endfor %}
-            <div class="col-md-3 d-flex justify-content-start">
-                <a
-            href="{{url_for('show_movieinfolist_bygenre',genre=genre.genre)}}"><img src="{{url_for('static',filename='images/viewmore.svg')}}" alt="" style="width:150px;height:30px"></a>
-                
-            </div>
-        </div>
-    </div>
-</div>
-{% endif %}
-{% endfor %}
+        {% endif %}
+    {% endfor %}
 
 {% endblock %}

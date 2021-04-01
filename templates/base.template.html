@@ -43,7 +43,7 @@
                         <form method="GET" enctype="multipart/form-data" class="w-100">
 
                             <div class="input-group p-2">
-                                <input name="result" type="text" class="form-control headerfont"
+                                <input minlength="3" name="result" type="text" class="form-control headerfont"
                                     placeholder="Search for a movie title, main cast or director name..."
                                     style="border-color:#083864fe;">
                                 <div class="input-group-append">
@@ -75,7 +75,7 @@
                     <div class="dropdown-menu " style="min-width:0em" aria-labelledby="genredropdownMenuButton">
                         {% for genre in all_genre %}
                         <a class="dropdown-item headerfont"
-                            href="{{url_for('show_movieinfolist_bygenre',genre=genre.genre)}}">{{genre.genre.capitalize()}}</a>
+                            href="{{url_for('show_movieinfolist_bygenre',genre=genre)}}">{{genre.capitalize()}}</a>
                         {% endfor %}
                     </div>
                 </div>
@@ -263,12 +263,6 @@
                             <img src="{{url_for('static',filename='images/uploadmovie.svg')}}" alt="">
                         </button>
                     </div>
-                    <div class="progress">
-                        <div id="addprogressBar" class="progress-bar" role="progressbar" aria-valuenow="0"
-                            aria-valuemin="0" aria-valuemax="100" style="width: 0%;">
-                            0%
-                        </div>
-                    </div>
                     <div id="form-response"></div>
                 </form>
 
@@ -287,9 +281,6 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
     
-    <!-- <script src="{{url_for('static',filename='js/update_upload.js')}}"></script>
-    <script src="{{url_for('static',filename='js/create_upload.js')}}"></script> -->
-
     <script>
 
         {% set errormsg = ["Movie title field cannot be blank",

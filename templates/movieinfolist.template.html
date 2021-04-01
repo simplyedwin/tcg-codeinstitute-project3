@@ -2,32 +2,60 @@
 
 {% block content %}
 
-    {% for movie in movieslist%}
-            <div class="container w-50 py-5">
-                <a href="{{url_for('show_movieinfo_page',movie_id=movie._id)}}">
-                    <div class="card mb-3 shadow bg-white rounded">
-                        <div class="row no-gutters align-items-center">
-                            <div class="col-md-6">
-                                <img src="{{movie.imageurl}}" class="card-img my-auto " alt="...">
-                            </div>
-                            <div class="col-md-6">
-                                <div class="card-body">
-                                    <p class="card-title headerfont h5">{{movie.name}}</p>
-                                    <p class="card-text headerfont">Genre: {{movie.genre.capitalize()}}</p>
-                                    <p class="card-text headerfont">Directed by:
-                                        {% if movie.directors|length> 0 %}
-                                        {{', '.join(movie.directors)}}
-                                        {% else %}
-                                        {{movie.directors[0]}}
-                                        {% endif %}
-                                    </p>
-                                    <p class="card-text headerfont">Release on: {{movie.year}}</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </a>
-            </div>
+{% if year is defined %}
+    {% set years =[] %}
+    {% for movie in all_movies %}
+        {% if years.append(movie.year|int) is none %}
+        {{''}}
+        {% endif %}
+    {% endfor %}
+    {% set years_sorted = years|unique|sort %}
+    {% if year|int in years_sorted %}
+    <p class="h1 px-5 pt-2 text-center">
+        {{year}}
+    </p>
+    {% endif %}
+{% elif genre is defined %}
+    {% for genreitem in all_genre%}
+        {% if genreitem == genre %}
+        <p class="h1 px-5 pt-2 text-center">
+            {{genre.capitalize()}}
+        </p>
+        {%endif%}
     {% endfor%}
+{% else %}
+    <p class="h1 px-5 pt-2 text-center">
+        Search Result for: {{result.capitalize()}}
+    </p>
+{% endif%}
+
+{% for movie in movieslist%}
+
+<div class="container w-50 py-5">
+    <a href="{{url_for('show_movieinfo_page',movie_id=movie._id)}}">
+        <div class="card mb-3 shadow bg-white rounded">
+            <div class="row no-gutters align-items-center">
+                <div class="col-md-6">
+                    <img src="{{movie.imageurl}}" class="card-img my-auto " alt="...">
+                </div>
+                <div class="col-md-6">
+                    <div class="card-body">
+                        <p class="card-title headerfont h5">{{movie.name}}</p>
+                        <p class="card-text headerfont">Genre: {{movie.genre.capitalize()}}</p>
+                        <p class="card-text headerfont">Directed by:
+                            {% if movie.directors|length> 0 %}
+                            {{', '.join(movie.directors)}}
+                            {% else %}
+                            {{movie.directors[0]}}
+                            {% endif %}
+                        </p>
+                        <p class="card-text headerfont">Release on: {{movie.year}}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </a>
+</div>
+{% endfor%}
 
 {% endblock %}
