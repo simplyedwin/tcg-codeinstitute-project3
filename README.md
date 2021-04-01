@@ -49,7 +49,8 @@ A wireframe of this application can be found [here](https://xd.adobe.com/view/b9
 <img src="static/images/moviefinder_landingpage.JPG" height=500>
 </p>
 
-- ***Movie Info Search Bar*** - This feature allow user to search for different number of movies in the movie database by keywords.
+- ***Movie Info Search Bar*** - This feature allow user to search for different number of movies in the movie database by keywords. This feature
+is currently limited to English language only.
  <br/><p align="center">
 <img src="static/images/searchbar.JPG">
 </p>
@@ -74,7 +75,7 @@ button displays the add new movie popout.
   <br/>
 
  - ***Movie Info List*** - The movie info list displays a list of filtered movies.
-<br/><p align="center"><img src="static/images/moviefinder_movieinfolist.JPG" height=400></p>
+<br/><p align="center"><img src="static/images/moviefinder_movieinfolist.JPG" height=400><img src="static/images/moviefinder_movieinfolistbyyear.JPG" height=400><img src="static/images/moviefinder_movieinfolistbykeyword.JPG" height=400></p>
   <br/>
 
 - ***Movie Info Page*** - The movie info page displays information of a selected movie.
@@ -151,6 +152,10 @@ This feature will check whether the content of the uploaded image is appropriate
 This feature will allow user to chose the order of the genre to be displayed on the landing page.
 <br/><br/>
 
+- ***Multi Languages Supports***<br/>
+This feature will allow user to search for different movie info in different langauges.
+<br/><br/>
+
 ## Technologies Used
 
 - [HTML/CSS](https://html.com/)<br/>
@@ -225,12 +230,17 @@ The project uses Cloudinary to store image files and provides the image url link
 | **Expected:** "Thumbnails files size cannot be more than 2MB" error message shall be flashed when the total file size of the selected thumbnails is > 2 MB from the update/add movie popouts.<br/>**Test:** Upload a few files which each size > 1 MB in the thumbnails file input field.<br/>**Result:** "Thumbnails files size cannot be more than 2MB" error message is flashed when the total file size of the selected thumbnails is > 2 MB from the update/add movie popouts.<br/>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
 | **Test Case 24: Invalid fie extension error message is flashed when the file field is uploaded with file that is not .jpg/.png/.gif extension from the update/add movie popouts**                                                                                                                                                                                                                                                                                                                                                                                                  |
 | **Expected:** Invalid fie extension error message shall be flashed when the file field is uploaded with file that is not .jpg/.png/.gif extension from the update/add movie popouts.<br/>**Test:** Upload a file with extension that is not .jpg/.png/.gif extension.<br/>**Result:** Invalid fie extension error message is flashed when the file field is uploaded with file that is not .jpg/.png/.gif extension from the update/add movie popouts.<br/>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
-
-
-
+| **Test Case 25: The genre of any newly added movies which does not exist in the database previously is added into the genre dropdown menu**                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
+| **Expected:** The genre of any newly added movies which does not exist in the database previously shall be added into genre dropdown menu.<br/>**Test:** Add a new movie with its genre not available in the database.<br/>**Result:** The genre of any newly added movies which does not exist in the database previously is added into the genre dropdown menu.<br/>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
+| **Test Case 26: Minimum characters prompt is triggered when less than 3 characters is submitted from the search bar**                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
+| **Expected:** Minimum characters prompt shall be triggered when less than 3 characters is submitted from the search bar.<br/>**Test:** Type in less than 3 characters in the search bar and submit.<br/>**Result:** Minimum characters prompt is triggered when less than 3 characters is submitted from the search bar .<br/>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
+| **Test Case 27: Landing page displays the latest 3 newly added movie or less**                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
+| **Expected:** Landing page shall display the latest 3 newly added movie or less.<br/>**Test:** Add a new movie.<br/>**Result:** Landing page displayed the latest 3 newly added movie or less.<br/>
+| **Test Case 28: The landing page and genre dropdown menu display genres which are available in the movie database**                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
+| **Expected:** The landing page and genre dropdown menu shall display genres which are available in the movie database.<br/>**Test:** Delete the last movie of a genre.<br/>**Result:** The landing page and genre dropdown menu displayed genres which are available in the movie database.<br/>
 
 ### Responsiveness
-**360 x 640**<br><p align="center">
+**360 x 640 (Moto G4)**<br><p align="center">
 <img src="static/images/360by640_1.JPG" height=200>
 <img src="static/images/360by640_2.JPG" height=200>
 <img src="static/images/360by640_3.JPG" height=200>
@@ -241,17 +251,17 @@ The project uses Cloudinary to store image files and provides the image url link
 
 <br>
 
-**375 x 667**<br><p align="center">
-<img src="static/images/375by667_1.JPG" height=200>
-<img src="static/images/375by667_2.JPG" height=200>
-<img src="static/images/375by667_3.JPG" height=200>
-<img src="static/images/375by667_4.JPG" height=200>
-<img src="static/images/375by667_5.JPG" height=200></p>
+**414 x 736 (iPhone 6/7/8 Plus)**<br><p align="center">
+<img src="static/images/414by736_1.JPG" height=200>
+<img src="static/images/414by736_2.JPG" height=200>
+<img src="static/images/414by736_3.JPG" height=200>
+<img src="static/images/414by736_4.JPG" height=200>
+<img src="static/images/414by736_5.JPG" height=200></p>
 
 <br>
 
 
-**768 x 1024**<br><p align="center">
+**768 x 1024 (iPad)**<br><p align="center">
 <img src="static/images/768by1024_1.JPG" height=200>
 <img src="static/images/768by1024_2.JPG" height=200>
 <img src="static/images/768by1024_3.JPG" height=200>
@@ -292,3 +302,5 @@ The website is hosted using heroku and can be accessed via [here]( https://simpl
 - Readme template from [Code Institute](https://github.com/Code-Institute-Solutions/readme-template).
 
 - For creating the [progress bar](https://www.youtube.com/watch?v=f-wXTpbNWoM) during update or add movie
+
+- [IMDB](https://www.imdb.com/) for information of movie

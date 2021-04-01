@@ -97,6 +97,22 @@
     width: 100%;
   }
 
+  #utube {
+    border: 0;
+    width: 80%;
+    height: 200px;
+    overflow: auto;
+  }
+
+  .h4 {
+    font-size: 5vw;
+  }
+
+  .h5 {
+    font-size: 4vw;
+  }
+
+
 }
 
 @media screen and (max-width: 376px) and (min-width: 330px) {
@@ -104,8 +120,17 @@
     font-size: 7vw;
   }
 
-  .headerfont {
+  .h5 {
     font-size: 3vw;
+  }
+
+  .h4 {
+    font-size: 4vw;
+  }
+
+
+  .headerfont {
+    font-size: 5vw;
   }
 
   .landingimg {
@@ -132,8 +157,16 @@
     font-size: 7vw;
   }
 
-  .headerfont {
+  .h5 {
     font-size: 3vw;
+  }
+
+  .h4 {
+    font-size: 4vw;
+  }
+
+  .headerfont {
+    font-size: 5vw;
   }
 
   .landingimg {

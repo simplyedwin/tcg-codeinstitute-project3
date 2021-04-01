@@ -19,17 +19,14 @@
 
             <div class="container"
                 style="border-radius: 10px; background-image: url({{old_values.backdrop}}); background-repeat:no-repeat; background-size:cover ; background-blend-mode: normal">
-                <!-- <div class="container"> -->
                 <div class="row">
                     <div class="col-md-12 mt-5 px-5">
                         <div id="carouselMovieThumbnailsControls" class="carousel slide" data-ride="carousel">
                             <div class="carousel-inner">
                                 {% for tn in old_values.thumbnails %}
                                 <div id="carouselimg"
-                                    class="rounded carousel-item {% if loop.index == 1 %} active{% endif %}" 
-                                    style="border-radius: 10px; background-image: url({{tn}}); background-repeat:no-repeat; background-size:cover ; background-blend-mode: normal"
-                                    >
-                                    <!-- <img src="{{tn}}" class="img-fluid w-100" style="height:500px !important;" alt="Thumbnails"> -->
+                                    class="rounded carousel-item {% if loop.index == 1 %} active{% endif %}"
+                                    style="border-radius: 10px; background-image: url({{tn}}); background-repeat:no-repeat; background-size:cover ; background-blend-mode: normal">
                                 </div>
                                 {% endfor %}
                             </div>
@@ -48,29 +45,29 @@
                 </div>
                 <div class="row bg-light m-5 rounded" style="opacity: 0.8;">
                     <div class="col-md-6 headerfont mt-3 h5">
-                        <h4>Title:</h4>
-                        <p style="color:grey">{{old_values.name}}</p>
-                        <h4>Genre:</h4>
-                        <p style="color:grey">{{old_values.genre.capitalize()}}</p>
-                        <h4>Directed by:</h4>
+                        <p class="h4">Title:</p>
+                        <p class="h5" style="color:grey">{{old_values.name}}</p>
+                        <p class="h4">Genre:</p>
+                        <p class="h5" style="color:grey">{{old_values.genre.capitalize()}}</p>
+                        <p class="h4">Directed by:</p>
                         {% if old_values.directors|length > 0 %}
-                        <p style="color:grey">{{', '.join(old_values.directors)}}</p>
+                        <p class="h5" style="color:grey">{{', '.join(old_values.directors)}}</p>
                         {% else %}
-                        <p style="color:grey">{{old_values.directors[0]}}</p>
+                        <p class="h5" style="color:grey">{{old_values.directors[0]}}</p>
                         {% endif %}
-                        <h4>Release on:</h4>
-                        <p style="color:grey">{{old_values.year}}</p>
-                        <h4>Main casts:</h4>
+                        <p class="h4">Release on:</p>
+                        <p class="h5" style="color:grey">{{old_values.year}}</p>
+                        <p class="h4">Main casts:</p>
                         {% if old_values.maincasts|length > 0 %}
-                        <p style="color:grey">{{', '.join(old_values.maincasts)}}</p>
+                        <p class="h5" style="color:grey">{{', '.join(old_values.maincasts)}}</p>
                         {% else %}
-                        <p style="color:grey">{{old_values.maincasts[0]}}</p>
+                        <p class="h5" style="color:grey">{{old_values.maincasts[0]}}</p>
                         {% endif %}
                     </div>
                     <div class="col-md-6 headerfont mt-3 h5">
 
-                        <h4>Synopsis:</h4>
-                        <p style="color:grey">
+                        <p class="h4">Synopsis:</p>
+                        <p class="h5" style="color:grey">
                             {{old_values.synopsis}}
                         </p>
                     </div>
@@ -275,13 +272,10 @@
                         0%
                     </div>
                 </div>
-
-
             </form>
         </div>
     </div>
 </div>
-<!-- </div> -->
 
 
 {% endblock %}

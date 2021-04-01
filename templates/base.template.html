@@ -242,7 +242,8 @@
                                         required>
                                 </div>
 
-                                <div> <label for="thumbnails" class="col-form-label headerfont">Thumbnails(jpg/png/gif):<span
+                                <div> <label for="thumbnails"
+                                        class="col-form-label headerfont">Thumbnails(jpg/png/gif):<span
                                             style="font-family:Arial, Helvetica, sans-serif; color:tomato;"> {{
                                             errors.thumbnails_is_blank or
                                              errors.thn_ext_is_wrong or
@@ -280,7 +281,7 @@
         crossorigin="anonymous"></script>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
-    
+
     <script>
 
         {% set errormsg = ["Movie title field cannot be blank",
