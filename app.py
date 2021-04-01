@@ -206,7 +206,7 @@ def show_landing_page():
 
     dbmovieslist = []
     movieslist = []
-    landing_page_genre = []
+    dropdown_genre = []
 
     all_genre = db.movie_genres.find()
     all_movies = db.movies.find()
@@ -226,8 +226,15 @@ def show_landing_page():
 
         else:
 
+            for movie in dbmovieslist:
+                if movie['genre'] in genreslists:
+                    dropdown_genre.append(movie['genre'])
+
+            # To make remove duplicates after appending movie
+            dropdown_genre = list(set(dropdown_genre))
+
             return render_template('movieinfolist.template.html',
-                                   all_genre=list(all_genre),
+                                   all_genre=dropdown_genre,
                                    result=result,
                                    movieslist=movieslist,
                                    all_movies=dbmovieslist, old_values={}, errors={})
@@ -237,13 +244,13 @@ def show_landing_page():
         for movie in all_movies:
             if movie['genre'] in genreslists:
                 dbmovieslist.append(movie)
-                landing_page_genre.append(movie['genre'])
+                dropdown_genre.append(movie['genre'])
 
         # To make remove duplicates after appending movie
-        landing_page_genre = list(set(landing_page_genre))
+        dropdown_genre = list(set(dropdown_genre))
 
         return render_template('landingpage.template.html',
-                               all_genre=landing_page_genre,
+                               all_genre=dropdown_genre,
                                all_movies=dbmovieslist, old_values={}, errors={})
 
 # Route to process add movie
@@ -261,6 +268,8 @@ def process_landing_page():
     maincasts = []
     directors = []
     uploaded__movie_youtubeurl = ""
+    dropdown_genre = []
+    dbmovieslist = []
 
     if len(errors) == 0:
 
@@ -360,9 +369,18 @@ def process_landing_page():
         for k, v in errors.items():
             flash(v)
 
+        # For the dropdown menu grene
+        for movie in all_movies:
+            if movie['genre'] in genreslists:
+                dbmovieslist.append(movie)
+                dropdown_genre.append(movie['genre'])
+
+        # To make remove duplicates after appending movie
+        dropdown_genre = list(set(dropdown_genre))
+
         return render_template('landingpage.template.html',
-                               all_movies=list(all_movies),
-                               all_genre=list(all_genre),
+                               all_movies=dbmovieslist,
+                               all_genre=dropdown_genre,
                                errors=errors,
                                old_values=request.form)
 
@@ -376,6 +394,7 @@ def show_movieinfolist_bygenre(genre):
     all_movies = db.movies.find()
     result = request.args.get('result')
     genreslists = genreslist(all_genre)
+    dropdown_genre = []
 
     # To return the result if there is keyword provided from the search bar
     if result != None:
@@ -390,8 +409,15 @@ def show_movieinfolist_bygenre(genre):
 
         else:
 
+            # For the dropdown menu grene
+            for movie in dbmovieslist:
+                if movie['genre'] in genreslists:
+                    dropdown_genre.append(movie['genre'])
+            # To make remove duplicates after appending movie
+            dropdown_genre = list(set(dropdown_genre))
+
             return render_template('movieinfolist.template.html',
-                                   all_genre=genreslists,
+                                   all_genre=dropdown_genre,
                                    result=result,
                                    movieslist=movieslist,
                                    all_movies=dbmovieslist, old_values={}, errors={})
@@ -405,8 +431,15 @@ def show_movieinfolist_bygenre(genre):
             # else the all_movies will become undefined
             dbmovieslist.append(movie)
 
+        # For the dropdown menu grene
+        for movie in dbmovieslist:
+            if movie['genre'] in genreslists:
+                dropdown_genre.append(movie['genre'])
+        # To make remove duplicates after appending movie
+        dropdown_genre = list(set(dropdown_genre))
+
         return render_template('movieinfolist.template.html',
-                               all_genre=genreslists,
+                               all_genre=dropdown_genre,
                                movieslist=movieslist,
                                all_movies=dbmovieslist, old_values={}, errors={}, genre=genre)
 
@@ -420,6 +453,7 @@ def show_movieinfolist_byyear(year):
     all_movies = db.movies.find()
     result = request.args.get('result')
     genreslists = genreslist(all_genre)
+    dropdown_genre = []
 
     # To return the result if there is keyword provided from the search bar
     if result != None:
@@ -434,8 +468,15 @@ def show_movieinfolist_byyear(year):
 
         else:
 
+            # For the dropdown menu grene
+            for movie in dbmovieslist:
+                if movie['genre'] in genreslists:
+                    dropdown_genre.append(movie['genre'])
+            # To make remove duplicates after appending movie
+            dropdown_genre = list(set(dropdown_genre))
+
             return render_template('movieinfolist.template.html',
-                                   all_genre=genreslists,
+                                   all_genre=dropdown_genre,
                                    result=result,
                                    movieslist=movieslist,
                                    all_movies=dbmovieslist, old_values={}, errors={})
@@ -449,8 +490,15 @@ def show_movieinfolist_byyear(year):
             # else the all_movies will become undefined
             dbmovieslist.append(movie)
 
+        # For the dropdown menu grene
+        for movie in dbmovieslist:
+            if movie['genre'] in genreslists:
+                dropdown_genre.append(movie['genre'])
+            # To make remove duplicates after appending movie
+        dropdown_genre = list(set(dropdown_genre))
+
         return render_template('movieinfolist.template.html',
-                               all_genre=genreslists,
+                               all_genre=dropdown_genre,
                                movieslist=movieslist,
                                all_movies=dbmovieslist, old_values={}, errors={}, year=year)
 
@@ -465,6 +513,7 @@ def show_movieinfo_page(movie_id):
     all_movies = db.movies.find()
     result = request.args.get('result')
     genreslists = genreslist(all_genre)
+    dropdown_genre = []
 
     # To return the result if there is keyword provided from the search bar
     if result != None:
@@ -477,9 +526,15 @@ def show_movieinfo_page(movie_id):
             return redirect(url_for('show_landing_page'))
 
         else:
+            # For the dropdown menu grene
+            for movie in dbmovieslist:
+                if movie['genre'] in genreslists:
+                    dropdown_genre.append(movie['genre'])
+            # To make remove duplicates after appending movie
+            dropdown_genre = list(set(dropdown_genre))
 
             return render_template('movieinfolist.template.html',
-                                   all_genre=genreslists,
+                                   all_genre=dropdown_genre,
                                    result=result,
                                    movieslist=movieslist,
                                    all_movies=dbmovieslist, old_values={}, errors={})
@@ -488,9 +543,17 @@ def show_movieinfo_page(movie_id):
             '_id': ObjectId(movie_id)
         })
 
+        for movie in all_movies:
+            if movie['genre'] in genreslists:
+                dropdown_genre.append(movie['genre'])
+            dbmovieslist.append(movie)
+
+        # To make remove duplicates after appending movie
+        dropdown_genre = list(set(dropdown_genre))
+
         return render_template('movieinfo.template.html',
-                               all_genre=genreslists,
-                               all_movies=list(all_movies),
+                               all_genre=dropdown_genre,
+                               all_movies=dbmovieslist,
                                old_values=movie, errors={})
 
 # Route to process a delete
@@ -523,6 +586,7 @@ def show_update_movieinfo_page(movie_id):
     all_movies = db.movies.find()
     result = request.args.get('result')
     genreslists = genreslist(all_genre)
+    dropdown_genre = []
 
     # To return the result if there is keyword provided from the search bar
     if result != None:
@@ -535,6 +599,12 @@ def show_update_movieinfo_page(movie_id):
             return redirect(url_for('show_landing_page'))
 
         else:
+            # For the dropdown menu grene
+            for movie in dbmovieslist:
+                if movie['genre'] in genreslists:
+                    dropdown_genre.append(movie['genre'])
+            # To make remove duplicates after appending movie
+            dropdown_genre = list(set(dropdown_genre))
 
             return render_template('movieinfolist.template.html',
                                    all_genre=genreslists,
@@ -546,9 +616,18 @@ def show_update_movieinfo_page(movie_id):
             '_id': ObjectId(movie_id)
         })
 
+        # For the dropdown menu grene
+        for movie in all_movies:
+            if movie['genre'] in genreslists:
+                dropdown_genre.append(movie['genre'])
+            dbmovieslist.append(movie)
+
+        # To make remove duplicates after appending movie
+        dropdown_genre = list(set(dropdown_genre))
+
         return render_template('movieinfo.template.html',
-                               all_genre=genreslists,
-                               all_movies=list(all_movies),
+                               all_genre=dropdown_genre,
+                               all_movies=dbmovieslist,
                                old_values=movie, errors={})
 
 # Route to process an update
@@ -562,10 +641,12 @@ def process_update_movieinfo_page(movie_id):
     uploaded__movie_youtubeurl = ""
     maincasts = []
     directors = []
+    dbmovieslist = []
 
     all_genre = db.movie_genres.find()
     all_movies = db.movies.find()
     genreslists = genreslist(all_genre)
+    dropdown_genre = []
 
     if len(errors) == 0:
 
@@ -665,6 +746,15 @@ def process_update_movieinfo_page(movie_id):
             '_id': ObjectId(movie_id)
         })
 
+        # For the dropdown menu grene
+        for movie in all_movies:
+            if movie['genre'] in genreslists:
+                dropdown_genre.append(movie['genre'])
+            dbmovieslist.append(movie)
+
+        # To make remove duplicates after appending movie
+        dropdown_genre = list(set(dropdown_genre))
+
         # To corret the format of the casts and directors when
         # shown on the update popout
         movie_title = request.form.get('name')
@@ -688,8 +778,8 @@ def process_update_movieinfo_page(movie_id):
         old_values = {**movie, **updated_form}
 
         return render_template('movieinfo.template.html',
-                               all_movies=list(all_movies),
-                               all_genre=genreslists,
+                               all_movies=dbmovieslist,
+                               all_genre=dropdown_genre,
                                errors=errors,
                                old_values=old_values)
 
@@ -702,9 +792,20 @@ def page_not_found(e):
     all_genre = db.movie_genres.find()
     all_movies = db.movies.find()
     genreslists = genreslist(all_genre)
+    dropdown_genre = []
+    dbmovieslist = []
 
-    return render_template('custom404.template.html', all_movies=list(all_movies),
-                           all_genre=genreslists, old_values={}, errors={})
+    # For the dropdown menu grene
+    for movie in all_movies:
+        if movie['genre'] in genreslists:
+            dropdown_genre.append(movie['genre'])
+        dbmovieslist.append(movie)
+
+    # To make remove duplicates after appending movie
+    dropdown_genre = list(set(dropdown_genre))
+
+    return render_template('custom404.template.html', all_movies=dbmovieslist,
+                           all_genre=dropdown_genre, old_values={}, errors={})
 
 
 if __name__ == '__main__':
