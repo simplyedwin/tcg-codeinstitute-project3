@@ -226,9 +226,9 @@ def show_landing_page():
 
         else:
 
-            for movie in dbmovieslist:
-                if movie['genre'] in genreslists:
-                    dropdown_genre.append(movie['genre'])
+            for dbmovie in dbmovieslist:
+                if dbmovie['genre'] in genreslists:
+                    dropdown_genre.append(dbmovie['genre'])
 
             # To make remove duplicates after appending movie
             dropdown_genre = list(set(dropdown_genre))
@@ -241,10 +241,10 @@ def show_landing_page():
 
     else:
 
-        for movie in all_movies:
-            if movie['genre'] in genreslists:
-                dbmovieslist.append(movie)
-                dropdown_genre.append(movie['genre'])
+        for dbmovie in all_movies:
+            if dbmovie['genre'] in genreslists:
+                dbmovieslist.append(dbmovie)
+                dropdown_genre.append(dbmovie['genre'])
 
         # To make remove duplicates after appending movie
         dropdown_genre = list(set(dropdown_genre))
@@ -370,10 +370,10 @@ def process_landing_page():
             flash(v)
 
         # For the dropdown menu grene
-        for movie in all_movies:
-            if movie['genre'] in genreslists:
-                dbmovieslist.append(movie)
-                dropdown_genre.append(movie['genre'])
+        for dbmovie in all_movies:
+            if dbmovie['genre'] in genreslists:
+                dbmovieslist.append(dbmovie)
+                dropdown_genre.append(dbmovie['genre'])
 
         # To make remove duplicates after appending movie
         dropdown_genre = list(set(dropdown_genre))
@@ -410,9 +410,9 @@ def show_movieinfolist_bygenre(genre):
         else:
 
             # For the dropdown menu grene
-            for movie in dbmovieslist:
-                if movie['genre'] in genreslists:
-                    dropdown_genre.append(movie['genre'])
+            for dbmovie in dbmovieslist:
+                if dbmovie['genre'] in genreslists:
+                    dropdown_genre.append(dbmovie['genre'])
             # To make remove duplicates after appending movie
             dropdown_genre = list(set(dropdown_genre))
 
@@ -432,9 +432,9 @@ def show_movieinfolist_bygenre(genre):
             dbmovieslist.append(movie)
 
         # For the dropdown menu grene
-        for movie in dbmovieslist:
-            if movie['genre'] in genreslists:
-                dropdown_genre.append(movie['genre'])
+        for dbmovie in dbmovieslist:
+            if dbmovie['genre'] in genreslists:
+                dropdown_genre.append(dbmovie['genre'])
         # To make remove duplicates after appending movie
         dropdown_genre = list(set(dropdown_genre))
 
@@ -469,9 +469,9 @@ def show_movieinfolist_byyear(year):
         else:
 
             # For the dropdown menu grene
-            for movie in dbmovieslist:
-                if movie['genre'] in genreslists:
-                    dropdown_genre.append(movie['genre'])
+            for dbmovie in dbmovieslist:
+                if dbmovie['genre'] in genreslists:
+                    dropdown_genre.append(dbmovie['genre'])
             # To make remove duplicates after appending movie
             dropdown_genre = list(set(dropdown_genre))
 
@@ -491,9 +491,9 @@ def show_movieinfolist_byyear(year):
             dbmovieslist.append(movie)
 
         # For the dropdown menu grene
-        for movie in dbmovieslist:
-            if movie['genre'] in genreslists:
-                dropdown_genre.append(movie['genre'])
+        for dbmovie in dbmovieslist:
+            if dbmovie['genre'] in genreslists:
+                dropdown_genre.append(dbmovie['genre'])
             # To make remove duplicates after appending movie
         dropdown_genre = list(set(dropdown_genre))
 
@@ -527,9 +527,9 @@ def show_movieinfo_page(movie_id):
 
         else:
             # For the dropdown menu grene
-            for movie in dbmovieslist:
-                if movie['genre'] in genreslists:
-                    dropdown_genre.append(movie['genre'])
+            for dbmovie in dbmovieslist:
+                if dbmovie['genre'] in genreslists:
+                    dropdown_genre.append(dbmovie['genre'])
             # To make remove duplicates after appending movie
             dropdown_genre = list(set(dropdown_genre))
 
@@ -543,10 +543,10 @@ def show_movieinfo_page(movie_id):
             '_id': ObjectId(movie_id)
         })
 
-        for movie in all_movies:
-            if movie['genre'] in genreslists:
-                dropdown_genre.append(movie['genre'])
-            dbmovieslist.append(movie)
+        for dbmovie in all_movies:
+            if dbmovie['genre'] in genreslists:
+                dropdown_genre.append(dbmovie['genre'])
+            dbmovieslist.append(dbmovie)
 
         # To make remove duplicates after appending movie
         dropdown_genre = list(set(dropdown_genre))
@@ -617,10 +617,10 @@ def show_update_movieinfo_page(movie_id):
         })
 
         # For the dropdown menu grene
-        for movie in all_movies:
-            if movie['genre'] in genreslists:
-                dropdown_genre.append(movie['genre'])
-            dbmovieslist.append(movie)
+        for dbmovie in all_movies:
+            if dbmovie['genre'] in genreslists:
+                dropdown_genre.append(dbmovie['genre'])
+            dbmovieslist.append(dbmovie)
 
         # To make remove duplicates after appending movie
         dropdown_genre = list(set(dropdown_genre))
@@ -747,10 +747,10 @@ def process_update_movieinfo_page(movie_id):
         })
 
         # For the dropdown menu grene
-        for movie in all_movies:
-            if movie['genre'] in genreslists:
-                dropdown_genre.append(movie['genre'])
-            dbmovieslist.append(movie)
+        for dbmovie in all_movies:
+            if dbmovie['genre'] in genreslists:
+                dropdown_genre.append(dbmovie['genre'])
+            dbmovieslist.append(dbmovie)
 
         # To make remove duplicates after appending movie
         dropdown_genre = list(set(dropdown_genre))
@@ -796,10 +796,10 @@ def page_not_found(e):
     dbmovieslist = []
 
     # For the dropdown menu grene
-    for movie in all_movies:
-        if movie['genre'] in genreslists:
-            dropdown_genre.append(movie['genre'])
-        dbmovieslist.append(movie)
+    for dbmovie in all_movies:
+        if dbmovie['genre'] in genreslists:
+            dropdown_genre.append(dbmovie['genre'])
+        dbmovieslist.append(dbmovie)
 
     # To make remove duplicates after appending movie
     dropdown_genre = list(set(dropdown_genre))
